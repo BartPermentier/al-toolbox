@@ -1,0 +1,12 @@
+{
+    "Snippet: Region":{ 
+	
+                "description": "Snippet to create a region", 
+                "prefix": "rregion", 
+                "body": [ 
+                "//#region ${1:RegionName}", 
+                "$0", 
+                "//#endregion ${1:RegionName}" 
+                ] 
+            } 
+}
