@@ -205,7 +205,7 @@
 	},
 	"Snippet: SimpleFunction":{
 		"description": "Snippet Simple Function without publishers",
-		"prefix": "rlocalfunction (ALTB)",
+		"prefix": "rSimpleFunction (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
 			"local procedure ${1:MethodName}(var ${4:VariableName}: ${2:ObjectType} ${3:ObjectName});",
