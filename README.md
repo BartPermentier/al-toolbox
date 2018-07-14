@@ -6,7 +6,7 @@ The AL Toolbox extension adds the region functionality to the Microsoft AL langu
 
 The extension also adds some usefull snippets with this region functionality and some Design Pattern Snippets.
 
-![Symbols browser](resources/SimpleExample.gif)
+![Simple Example](resources/SimpleExample.gif)
 
 
 ## Inspiration
