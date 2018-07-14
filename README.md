@@ -1,14 +1,12 @@
 # al-toolbox README
 
-This is the README for your extension "al-toolbox". After writing up a brief description, we recommend including the following sections.
+This extension allows you to use regions in the Microsoft AL language so you can easily group pieces of code. It also contains usefull snippets based on Design Patterns.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Adds Regions functionality to AL Language.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
+\!\[feature X\]\(images/test.gif\)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 

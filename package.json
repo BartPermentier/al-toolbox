@@ -7,6 +7,10 @@
     "engines": {
         "vscode": "^1.25.0"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/BartPermentier/al-toolbox"
+    },
     "keywords": [
         "Dynamics NAV",
         "Dynamics 365 Business Central",
