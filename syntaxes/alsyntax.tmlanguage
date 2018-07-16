@@ -18,13 +18,13 @@
 			<key>match</key> 
 			<string>^\s*//\s*#region\b</string> 
 			<key>name</key> 
-			<string>keyword.preprocessor.region.al</string> 
+			<string>keyword.operators.al</string> 
 		</dict> 
 		<dict> 
 			<key>match</key> 
 			<string>^\s*//\s*#endregion\b</string> 
 			<key>name</key> 
-			<string>keyword.preprocessor.region.al</string> 
+			<string>keyword.operators.al</string> 
 		</dict> 
 	</array>
 	<key>scopeName</key>
