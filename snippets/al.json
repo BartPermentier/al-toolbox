@@ -237,7 +237,7 @@
 	},
 	"Snippet: Subscriber to a Table":{
 		"description": "Create a Subscription to a table",
-		"prefix": "rSubTable (ALTB)",
+		"prefix": "rSubscriptionTable (ALTB)",
 		"body": [
 	"//#region EventSubscriber Table ${2:Object No.} ${3|OnBeforeInsertEvent,OnBeforeModifyEvent,OnBeforeDeleteEvent,OnBeforeRenameEvent,OnBeforeValidateEvent,OnAfterInsertEvent,OnAfterModifyEvent,OnAfterDeleteEvent,OnAfterRenameEvent,OnAfterValidateEvent|} ${4:TriggerFieldOrActionName}",
 	"[EventSubscriber(ObjectType::Table, Database::${6:RecName}, '${3:Trigger}', '${4:TriggerFieldOrActionName}', true, true)]",
@@ -250,7 +250,7 @@
 	},
 	"Snippet: Subsriber to a Codeunit":{
 		"description": "Create a Subscription to a codeunit",
-		"prefix": "rSubCodeunit (ALTB)",
+		"prefix": "rSubscriptionCodeunit (ALTB)",
 		"body": [
 	"//#region EventSubscriber Codeunit ${1:Object No.} ${2:Trigger}",
 	"[EventSubscriber(ObjectType::Codeunit, Codeunit::${3:CodeunitName}, '${2:Trigger}', '', true, true)]",
@@ -259,6 +259,19 @@
 		"\t$0",
 	"end;",
 	"//#endregion EventSubscriber Codeunit ${1:Object No.} ${2:Trigger}"
+		]
+	},
+	"Snippet: Subsriber to a Page":{
+		"description": "Create a Subscription to a page",
+		"prefix": "rSubscriptionPage (ALTB)",
+		"body": [
+	"//#region EventSubscriber Page ${1:Object No.} ${2:Trigger}",
+	"[EventSubscriber(ObjectType::Page, Page::${3:PageName}, '${2:Trigger}', '', true, true)]",
+	"local procedure ${2:Trigger}_C${1:Object No.}(var Rec: Record ${4:RecName});",
+	"begin",
+		"\t$0",
+	"end;",
+	"//#endregion EventSubscriber Page ${1:Object No.} ${2:Trigger}"
 		]
 	},
 	"Snippet: Field Page":{
