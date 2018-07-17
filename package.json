@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "0.0.6",
+    "version": "0.0.8",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -44,7 +44,7 @@
         ],
         "grammars": [
             {
-                "scopeName": "al.extended",
+                "scopeName": "al.toolbox",
                 "path": "./syntaxes/alsyntax.tmlanguage",
                 "injectTo": [ "source.al" ]
             }

@@ -11,7 +11,7 @@
 	<key>injectionSelector</key>
 	<string>L:source.al</string>
 	<key>name</key>
-	<string>ALextended</string>
+	<string>ALtoolbox</string>
 	<key>patterns</key>
 	<array>
 		<dict> 
@@ -28,6 +28,6 @@
 		</dict> 
 	</array>
 	<key>scopeName</key>
-	<string>al.extended</string>
+	<string>al.toolbox</string>
 </dict>
 </plist>
