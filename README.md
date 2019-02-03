@@ -6,7 +6,7 @@ The AL Toolbox extension adds the region functionality to the Microsoft AL langu
 
 The extension also adds some usefull snippets with this region functionality and some Design Pattern Snippets.
 
-![BeforeAfter](resources/BeforeAfter.png)
+![Simple Example](resources/SimpleExample.gif)
 
 ## Inspiration
 
@@ -20,5 +20,5 @@ This extension contributes no settings yet.
 
 No known issues.
 
-## Simple Example
-![Simple Example](resources/SimpleExample.gif)
+## Before After
+![BeforeAfter](resources/BeforeAfter.png)
