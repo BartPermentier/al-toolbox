@@ -1,5 +1,7 @@
 # AL Toolbox for Visual Studio Code
 
+Please visit https://www.altoolbox.com/ for more in depth information and AL Language tips and tricks.
+
 ## Features
 
 The AL Toolbox extension adds the region functionality to the Microsoft AL language for Business Central.

@@ -71,9 +71,9 @@
 		"body": [
 			"field(${1:id}; \"${2:MyField}\"; ${3:Type})",
 			"{",
-			"\tCaption = '${2:MyField}', comment = '${4:NLB}=\"${5:YourLanguageText}\"';$0",
+			"\tCaption = '${2:MyField}', comment = '${4:NLB}=\"${5:YourLanguageText}\"';",
 			"\tDataClassification = ${6|SystemMetadata,CustomerContent,EndUserIdentifiableInformation|};",
-			"}"
+			"}$0"
 		],
 		"description": "Snippet: Table Field"
 	},
@@ -82,10 +82,10 @@
 		"body": [
 			"field(${1:id}; \"${2:MyField}\"; Code[${3:Length}])",
 			"{",
-			"\tCaption = '${2:MyField}', comment = '${4:NLB}=\"${5:YourLanguageText}\"';$0",
+			"\tCaption = '${2:MyField}', comment = '${4:NLB}=\"${5:YourLanguageText}\"';",
 			"\tTableRelation = ${6:Table.Field};",
 			"\tDataClassification = ${7|SystemMetadata,CustomerContent,EndUserIdentifiableInformation|};",
-			"}"
+			"}$0"
 		],
 		"description": "Snippet: Table Field Code with table relation"
 	},
@@ -94,11 +94,11 @@
 		"body": [
 			"field(${1:id}; \"${2:MyField}\"; Option)",
 			"{",
-			"\tCaption = '${2:MyField}', comment = '${3:NLB}=\"${4:YourLanguageText}\"';$0",
+			"\tCaption = '${2:MyField}', comment = '${3:NLB}=\"${4:YourLanguageText}\"';",
 			"\tOptionMembers = ${5};",
 			"\tOptionCaption = '${5}';",
 			"\tDataClassification = ${6|SystemMetadata,CustomerContent,EndUserIdentifiableInformation|};",
-			"}"
+			"}$0"
 		],
 		"description": "Snippet: Table Field option"
 	},
@@ -464,24 +464,58 @@
 			"//#endregion MyNotifications"
 		]
 	},
-	"Snippet: CurrentPageSetSelectionFilter":{
-		"description": "Snippet to add a function to page which will return a record set of selected entries",
-		"prefix": "rPageSelectionFunction (ALTB)",
-		"body": [
-			"//#region Get${2:VariableName}",
-			"procedure Get${2:VariableName}(var ${2:VariableName}: Record ${1:RecordName});",
-			"begin",
-			"\tCurrPage.SetSelectionFilter(${2:VariableName});",
-			"end;",
-			"//#endregion Get${2:VariableName}"
-		]
-	},
 	"Snippet: EnumToInt":{
 		"description": "Snippet to convert an Enum to an Integer",
 		"prefix": "rEnumToInt (ALTB)",
 		"body": [
 			"Evaluate(${1:IntegerVariable}, Format(${2:EnumVariable}, 0, 9));"
 		]
+	},
+	"Record Repeat": {
+        "prefix": "rRepeat (ALTB)",
+        "body": [
+            "if ${1:Rec}.FindSet() then",
+            "\trepeat",
+            "\t\t$0",
+            "\tuntil ${1:Rec}.Next() = 0;"
+        ]
+    },
+	"Action Properties": {
+        "prefix": "rPropertiesAction (ALTB)",
+        "body": [
+			"Caption = '${1:Caption}', comment = '${2:NLB}=\"${3:YourLanguageCaption}\"';",
+			"Promoted = true;",
+			"PromotedCategory = ${4|Process,New,Report|};",
+			"PromotedIsBig = true;",
+			"Image = ${5:Image};$0"
+			
+        ]
+	},
+	"Snippet: Action": {
+        "prefix": "rAction (ALTB)",
+        "body": [
+            "action(${1:ActionName})",
+            "{",
+			"\tApplicationArea = ${2|All,Basic,Suite,Advanced|};",
+			"\tCaption = '${3:Caption}', comment = '${4:NLB}=\"${5:YourLanguageCaption}\"';",
+			"\tPromoted = true;",
+			"\tPromotedCategory = ${6|Process,New,Report|};",
+			"\tPromotedIsBig = true;",
+			"\tImage = ${7:Image};",
+            "\ttrigger OnAction()",
+            "\tbegin",
+            "\t\t$0",
+            "\tend;",
+            "}"
+        ]
+	},
+	"Snippet: DelChr": {
+        "prefix": "rDelChr (ALTB)",
+        "body": [
+            "DelChr(${1:VarName}, '=', DelChr(${1:VarName}, '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'));"
+		],
+		"description": "Delete all special characters."
 	}
+	
 
 	}

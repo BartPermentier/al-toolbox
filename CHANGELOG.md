@@ -1,3 +1,5 @@
+Please visit https://www.altoolbox.com/ for more in depth information and AL Language tips and tricks.
+
 # Change Log
 All notable changes to the "al-toolbox" extension will be documented in this file.
 
@@ -14,3 +16,13 @@ All notable changes to the "al-toolbox" extension will be documented in this fil
 - Added Enum to Int Snippet
 - Renamed Subscriptions to Subscribers
 - Added CurrPage Lookup Snippet
+
+## [0.1.1]
+- Added 3 Snippets
+    - rAction
+    - rPropertiesAction
+    - rRepeat
+- Fixed Caption snippets that would have $0 midway instead of at the end
+
+## [0.1.2]
+- Added the snippet rDelChr (ALTB)
