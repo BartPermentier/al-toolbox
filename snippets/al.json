@@ -278,7 +278,7 @@
 		"description": "Add a field to a page",
 		"prefix": "rFieldPage (ALTB)",
 		"body": [
-			"field(${1:FieldName})",
+			"field(${1})",
 				"{",
 					"\tApplicationArea = All;",
 				"}",
