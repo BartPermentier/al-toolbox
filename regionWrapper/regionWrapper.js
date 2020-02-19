@@ -1,15 +1,13 @@
 const vscode = require('vscode');
 // import * as vscode from 'vscode';
 
-const alFunctionRegex = /(\[[^\]]+\]\s*)?(\blocal\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gmi;
-const functionParametersRegex = /\[[^\]]+\]\s*$/;
-const functionNameRegex = /\b(trigger|procedure)\b\s+(?<name>\w+|"[^"]*")/i;
 const regionStartRegex = /\/\/#region\b/;
 const commandRegex = /((?<=\/\/)(?!#(end)?region\b)|(?<=\/\/#(end)?region\b)).*/g;
 const stringRegex = /'([^']|'')*'|"[^"]+"/g;
+
+const alFunctionRegex = /(\[[^\]]+\]\s*)?(\blocal\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gmi;
 const beginRegex = /\bbegin\b|\bcase\b.*\bof\b/gmi;
 const endRegex = /\bend;?\b/gi;
-
 /**
  * @param {vscode.TextEditorEdit} editBuilder
  * @param {vscode.TextDocument} document
@@ -182,6 +180,8 @@ function addRegionStartOrEnd(editBuilder, line, name, isEnd) {
     }
 }
 
+const functionParametersRegex = /\[[^\]]+\]\s*$/;
+const functionNameRegex = /\b(trigger|procedure)\b\s+(?<name>\w+|"[^"]*")/i;
 /**
  * @param {vscode.TextDocument} document 
  * @param {number} lineNo 
