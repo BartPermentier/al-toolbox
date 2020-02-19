@@ -7,6 +7,7 @@ const constants_1 = require("./constants_1");
 //const workspaceHelpers = require("./workspaceFolderHelpers");
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
+const regionWrapper = require('./regionWrapper/regionWrapper');
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -73,7 +74,11 @@ function activate(context) {
 		vscode.window.showInformationMessage('createRelatedTables!');
 	});
 
-	context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable);
+    
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', function () {
+        vscode.window.showInformationMessage(regionWrapper.WrapAllFunctions() + ' region(s) created.');
+    }));
 }
 exports.activate = activate;
 ///////////AL File Creation
