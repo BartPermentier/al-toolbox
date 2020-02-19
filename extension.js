@@ -77,7 +77,27 @@ function activate(context) {
     context.subscriptions.push(disposable);
     
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', function () {
-        vscode.window.showInformationMessage(regionWrapper.WrapAllFunctions() + ' region(s) created.');
+        let editor = vscode.window.activeTextEditor;
+        let numberOfRegions; 
+        editor.edit(editBuilder => {
+            numberOfRegions = regionWrapper.WrapAllFunctions(editBuilder, editor.document);
+        }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
+    
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllDataItemsAndColumns', function () {
+        let editor = vscode.window.activeTextEditor;
+        let numberOfRegions; 
+        editor.edit(editBuilder => {
+            numberOfRegions = regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false);
+        }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAll', function () {
+        let editor = vscode.window.activeTextEditor;
+        let numberOfRegions;
+        editor.edit(editBuilder => {
+            numberOfRegions = regionWrapper.WrapAllFunctions(editBuilder, editor.document);
+            numberOfRegions += regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false);
+        }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
 }
 exports.activate = activate;
