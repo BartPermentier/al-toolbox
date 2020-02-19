@@ -24,7 +24,7 @@ exports.WrapAllFunctions = (editBuilder, document) => {
         const lineNos = getLineNumbersForLocations(text, location);
         if ((lineNos.start === 0) ||
                 !regionStartRegex.test(document.lineAt(lineNos.start-1).text)) { // check if line before function does not contain a region
-            const regionName = getAlFunctionName(document, lineNos.start);
+            const regionName = getRegionNameForAlFunction(document, lineNos.start);
             addRegionStartOrEnd(editBuilder, document.lineAt(lineNos.start), regionName, false);
             addRegionStartOrEnd(editBuilder, document.lineAt(lineNos.end), regionName, true);
             ++regionCount;
@@ -70,7 +70,6 @@ exports.WrapAllDataItemsAndColumns = (editBuilder, document, skipSingelInstance)
 
     return regionCount;
 }
-
 
 const CodeBlockTokenTypes = {
     STARTOFBLOCK: 0,
@@ -180,22 +179,31 @@ function addRegionStartOrEnd(editBuilder, line, name, isEnd) {
     }
 }
 
+const EventSubscriberRegex =
+    /\[EventSubscriber\(ObjectType::(?<ObjectType>Codeunit|Page|Report|Table|XMLPort), (Codeunit|Page|Report|Database|XMLPort)::(?<Publisher>\w*|"[^"]*"), '(?<Event>([^']|'')*)', '(?<Element>([^']|'')*)', (true|false), (true|false)\)\]/i;
 const functionParametersRegex = /\[[^\]]+\]\s*$/;
 const functionNameRegex = /\b(trigger|procedure)\b\s+(?<name>\w+|"[^"]*")/i;
 /**
  * @param {vscode.TextDocument} document 
  * @param {number} lineNo 
  */
-function getAlFunctionName(document, lineNo) {
+function getRegionNameForAlFunction(document, lineNo) {
     var line = document.lineAt(lineNo).text;
+    let match;
+    if ((match = EventSubscriberRegex.exec(line)) !== null) {
+        //TODO: Change ${match.groups.Publisher} to the corresponding object ID
+        return `EventSubscriber ${match.groups.ObjectType} ${match.groups.Publisher} ${match.groups.Event} ${match.groups.Element}`;
+    }
+
     if (functionParametersRegex.test(line) && !functionNameRegex.test(line)) {
-        // The line where the function starts on a line with function parameter without the 'normal' function declaration.
-        // e.g.:
-        //  [...]
-        //  procedure name(...)
+        /* The line where the function starts on a line with function parameter without the 'normal' function declaration.
+         * e.g.:
+         *  [...]
+         *  procedure name(...)
+         */
         line = document.lineAt(lineNo + 1).text;
     }
-    const match = functionNameRegex.exec(line);
+    match = functionNameRegex.exec(line);
     if (match === null)
         console.error('Does not contain a AL function: ' + line);
     return match.groups['name'];
