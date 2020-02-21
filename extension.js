@@ -27,18 +27,23 @@ function activate(context) {
         }
 
         // tableextensions
-        vscode.window.showInformationMessage(rootPath);
-        let destinationPath = rootPath + '/src/tableextension';
-        vscode.window.showInformationMessage(rootPath);
-        createFolder(destinationPath);
-        vscode.window.showInformationMessage('createRelatedTables!');
+        //vscode.window.showInformationMessage(rootPath);
+        const baseDestinationPath = rootPath + '/src/';
+        //vscode.window.showInformationMessage(rootPath);
         
+        //Create Table Extension Folder
+        let destinationPath = baseDestinationPath + constants_1.tableExtension + '/';
+        createFolder(destinationPath);
         //Contact
+        destinationPath = destinationPath + 'Contact/'
+        createFolder(destinationPath);
         createAlFile(destinationPath, constants_1.tableExtension, 18, 'Customer');
         createAlFile(destinationPath, constants_1.tableExtension, 23, 'Vendor');
         createAlFile(destinationPath, constants_1.tableExtension, 270, 'Bank Account');
         createAlFile(destinationPath, constants_1.tableExtension, 5050, 'Contact');
         //SalesHeader
+        destinationPath = baseDestinationPath + constants_1.tableExtension + '/SalesHeader/';
+        createFolder(destinationPath);
         createAlFile(destinationPath, constants_1.tableExtension, 36, 'Sales Header');
         createAlFile(destinationPath, constants_1.tableExtension, 110, 'Sales Shipment Header');
         createAlFile(destinationPath, constants_1.tableExtension, 112, 'Sales Invoice Header');
@@ -46,6 +51,8 @@ function activate(context) {
         createAlFile(destinationPath, constants_1.tableExtension, 5107, 'Sales Header Archive');
         createAlFile(destinationPath, constants_1.tableExtension, 6660, 'Return Receipt Header');
         //SalesLine
+        destinationPath = baseDestinationPath + constants_1.tableExtension + '/SalesLine/';
+        createFolder(destinationPath);
         createAlFile(destinationPath, constants_1.tableExtension, 37, 'Sales Line');
         createAlFile(destinationPath, constants_1.tableExtension, 111, 'Sales Shipment Line');
         createAlFile(destinationPath, constants_1.tableExtension, 113, 'Sales Invoice Line');
@@ -53,6 +60,8 @@ function activate(context) {
         createAlFile(destinationPath, constants_1.tableExtension, 5108, 'Sales Line Archive');
         createAlFile(destinationPath, constants_1.tableExtension, 6661, 'Return Receipt Line');
         //PurchaseHeader
+        destinationPath = baseDestinationPath + constants_1.tableExtension + '/PurchaseHeader/';
+        createFolder(destinationPath);
         createAlFile(destinationPath, constants_1.tableExtension, 38, 'Purchase Header');
         createAlFile(destinationPath, constants_1.tableExtension, 120, 'Purch. Rcpt. Header');
         createAlFile(destinationPath, constants_1.tableExtension, 122, 'Purch. Inv. Header');
@@ -60,6 +69,8 @@ function activate(context) {
         createAlFile(destinationPath, constants_1.tableExtension, 5109, 'Purchase Header Archive');
         createAlFile(destinationPath, constants_1.tableExtension, 6650, 'Return Shipment Header');
         //PurchaseLine
+        destinationPath = baseDestinationPath + constants_1.tableExtension + '/PurchaseLine/';
+        createFolder(destinationPath);
         createAlFile(destinationPath, constants_1.tableExtension, 39, 'Purchase Line');
         createAlFile(destinationPath, constants_1.tableExtension, 121, 'Purch. Rcpt. Line');
         createAlFile(destinationPath, constants_1.tableExtension, 123, 'Purch. Inv. Line');
@@ -71,7 +82,7 @@ function activate(context) {
         
 
 		// Display a message box to the user
-		vscode.window.showInformationMessage('createRelatedTables!');
+		vscode.window.showInformationMessage('Related Tables Created!');
 	});
 
     context.subscriptions.push(disposable);
