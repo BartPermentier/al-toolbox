@@ -77,8 +77,84 @@ function activate(context) {
         createAlFile(destinationPath, constants_1.tableExtension, 125, 'Purch. Cr. Memo Line');
         createAlFile(destinationPath, constants_1.tableExtension, 5110, 'Purchase Line Archive');
         createAlFile(destinationPath, constants_1.tableExtension, 6651, 'Return Shipment Line');
+
         // pageextensions
+        //Create Page Extension Folder
+        destinationPath = baseDestinationPath + constants_1.pageExtension + '/';
+        createFolder(destinationPath);
+        //Contact
+        destinationPath = destinationPath + 'Contact/'
+        createFolder(destinationPath);
+        createAlFile(destinationPath, constants_1.pageExtension, 21, 'Customer Card');
+        createAlFile(destinationPath, constants_1.pageExtension, 22, 'Customer List');
+        createAlFile(destinationPath, constants_1.pageExtension, 26, 'Vendor Card');
+        createAlFile(destinationPath, constants_1.pageExtension, 27, 'Vendor List');
+        createAlFile(destinationPath, constants_1.pageExtension, 370, 'Bank Account Card');
+        createAlFile(destinationPath, constants_1.pageExtension, 371, 'Bank Account List');
+        createAlFile(destinationPath, constants_1.pageExtension, 5050, 'Contact Card');
+        createAlFile(destinationPath, constants_1.pageExtension, 5052, 'Contact List');
+        //SalesHeader
+        destinationPath = baseDestinationPath + constants_1.pageExtension + '/SalesHeader/';
+        createFolder(destinationPath);
+        createAlFile(destinationPath, constants_1.pageExtension, 41, 'Sales Quote');
+        createAlFile(destinationPath, constants_1.pageExtension, 42, 'Sales Order');
+        createAlFile(destinationPath, constants_1.pageExtension, 43, 'Sales Invoice');
+        createAlFile(destinationPath, constants_1.pageExtension, 44, 'Sales Credit Memo');
+        createAlFile(destinationPath, constants_1.pageExtension, 130, 'Posted Sales Shipment');
+        createAlFile(destinationPath, constants_1.pageExtension, 132, 'Posted Sales Invoice');
+        createAlFile(destinationPath, constants_1.pageExtension, 134, 'Posted Sales Credit Memo');
+        createAlFile(destinationPath, constants_1.pageExtension, 143, 'Posted Sales Invoices');
+        createAlFile(destinationPath, constants_1.pageExtension, 144, 'Posted Sales Credit Memos');
+        createAlFile(destinationPath, constants_1.pageExtension, 6630, 'Sales Return Order');
+        createAlFile(destinationPath, constants_1.pageExtension, 9300, 'Sales Quotes');
+        createAlFile(destinationPath, constants_1.pageExtension, 9301, 'Sales Invoice List');
+        createAlFile(destinationPath, constants_1.pageExtension, 9302, 'Sales Credit Memos');
+        createAlFile(destinationPath, constants_1.pageExtension, 9304, 'Sales Return Order List');
+        createAlFile(destinationPath, constants_1.pageExtension, 9305, 'Sales Order List');
+        //SalesLine
+        destinationPath = baseDestinationPath + constants_1.pageExtension + '/SalesLine/';
+        createFolder(destinationPath);
         createAlFile(destinationPath, constants_1.pageExtension, 46, 'Sales Order Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 47, 'Sales Invoice Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 95, 'Sales Quote Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 96, 'Sales Cr. Memo Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 131, 'Posted Sales Shpt. Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 133, 'Posted Sales Invoice Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 135, 'Posted Sales Cr. Memo Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 516, 'Sales Lines');
+        createAlFile(destinationPath, constants_1.pageExtension, 526, 'Posted Sales Invoice Lines');
+        createAlFile(destinationPath, constants_1.pageExtension, 6631, 'Sales Return Order Subform');
+        //PurchaseHeader
+        destinationPath = baseDestinationPath + constants_1.pageExtension + '/PurchaseHeader/';
+        createFolder(destinationPath);
+        createAlFile(destinationPath, constants_1.pageExtension, 49, 'Purchase Quote');
+        createAlFile(destinationPath, constants_1.pageExtension, 50, 'Purchase Order');
+        createAlFile(destinationPath, constants_1.pageExtension, 51, 'Purchase Invoice');
+        createAlFile(destinationPath, constants_1.pageExtension, 52, 'Purchase Credit Memo');
+        createAlFile(destinationPath, constants_1.pageExtension, 136, 'Posted Purchase Receipt');
+        createAlFile(destinationPath, constants_1.pageExtension, 138, 'Posted Purchase Invoice');
+        createAlFile(destinationPath, constants_1.pageExtension, 140, 'Posted Purchase Credit Memo');
+        createAlFile(destinationPath, constants_1.pageExtension, 145, 'Posted Purchase Receipts');
+        createAlFile(destinationPath, constants_1.pageExtension, 146, 'Posted Purchase Invoices');
+        createAlFile(destinationPath, constants_1.pageExtension, 147, 'Posted Purchase Credit Memos');
+        createAlFile(destinationPath, constants_1.pageExtension, 6640, 'Purchase Return Order');
+        createAlFile(destinationPath, constants_1.pageExtension, 6660, 'Posted Return Receipt');
+        createAlFile(destinationPath, constants_1.pageExtension, 9306, 'Purchase Quotes');
+        createAlFile(destinationPath, constants_1.pageExtension, 9307, 'Purchase List');
+        createAlFile(destinationPath, constants_1.pageExtension, 9308, 'Purchase Invoices');
+        createAlFile(destinationPath, constants_1.pageExtension, 9309, 'Purchase Credit Memos');
+        createAlFile(destinationPath, constants_1.pageExtension, 9311, 'Purchase Return Order List');
+        //PurchaseLine
+        destinationPath = baseDestinationPath + constants_1.pageExtension + '/PurchaseLine/';
+        createFolder(destinationPath);
+        createAlFile(destinationPath, constants_1.pageExtension, 54, 'Purchase Order Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 55, 'Purch. Invoice Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 97, 'Purchase Quote Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 98, 'Purch. Cr. Memo Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 137, 'Posted Purchase Rcpt. Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 139, 'Posted Purch. Invoice Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 141, 'Posted Purch. Cr. Memo Subform');
+        createAlFile(destinationPath, constants_1.pageExtension, 6641, 'Purchase Return Order Subform');
         
 
 		// Display a message box to the user
