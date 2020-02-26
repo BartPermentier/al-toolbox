@@ -22,7 +22,7 @@
         "Snippets"
     ],
     "activationEvents": [
-        "onCommand:extension.createRelatedTables",
+        "onCommand:al-toolbox.createRelatedTables",
         "onCommand:al-toolbox.wrapAllFunctions",
         "onCommand:al-toolbox.wrapAllDataItemsAndColumns",
         "onCommand:al-toolbox.wrapAll"
@@ -58,7 +58,7 @@
         ],
         "commands":[
             {
-                "command": "extension.createRelatedTables",
+                "command": "al-toolbox.createRelatedTables",
 				"title": "ALTB: Start Project: Create Related Tables"
             },
             {
