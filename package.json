@@ -22,7 +22,10 @@
         "Snippets"
     ],
     "activationEvents": [
-		"onCommand:extension.createRelatedTables"
+        "onCommand:extension.createRelatedTables",
+        "onCommand:al-toolbox.wrapAllFunctions",
+        "onCommand:al-toolbox.wrapAllDataItemsAndColumns",
+        "onCommand:al-toolbox.wrapAll"
 	],
 	"main": "./extension.js",
     "contributes": {
@@ -57,6 +60,18 @@
             {
                 "command": "extension.createRelatedTables",
 				"title": "ALTB: Start Project: Create Related Tables"
+            },
+            {
+                "command": "al-toolbox.wrapAllFunctions",
+				"title": "ALTB: Create regions for all AL functions and triggers"
+            },
+            {
+                "command": "al-toolbox.wrapAllDataItemsAndColumns",
+                "title": "ALTB: Create regions for all AL dataitems and columns"
+            },
+            {
+                "command": "al-toolbox.wrapAll",
+                "title": "ALTB: Create regions for all AL functions, triggers, dataitems, and columns"
             }
         ]
     },

@@ -411,7 +411,7 @@
 		"prefix": "rregion (ALTB)",
 		"body": [
 		"//#region ${1:MethodName}",
-		"$0",
+		"$TM_SELECTED_TEXT$0",
 		"//#endregion ${1:MethodName}"
 		]
 	},
@@ -516,6 +516,4 @@
 		],
 		"description": "Delete all special characters."
 	}
-	
-
-	}
+}
