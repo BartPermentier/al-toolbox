@@ -1,10 +1,11 @@
+const vscode = require('vscode');
 const constants = require('./constants');
 const fileMangagement = require('./fileManagement');
 
 /**
  * @returns {Promise}
  */
-exports.createRelatedTables = () => {
+exports.createRelatedTables = (objectNamePrefix) => {
     const rootPath = fileMangagement.getCurrentWorkspaceFolderPath();
     // if rootpath is empty then error
     if (!rootPath) {
@@ -23,7 +24,7 @@ exports.createRelatedTables = () => {
         fileMangagement.createFolder(destinationPath);
 
         element.objects.forEach(object => {
-            fileCreationPromises.push(fileMangagement.createAlFile(destinationPath, element.objectType, object.id, object.name));
+            fileCreationPromises.push(fileMangagement.createAlFile(destinationPath, element.objectType, object.id, object.name, objectNamePrefix));
         });
     });
 

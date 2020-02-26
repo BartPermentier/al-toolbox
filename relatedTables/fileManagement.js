@@ -4,10 +4,9 @@ const vscode = require('vscode');
 const constants = require("./constants");
 
 //#region AL File Creation
-function createAlFile(destinationPath, objectType, objectId, objectName){
+function createAlFile(destinationPath, objectType, objectId, objectName, objectNamePrefix){
     const newObjectId = objectId + 80000;
-    let newObjectName = objectName.replace(/\s/g,'');
-    newObjectName = newObjectName.replace('.', '');
+    let newObjectName = objectName.replace(/[^\w]/g,'');
     let fileName;
     let fileContent;
     // Generate File Name and Content
@@ -51,7 +50,7 @@ function createAlFile(destinationPath, objectType, objectId, objectName){
             if (exists) {
                 return filePath;
             }
-            const contents = objectType + ' ' + newObjectId + ' "' + newObjectName + '" extends "' +  objectName + '" //' + objectId + fileContent;
+            const contents = objectType + ' ' + newObjectId + ' "' + objectNamePrefix + newObjectName + '" extends "' +  objectName + '" //' + objectId + fileContent;
             return writeTextFileAsync(filePath, contents)
                 .then(() => filePath);
             });  
