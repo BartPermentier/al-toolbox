@@ -13,8 +13,8 @@ function activate(context) {
   
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.createRelatedTables', () => {
         relatedTables.createRelatedTables()
-            .then(() => vscode.window.showInformationMessage('Related Tables Created!'),
-                  () => vscode.window.showInformationMessage('Failed to create Related Tables.'));
+            .then(() => vscode.window.showInformationMessage('Related tables created!'),
+                  () => vscode.window.showInformationMessage('Failed to create related tables'));
     }));
     
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', function () {

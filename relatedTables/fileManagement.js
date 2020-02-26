@@ -21,8 +21,7 @@ function createAlFile(destinationPath, objectType, objectId, objectName){
     {
 
     }
-}
-        `;
+}`;
             break;
         case constants.AlObjectTypes.pageExtension:
             fileName = 'Pag';
@@ -36,10 +35,10 @@ function createAlFile(destinationPath, objectType, objectId, objectName){
     actions
     {
     }
-}
-        `;
+}`;
             break;
         default:
+            console.error('Unsuported AL object type.');
             throw Error('Unsuported AL object type.');
     }
     
