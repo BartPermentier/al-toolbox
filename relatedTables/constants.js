@@ -11,8 +11,33 @@ exports.AlObjectTypes = {
     XMLPort: 'xmlport'
 }
 
+exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
+    switch (AlObjectType) {
+        case this.AlObjectTypes.table:
+		case this.AlObjectTypes.tableExtension:
+		    return 'Tab';
+        case this.AlObjectTypes.page:
+		case this.AlObjectTypes.pageExtension:
+		case this.AlObjectTypes.pageCustomization:
+		    return 'Pag';
+        case this.AlObjectTypes.codeUnit:
+		    return 'Cod';
+        case this.AlObjectTypes.report:
+		    return 'Rep';
+        case this.AlObjectTypes.query:
+		    return 'Que';
+        case this.AlObjectTypes.profile:
+		    return 'Prof';
+        case this.AlObjectTypes.XMLPort:
+            return 'Xml';
+        default:
+            return '';
+    }
+}
+
 exports.RelatedTables = [
     {
+        table: 'Contact',
         folder: 'Contact',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -23,6 +48,7 @@ exports.RelatedTables = [
         ]
     },
     {
+        table: 'Sales Header',
         folder: 'SalesHeader',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -35,7 +61,8 @@ exports.RelatedTables = [
         ]
     },
     {
-        folder: 'SalesLine',
+        table: 'Sales Line',
+		folder: 'SalesLine',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
             { id: 37, name: 'Sales Line' },
@@ -47,7 +74,8 @@ exports.RelatedTables = [
         ]
     },
     {
-        folder: 'PurchaseHeader',
+        table: 'Purchase Header',
+		folder: 'PurchaseHeader',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
             { id: 38, name: 'Purchase Header' },
@@ -59,7 +87,8 @@ exports.RelatedTables = [
         ]
     },
     {
-        folder: 'PurchaseLine',
+        table: 'Purchase Line',
+		folder: 'PurchaseLine',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
             { id: 39, name: 'Purchase Line' },
@@ -70,33 +99,54 @@ exports.RelatedTables = [
             { id: 6651, name: 'Return Shipment Line' }
         ]
     },
+    //#region Pages form tables related to Contact
     {
+        table: 'Contact',
         folder: 'Contact',
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
-            { id: 21, name: 'Customer Card' },
-            { id: 22, name: 'Customer List' },
-            { id: 26, name: 'Vendor Card' },
-            { id: 27, name: 'Vendor List' },
-            { id: 370, name: 'Bank Account Card' },
-            { id: 371, name: 'Bank Account List' },
             { id: 5050, name: 'Contact Card' },
             { id: 5052, name: 'Contact List' }
         ]
     },
     {
-        folder: 'SalesHeader',
+        table: 'Customer',
+        folder: 'Contact',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 21, name: 'Customer Card' },
+            { id: 22, name: 'Customer List' }
+        ]
+    },
+    {
+        table: 'Vendor',
+        folder: 'Contact',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 26, name: 'Vendor Card' },
+            { id: 27, name: 'Vendor List' },
+        ]
+    },
+    {
+        table: 'Bank Account',
+        folder: 'Contact',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 370, name: 'Bank Account Card' },
+            { id: 371, name: 'Bank Account List' }
+        ]
+    },
+    //#endregion
+    //#region Pages form tables related to Sales Header
+    {
+        table: 'Sales Header',
+		folder: 'SalesHeader',
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
             { id: 41, name: 'Sales Quote' },
             { id: 42, name: 'Sales Order' },
             { id: 43, name: 'Sales Invoice' },
             { id: 44, name: 'Sales Credit Memo' },
-            { id: 130, name: 'Posted Sales Shipment' },
-            { id: 132, name: 'Posted Sales Invoice' },
-            { id: 134, name: 'Posted Sales Credit Memo' },
-            { id: 143, name: 'Posted Sales Invoices' },
-            { id: 144, name: 'Posted Sales Credit Memos' },
             { id: 6630, name: 'Sales Return Order' },
             { id: 9300, name: 'Sales Quotes' },
             { id: 9301, name: 'Sales Invoice List' },
@@ -106,37 +156,100 @@ exports.RelatedTables = [
         ]
     },
     {
-        folder: 'SalesLine',
+        table: 'Sales Shipment Header',
+		folder: 'SalesHeader',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 130, name: 'Posted Sales Shipment' },
+            { id: 142, name: 'Posted Sales Shipments' }
+        ]
+    },
+    {
+        table: 'Sales Invoice Header',
+		folder: 'SalesHeader',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 132, name: 'Posted Sales Invoice' },
+            { id: 143, name: 'Posted Sales Invoices' },
+        ]
+    },
+    {
+        table: 'Sales Cr.Memo Header',
+		folder: 'SalesHeader',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 134, name: 'Posted Sales Credit Memo' },
+            { id: 144, name: 'Posted Sales Credit Memos' }
+        ]
+    },
+    {
+        table: 'Return Receipt Header',
+		folder: 'SalesHeader',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 6660, name: 'Posted Return Receipt' }
+        ]
+    },
+    //#endregion
+    //#region Pages form tables related to Sales Lines
+    {
+        table: 'Sales Line',
+		folder: 'SalesLine',
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
             { id: 46, name: 'Sales Order Subform' },
             { id: 47, name: 'Sales Invoice Subform' },
             { id: 95, name: 'Sales Quote Subform' },
             { id: 96, name: 'Sales Cr. Memo Subform' },
-            { id: 131, name: 'Posted Sales Shpt. Subform' },
-            { id: 133, name: 'Posted Sales Invoice Subform' },
-            { id: 135, name: 'Posted Sales Cr. Memo Subform' },
             { id: 516, name: 'Sales Lines' },
-            { id: 526, name: 'Posted Sales Invoice Lines' },
             { id: 6631, name: 'Sales Return Order Subform' }
         ]
     },
     {
-        folder: 'PurchaseHeader',
+        table: 'Sales Shipment Line',
+		folder: 'SalesLine',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 131, name: 'Posted Sales Shpt. Subform' }
+        ]
+    },
+    {
+        table: 'Sales Invoice Line',
+		folder: 'SalesLine',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 133, name: 'Posted Sales Invoice Subform' },
+            { id: 526, name: 'Posted Sales Invoice Lines' }
+        ]
+    },
+    {
+        table: 'Sales Cr.Memo Line',
+		folder: 'SalesLine',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 135, name: 'Posted Sales Cr. Memo Subform' },
+        ]
+    },
+    {
+        table: 'Return Receipt Line',
+		folder: 'SalesLine',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 6661, name: 'Posted Return Receipt Subform' }
+        ]
+    },
+    //#endregion
+    //#region Pages form tables related to Purchase Header
+    {
+        table: 'Purchase Header',
+		folder: 'PurchaseHeader',
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
             { id: 49, name: 'Purchase Quote' },
             { id: 50, name: 'Purchase Order' },
             { id: 51, name: 'Purchase Invoice' },
             { id: 52, name: 'Purchase Credit Memo' },
-            { id: 136, name: 'Posted Purchase Receipt' },
-            { id: 138, name: 'Posted Purchase Invoice' },
-            { id: 140, name: 'Posted Purchase Credit Memo' },
-            { id: 145, name: 'Posted Purchase Receipts' },
-            { id: 146, name: 'Posted Purchase Invoices' },
-            { id: 147, name: 'Posted Purchase Credit Memos' },
             { id: 6640, name: 'Purchase Return Order' },
-            { id: 6660, name: 'Posted Return Receipt' },
             { id: 9306, name: 'Purchase Quotes' },
             { id: 9307, name: 'Purchase List' },
             { id: 9308, name: 'Purchase Invoices' },
@@ -145,17 +258,87 @@ exports.RelatedTables = [
         ]
     },
     {
-        folder: 'Contact',
+        table: 'Purch. Rcpt. Header',
+		folder: 'PurchaseHeader',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 145, name: 'Posted Purchase Receipts' },
+            { id: 6660, name: 'Posted Return Receipt' }
+        ]
+    },
+    {
+        table: 'Purch. Inv. Header',
+		folder: 'PurchaseHeader',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 138, name: 'Posted Purchase Invoice' },
+            { id: 146, name: 'Posted Purchase Invoices' }
+        ]
+    },
+    {
+        table: 'Purch. Cr. Memo Hdr.',
+		folder: 'PurchaseHeader',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 140, name: 'Posted Purchase Credit Memo' },
+            { id: 147, name: 'Posted Purchase Credit Memos' }
+        ]
+    },
+    {
+        table: 'Return Shipment Header',
+		folder: 'PurchaseHeader',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 6650, name: 'Posted Return Shipment' },
+            { id: 6650, name: 'Posted Return Shipments' }
+        ]
+    },
+    //#endregion
+    //#region Pages form tables related to Purchase Line
+    {
+        table: 'Purchase Line',
+		folder: 'PurchaseLine',
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
             { id: 54, name: 'Purchase Order Subform' },
             { id: 55, name: 'Purch. Invoice Subform' },
             { id: 97, name: 'Purchase Quote Subform' },
             { id: 98, name: 'Purch. Cr. Memo Subform' },
-            { id: 137, name: 'Posted Purchase Rcpt. Subform' },
-            { id: 139, name: 'Posted Purch. Invoice Subform' },
-            { id: 141, name: 'Posted Purch. Cr. Memo Subform' },
             { id: 6641, name: 'Purchase Return Order Subform' }
         ]
+    },
+    {
+        table: 'Purch. Rcpt. Line',
+		folder: 'PurchaseLine',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 137, name: 'Posted Purchase Rcpt. Subform' }
+        ]
+    },
+    {
+        table: 'Purch. Inv. Line',
+		folder: 'PurchaseLine',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 139, name: 'Posted Purch. Invoice Subform' }
+        ]
+    },
+    {
+        table: 'Purch. Cr. Memo Line',
+		folder: 'PurchaseLine',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 141, name: 'Posted Purch. Cr. Memo Subform' }
+        ]
+    },
+    {
+        table: 'Return Shipment Line',
+		folder: 'PurchaseLine',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 6651, name: 'Posted Return Shipment Subform' },
+            { id: 6653, name: 'Posted Return Shipment Lines' }
+        ]
     }
+    //#endregion
 ];

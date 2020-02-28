@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const glob = require('glob');
 const vscode = require('vscode');
 const constants = require("./constants");
 
@@ -12,7 +13,7 @@ function createAlFile(destinationPath, objectType, objectId, objectName, objectN
     // Generate File Name and Content
     switch (objectType) {
         case constants.AlObjectTypes.tableExtension:
-            fileName = 'Tab';
+            fileName = constants.AlObjectTypesToFilePrefix(constants.AlObjectTypes.tableExtension);
             fileContent = 
         `
 {
@@ -23,7 +24,7 @@ function createAlFile(destinationPath, objectType, objectId, objectName, objectN
 }`;
             break;
         case constants.AlObjectTypes.pageExtension:
-            fileName = 'Pag';
+            fileName = constants.AlObjectTypesToFilePrefix(constants.AlObjectTypes.pageExtension);
             fileContent = 
         `
 {
@@ -123,6 +124,38 @@ function createFolder(dir) {
     fs.mkdirSync(dir);
 }
 exports.createFolder = createFolder;
+//#endregion
+
+//#region Open AL files
+/**
+ * @param {string} objectName
+ * @param {string} alObjectType
+ * @returns {Thenable<vscode.TextDocument>[]} 
+ */
+function openALFile(objectName, alObjectType) {
+    const tenables = [];
+    const files = getAlFileLocations(objectName, alObjectType);
+    files.forEach(file => tenables.push(
+        vscode.workspace.openTextDocument(file).then(doc => {
+            vscode.window.showTextDocument(doc, {preserveFocus: true, preview: false});
+        })
+    ));
+    return tenables;
+}
+exports.openALFile = openALFile;
+
+/**
+ * @param {string} objectName
+ * @param {string} alObjectType
+ * @returns {string[]} File locations 
+ */
+function getAlFileLocations(objectName, alObjectType){
+    const compactObjectName = objectName.replace(/[^\w]/g, '');
+    const filePrefix = constants.AlObjectTypesToFilePrefix(alObjectType);
+    const fileLocationFormat = `${getCurrentWorkspaceFolderPath()}/src/**/${filePrefix}*${compactObjectName}.al`;
+    return glob.sync(fileLocationFormat);
+}
+exports.getAlFileLocations = getAlFileLocations;
 //#endregion
 
 let lastActiveWorkspace = undefined;

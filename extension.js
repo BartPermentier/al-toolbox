@@ -18,6 +18,34 @@ function activate(context) {
                     () => vscode.window.showInformationMessage('Failed to create related tables & pages'));
         }
     }));
+    const RelatedTablesManager = new relatedTables.RelatedTablesManager();
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.openRelatedTables', () => {
+        const currendDoc = vscode.window.activeTextEditor.document;
+        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(currendDoc);
+        if (extensionObjectInfo) {
+            if (!RelatedTablesManager.openRelateTables(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
+                vscode.window.showInformationMessage('No related tables found');
+        } else
+            vscode.window.showInformationMessage('No page-/tableextension found in open file');
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.openRelatedPages', () => {
+        const currendDoc = vscode.window.activeTextEditor.document;
+        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(currendDoc);
+        if (extensionObjectInfo) {
+            if (!RelatedTablesManager.openRelatePages(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
+                vscode.window.showInformationMessage('No related pages found');
+        } else
+            vscode.window.showInformationMessage('No page-/tableextension found in open file');
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.openRelatedTablesAndPages', () => {
+        const currendDoc = vscode.window.activeTextEditor.document;
+        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(currendDoc);
+        if (extensionObjectInfo) {
+            if(!RelatedTablesManager.openRelatePagesAndTables(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
+                vscode.window.showInformationMessage('No related tables or pages found');
+        } else
+            vscode.window.showInformationMessage('No page-/tableextension found in open file');
+    }));
     
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', function () {
         let editor = vscode.window.activeTextEditor;
