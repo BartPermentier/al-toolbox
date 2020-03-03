@@ -44,18 +44,34 @@ exports.RelatedTablesManager = class RelatedTablesManager {
         this.tableToRelatedObjects = new Map();
         this.pageToRelatedTable = new Map();
         constants.RelatedTables.forEach(element => {
-            element.objects.forEach(object => {
-                if (!this.tableToRelatedObjects.has(element.table))
-                this.tableToRelatedObjects.set(element.table, new Map());
-                if (!this.tableToRelatedObjects.get(element.table).has(element.objectType))
-                this.tableToRelatedObjects.get(element.table).set(element.objectType, []);
-
-                this.tableToRelatedObjects.get(element.table).get(element.objectType).push(object.name);
-
-                if (element.objectType === constants.AlObjectTypes.pageExtension) {
+            if (element.objectType === constants.AlObjectTypes.tableExtension) {
+                element.objects.forEach(object1 => {
+                    if (!this.tableToRelatedObjects.has(object1.name)) {
+                        this.tableToRelatedObjects.set(object1.name, {
+                            [constants.AlObjectTypes.tableExtension]: [],
+                            [constants.AlObjectTypes.pageExtension]: []
+                        });
+                    }
+                    element.objects.forEach(object2 => {
+                        if (object1.name !== object2.name) {
+                            this.tableToRelatedObjects.get(object1.name)
+                                [constants.AlObjectTypes.tableExtension].push(object2.name);
+                        }
+                    });
+                });
+            } else if (element.objectType === constants.AlObjectTypes.pageExtension) {
+                element.objects.forEach(object => {
+                    if (!this.tableToRelatedObjects.has(element.table)) {
+                        this.tableToRelatedObjects.set(element.table, {
+                            [constants.AlObjectTypes.tableExtension]: [],
+                            [constants.AlObjectTypes.pageExtension]: []
+                        });
+                    }
+                    this.tableToRelatedObjects.get(element.table)
+                        [constants.AlObjectTypes.pageExtension].push(object.name);
                     this.pageToRelatedTable.set(object.name, element.table);
-                }
-            });
+                });
+            }
         });
     }
 
@@ -108,8 +124,8 @@ exports.RelatedTablesManager = class RelatedTablesManager {
         const relatedObjects = [];
         if (sourceAlObjectType === constants.AlObjectTypes.tableExtension) {
             alObjectTypesToOpen.forEach(alObjectType => {
-                if (this.tableToRelatedObjects.has(objectName) && this.tableToRelatedObjects.get(objectName).has(alObjectType)) {
-                    this.tableToRelatedObjects.get(objectName).get(alObjectType).forEach(
+                if (this.tableToRelatedObjects.has(objectName)) {
+                    this.tableToRelatedObjects.get(objectName)[alObjectType].forEach(
                         objectName => relatedObjects.push({name: objectName, type: alObjectType})
                     );
                 }
