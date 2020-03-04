@@ -3,9 +3,11 @@ const constants = require('./constants');
 const fileMangagement = require('./fileManagement');
 
 /**
+ * @param {string} objectNamePrefix
+ * @param {(objectType: string, objectId: number, objectName: string) => string} fileNameFormatter
  * @returns {Promise}
  */
-exports.createRelatedTables = function createRelatedTables(objectNamePrefix) {
+exports.createRelatedTables = function createRelatedTables(objectNamePrefix, fileNameFormatter) {
     const rootPath = fileMangagement.getCurrentWorkspaceFolderPath();
     // if rootpath is empty then error
     if (!rootPath) {
@@ -24,7 +26,7 @@ exports.createRelatedTables = function createRelatedTables(objectNamePrefix) {
         fileMangagement.createFolder(destinationPath);
 
         element.objects.forEach(object => {
-            fileCreationPromises.push(fileMangagement.createAlFile(destinationPath, element.objectType, object.id, object.name, objectNamePrefix));
+            fileCreationPromises.push(fileMangagement.createAlFile(destinationPath, element.objectType, object.id, object.name, objectNamePrefix, fileNameFormatter));
         });
     });
 

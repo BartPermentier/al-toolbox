@@ -35,6 +35,33 @@ exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
     }
 }
 
+exports.AlObjectTypesToFullTypeName = (AlObjectType) => {
+    switch (AlObjectType) {
+        case this.AlObjectTypes.table:
+		    return 'Table';
+		case this.AlObjectTypes.tableExtension:
+		    return 'TableExt';
+        case this.AlObjectTypes.page:
+            return 'Page';
+		case this.AlObjectTypes.pageExtension:
+            return 'PageExt';
+		case this.AlObjectTypes.pageCustomization:
+		    return 'PageCust';
+        case this.AlObjectTypes.codeUnit:
+		    return 'Codeunit';
+        case this.AlObjectTypes.report:
+		    return 'Report';
+        case this.AlObjectTypes.query:
+		    return 'Query';
+        case this.AlObjectTypes.profile:
+		    return 'Profile';
+        case this.AlObjectTypes.XMLPort:
+            return 'Xmlport';
+        default:
+            return '';
+    }
+}
+
 exports.RelatedTables = [
     {
         table: 'Contact',

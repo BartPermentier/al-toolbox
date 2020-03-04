@@ -5,15 +5,22 @@ const vscode = require('vscode');
 const constants = require("./constants");
 
 //#region AL File Creation
-function createAlFile(destinationPath, objectType, objectId, objectName, objectNamePrefix){
+/**
+ * 
+ * @param {string} destinationPath 
+ * @param {string} objectType 
+ * @param {number} objectId 
+ * @param {string} objectName 
+ * @param {string} objectNamePrefix 
+ * @param {(objectType: string, objectId: number, objectName: string) => string} fileNameFormatter 
+ */
+function createAlFile(destinationPath, objectType, objectId, objectName, objectNamePrefix, fileNameFormatter){
     const newObjectId = objectId + 80000;
     let newObjectName = objectName.replace(/[^\w]/g,'');
-    let fileName;
     let fileContent;
     // Generate File Name and Content
     switch (objectType) {
         case constants.AlObjectTypes.tableExtension:
-            fileName = constants.AlObjectTypesToFilePrefix(constants.AlObjectTypes.tableExtension);
             fileContent = 
         `
 {
@@ -24,7 +31,6 @@ function createAlFile(destinationPath, objectType, objectId, objectName, objectN
 }`;
             break;
         case constants.AlObjectTypes.pageExtension:
-            fileName = constants.AlObjectTypesToFilePrefix(constants.AlObjectTypes.pageExtension);
             fileContent = 
         `
 {
@@ -42,7 +48,7 @@ function createAlFile(destinationPath, objectType, objectId, objectName, objectN
             throw Error('Unsuported AL object type.');
     }
     
-    fileName = fileName + objectId + '-' + 'Ext' + newObjectId + '.' + newObjectName + '.al';
+    const fileName = fileNameFormatter(objectType, objectId, objectName);
     //vscode.window.showInformationMessage(fileName);
     //Generate Path
     const filePath = path.join(destinationPath, fileName);
@@ -57,6 +63,35 @@ function createAlFile(destinationPath, objectType, objectId, objectName, objectN
             });  
 }
 exports.createAlFile = createAlFile;
+
+/**
+ * 
+ * @param {string} objectType 
+ * @param {number} objectId 
+ * @param {string} objectName
+ * @returns {string}
+ */
+function oldAlFileNameFormatter(objectType, objectId, objectName){
+    const newObjectId = 80000 + objectId;
+    const prefix = constants.AlObjectTypesToFilePrefix(objectType);
+    const newObjectName = objectName.replace(/[^\w]/g,'');
+    return prefix + objectId + '-' + 'Ext' + newObjectId + '.' + newObjectName + '.al';
+}
+exports.oldAlFileNameFormatter = oldAlFileNameFormatter;
+
+/**
+ * 
+ * @param {string} objectType 
+ * @param {number} objectId 
+ * @param {string} objectName
+ * @returns {string}
+ */
+function newAlFileNameFormatter(objectType, objectId, objectName){
+    const newObjectName = objectName.replace(/[^\w]/g,'');
+    const fullTypeName = constants.AlObjectTypesToFullTypeName(objectType);
+    return newObjectName + '.' + fullTypeName + '.al';
+}
+exports.newAlFileNameFormatter = newAlFileNameFormatter;
 //#endregion
 
 //#region File Creation
@@ -151,8 +186,18 @@ exports.openALFile = openALFile;
  */
 function getAlFileLocations(objectName, alObjectType){
     const compactObjectName = objectName.replace(/[^\w]/g, '');
-    const filePrefix = constants.AlObjectTypesToFilePrefix(alObjectType);
-    const fileLocationFormat = `${getCurrentWorkspaceFolderPath()}/src/**/${filePrefix}*${compactObjectName}.al`;
+
+    const UseOldFileNamingConventions = vscode.workspace.getConfiguration('ALTB').get('UseOldFileNamingConventions');
+    
+    let fileLocationFormat = `${getCurrentWorkspaceFolderPath()}/src/**/`;
+    if(UseOldFileNamingConventions) {
+        const filePrefix = constants.AlObjectTypesToFilePrefix(alObjectType);
+        fileLocationFormat += `${filePrefix}*${compactObjectName}.al`;
+    } else {
+        const fullTypeName = constants.AlObjectTypesToFullTypeName(alObjectType);
+        fileLocationFormat += `${compactObjectName}.${fullTypeName}.al`;
+    }
+
     return glob.sync(fileLocationFormat);
 }
 exports.getAlFileLocations = getAlFileLocations;

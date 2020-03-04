@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const relatedTables = require('./relatedTables/relatedTables');
+const fileManagement = require('./relatedTables/fileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
 
 
@@ -13,7 +14,7 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.createRelatedTables', async () => {
         const objectPrefix = await getObjectPrefix();
         if (objectPrefix !== undefined) {
-            relatedTables.createRelatedTables(objectPrefix)
+            relatedTables.createRelatedTables(objectPrefix, getFileNameFormatter())
                 .then(() => vscode.window.showInformationMessage(`Related tables & pages created with prefix: '${objectPrefix}'`),
                     () => vscode.window.showInformationMessage('Failed to create related tables & pages'));
         }
@@ -79,6 +80,9 @@ module.exports = {
 	deactivate
 }
 
+/**
+ * @returns {Promise<string>}
+ */
 async function getObjectPrefix() {
     let objectPrefix;
     let settings = vscode.workspace.getConfiguration('CRS');
@@ -87,7 +91,18 @@ async function getObjectPrefix() {
         settings = vscode.workspace.getConfiguration('alVarHelper');
         objectPrefix = settings.get('ignoreALPrefix');
         if (!objectPrefix)
-            objectPrefix = await vscode.window.showInputBox({ placeHolder: 'Object prefix'}).then(newPrefix => newPrefix);
+            objectPrefix = await vscode.window.showInputBox({placeHolder: 'Object prefix'}).then(newPrefix => newPrefix);
     }
     return objectPrefix
+}
+/**
+ * @returns {(objectType: string, objectId: number, objectName: string) => string}
+ */
+function getFileNameFormatter() {
+    const settings = vscode.workspace.getConfiguration('ALTB');
+    const UseOldFileNamingConventions = settings.get('UseOldFileNamingConventions');
+    if (UseOldFileNamingConventions)
+        return fileManagement.oldAlFileNameFormatter;
+    else
+        return fileManagement.newAlFileNameFormatter;
 }
