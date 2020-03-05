@@ -1,0 +1,139 @@
+const constants = require("../constants");
+const fileManagement = require('./fileManagement');
+const workspaceManagement = require('./workspaceManagement');
+const path = require("path");
+const vscode = require("vscode");
+const glob = require("glob");
+
+//#region AL File Creation
+/**
+ * 
+ * @param {string} destinationPath 
+ * @param {string} objectType 
+ * @param {number} objectId 
+ * @param {string} objectName 
+ * @param {string} objectNamePrefix 
+ * @param {(objectType: string, objectId: number, objectName: string) => string} fileNameFormatter 
+ */
+function createAlFile(destinationPath, objectType, objectId, objectName, objectNamePrefix, fileNameFormatter){
+    const newObjectId = objectId + 80000;
+    let newObjectName = objectName.replace(/[^\w]/g,'');
+    let fileContent;
+    // Generate File Name and Content
+    switch (objectType) {
+        case constants.AlObjectTypes.tableExtension:
+            fileContent = 
+        `
+{
+    fields
+    {
+
+    }
+}`;
+            break;
+        case constants.AlObjectTypes.pageExtension:
+            fileContent = 
+        `
+{
+    layout
+    {
+    }
+
+    actions
+    {
+    }
+}`;
+            break;
+        default:
+            console.error('Unsuported AL object type.');
+            throw Error('Unsuported AL object type.');
+    }
+    
+    const fileName = fileNameFormatter(objectType, objectId, objectName);
+    //vscode.window.showInformationMessage(fileName);
+    //Generate Path
+    const filePath = path.join(destinationPath, fileName);
+    return fileManagement.existsFileAsync(filePath)
+            .then(exists => {
+            if (exists) {
+                return filePath;
+            }
+            const contents = objectType + ' ' + newObjectId + ' "' + objectNamePrefix + newObjectName + '" extends "' +  objectName + '" //' + objectId + fileContent;
+            return fileManagement.writeTextFileAsync(filePath, contents)
+                .then(() => filePath);
+            });  
+}
+exports.createAlFile = createAlFile;
+
+/**
+ * 
+ * @param {string} objectType 
+ * @param {number} objectId 
+ * @param {string} objectName
+ * @returns {string}
+ */
+function oldAlFileNameFormatter(objectType, objectId, objectName){
+    const newObjectId = 80000 + objectId;
+    const prefix = constants.AlObjectTypesToFilePrefix(objectType);
+    const newObjectName = objectName.replace(/[^\w]/g,'');
+    return prefix + objectId + '-' + 'Ext' + newObjectId + '.' + newObjectName + '.al';
+}
+exports.oldAlFileNameFormatter = oldAlFileNameFormatter;
+
+/**
+ * 
+ * @param {string} objectType 
+ * @param {number} objectId 
+ * @param {string} objectName
+ * @returns {string}
+ */
+function newAlFileNameFormatter(objectType, objectId, objectName){
+    const newObjectName = objectName.replace(/[^\w]/g,'');
+    const fullTypeName = constants.AlObjectTypesToFullTypeName(objectType);
+    return newObjectName + '.' + fullTypeName + '.al';
+}
+exports.newAlFileNameFormatter = newAlFileNameFormatter;
+//#endregion
+
+//#region Open AL files
+/**
+ * @param {string} objectName
+ * @param {string} alObjectType
+ * @returns {Thenable<vscode.TextDocument>[]} 
+ */
+function openALFile(objectName, alObjectType) {
+    const tenables = [];
+    const files = getAlFileLocations(objectName, alObjectType);
+    files.forEach(file => tenables.push(
+        vscode.workspace.openTextDocument(file).then(doc => {
+            vscode.window.showTextDocument(doc, {preserveFocus: true, preview: false});
+        })
+    ));
+    return tenables;
+}
+exports.openALFile = openALFile;
+
+/**
+ * @param {string} objectName
+ * @param {string} alObjectType
+ * @returns {string[]} File locations 
+ */
+function getAlFileLocations(objectName, alObjectType){
+    const compactObjectName = objectName.replace(/[^\w]/g, '');
+
+    const UseOldFileNamingConventions = vscode.workspace.getConfiguration('ALTB').get('UseOldFileNamingConventions');
+    
+    let fileLocationFormat = `${workspaceManagement.getCurrentWorkspaceFolderPath()}/src/**/`;
+    if(UseOldFileNamingConventions) {
+        const filePrefix = constants.AlObjectTypesToFilePrefix(alObjectType);
+        fileLocationFormat += `${filePrefix}*${compactObjectName}.al`;
+    } else {
+        const fullTypeName = constants.AlObjectTypesToFullTypeName(alObjectType);
+        fileLocationFormat += `${compactObjectName}.${fullTypeName}.al`;
+    }
+
+    return glob.sync(fileLocationFormat);
+}
+exports.getAlFileLocations = getAlFileLocations;
+//#endregion
+

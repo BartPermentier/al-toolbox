@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const relatedTables = require('./relatedTables/relatedTables');
-const fileManagement = require('./fileManagement/fileManagement');
+const alFileManagement = require('./fileManagement/alFileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
 
 
@@ -102,7 +102,7 @@ function getFileNameFormatter() {
     const settings = vscode.workspace.getConfiguration('ALTB');
     const UseOldFileNamingConventions = settings.get('UseOldFileNamingConventions');
     if (UseOldFileNamingConventions)
-        return fileManagement.oldAlFileNameFormatter;
+        return alFileManagement.oldAlFileNameFormatter;
     else
-        return fileManagement.newAlFileNameFormatter;
+        return alFileManagement.newAlFileNameFormatter;
 }
