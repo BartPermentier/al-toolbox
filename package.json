@@ -30,7 +30,7 @@
         "onCommand:al-toolbox.openRelatedPages",
         "onCommand:al-toolbox.openRelatedTablesAndPages"
     ],
-    "main": "./extension.js",
+    "main": "./src/extension.js",
     "contributes": {
         "languages": [
             {

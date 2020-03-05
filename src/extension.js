@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const relatedTables = require('./relatedTables/relatedTables');
-const fileManagement = require('./relatedTables/fileManagement');
+const fileManagement = require('./fileManagement/fileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
 
 

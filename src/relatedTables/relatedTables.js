@@ -1,6 +1,6 @@
 const vscode = require('vscode');
-const constants = require('./constants');
-const fileMangagement = require('./fileManagement');
+const constants = require('../constants');
+const fileMangagement = require('../fileManagement/fileManagement');
 
 /**
  * @param {string} objectNamePrefix

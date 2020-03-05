@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const glob = require('glob');
 const vscode = require('vscode');
-const constants = require("./constants");
+const constants = require("../constants");
 
 //#region AL File Creation
 /**
