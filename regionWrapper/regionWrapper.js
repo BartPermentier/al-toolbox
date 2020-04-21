@@ -3,10 +3,11 @@ const vscode = require('vscode');
 
 const regionStartRegex = /\/\/#region\b/;
 const commandRegex = /((?<=\/\/)(?!#(end)?region\b)|(?<=\/\/#(end)?region\b)).*/g;
-const stringRegex = /'([^']|'')*'|"[^"]+"/g;
+const blockCommandRegex = /\/\*([^\*]|\*(?!\/))*\*\//g;
+const stringRegex = /'([^'\n]|'')*'|"[^"\n]+"/g;
 
-const alFunctionRegex = /(\[[^\]]+\]\s*)?(\blocal\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gmi;
-const beginRegex = /\bbegin\b|\bcase\b.*\bof\b/gmi;
+const alFunctionRegex = /(\[[^\]]+\]\s*)?(\blocal\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gi;
+const beginRegex = /\bbegin\b|\bcase\b/gi;
 const endRegex = /\bend;?\b/gi;
 /**
  * @param {vscode.TextEditorEdit} editBuilder
@@ -15,6 +16,7 @@ const endRegex = /\bend;?\b/gi;
 exports.WrapAllFunctions = (editBuilder, document) => {
     let text = document.getText();
     text = text.replace(commandRegex, '');
+    text = replaceBlockCommentsWithNewlines(text);
     text = text.replace(stringRegex, '""'); // replaced with "" so alFunctionRegex still recognizes function like: 'procedure "function b"(...)'
     
     let alFunctionLocations = findAllCodeBlocks(text, alFunctionRegex, beginRegex, endRegex);
@@ -34,7 +36,7 @@ exports.WrapAllFunctions = (editBuilder, document) => {
     return regionCount;
 }
 
-const DataItemOrColumnRegex = /\b(?<kind>dataitem|column)\b\s*\(/gmi;
+const DataItemOrColumnRegex = /\b(?<kind>dataitem|column)\b\s*\(/gi;
 /**
  * @param {vscode.TextEditorEdit} editBuilder
  * @param {vscode.TextDocument} document
@@ -204,8 +206,11 @@ function getRegionNameForAlFunction(document, lineNo) {
         line = document.lineAt(lineNo + 1).text;
     }
     match = functionNameRegex.exec(line);
-    if (match === null)
-        console.error('Does not contain a AL function: ' + line);
+    if (match === null) {
+        console.error('Does not contain a AL function: ' + line.trimLeft());
+        vscode.window.showErrorMessage(`Failed to find function name on line ${lineNo} (line number before adding regions): Region will be named "error function name not found" instead`);
+        return '"error function name not found"';
+    }
     return match.groups['name'];
 }
 
@@ -239,4 +244,18 @@ function concatCodeBlocksNextToEachOther(codeBlocks, checkKind) {
     }
 
     return newCodeBlocks;
+}
+
+function replaceBlockCommentsWithNewlines(text) {
+    if (!blockCommandRegex.global) console.error('blockCommandRegex should have option "global"');
+    
+    let match;
+    let newText = text;
+    while((match = blockCommandRegex.exec(newText)) !== null){
+        const newlines = match[0].replace(/[^\n]+/g, '');
+        newText = newText.substring(0, match.index) + newlines + newText.substring(match.index + match[0].length);
+        blockCommandRegex.lastIndex = match.index + newlines.length;
+    }
+
+    return newText;
 }
