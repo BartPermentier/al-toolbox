@@ -2,6 +2,7 @@ const vscode = require('vscode');
 const relatedTables = require('./relatedTables/relatedTables');
 const alFileManagement = require('./fileManagement/alFileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
+const renumber = require('./renumberObjects/renumber');
 
 
 /**
@@ -11,6 +12,7 @@ function activate(context) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
   
+    //#region Related Tables
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.createRelatedTables', async () => {
         const objectPrefix = await getObjectPrefix();
         if (objectPrefix !== undefined) {
@@ -47,7 +49,8 @@ function activate(context) {
         } else
             vscode.window.showInformationMessage('No page-/tableextension found in open file');
     }));
-    
+    //#endregion
+    //#region Wrapping
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', function () {
         let editor = vscode.window.activeTextEditor;
         let numberOfRegions; 
@@ -70,8 +73,25 @@ function activate(context) {
             numberOfRegions += regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false);
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
+    //#endregion
+
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {
+        try {
+            renumber.renumberAll().then(result => {
+                let numberOfDocumentsChanged = 0;
+                result.forEach(list => 
+                    list.forEach(changed => {
+                        if (changed) ++numberOfDocumentsChanged;
+                    })
+                );
+                vscode.window.showInformationMessage(`${numberOfDocumentsChanged} objects(s) renumbered.`)
+            });
+        } catch (error) {
+            vscode.window.showErrorMessage('An error occured: ' + error);
+        }
+    }));
 }
-exports.activate = activate;
+
 // this method is called when your extension is deactivated
 function deactivate() {}
 

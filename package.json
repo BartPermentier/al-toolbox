@@ -28,7 +28,8 @@
         "onCommand:al-toolbox.wrapAll",
         "onCommand:al-toolbox.openRelatedTables",
         "onCommand:al-toolbox.openRelatedPages",
-        "onCommand:al-toolbox.openRelatedTablesAndPages"
+        "onCommand:al-toolbox.openRelatedTablesAndPages",
+        "onCommand:al-toolbox.renumberAll"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -91,6 +92,10 @@
             {
                 "command": "al-toolbox.wrapAll",
                 "title": "ALTB: Create regions for all AL functions, triggers, dataitems, and columns"
+            },
+            {
+                "command": "al-toolbox.renumberAll",
+                "title": "ALTB: Renumber AL objects"
             }
         ],
         "configuration": [

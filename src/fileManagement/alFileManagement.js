@@ -137,3 +137,19 @@ function getAlFileLocations(objectName, alObjectType){
 exports.getAlFileLocations = getAlFileLocations;
 //#endregion
 
+exports.getFileFormatForType = function getFileFormatForType(alObjectType) {
+    const UseOldFileNamingConventions = vscode.workspace.getConfiguration('ALTB').get('UseOldFileNamingConventions');
+
+    let fileLocationFormat;
+    if(UseOldFileNamingConventions) {
+        const filePrefix = constants.AlObjectTypesToFilePrefix(alObjectType);
+        fileLocationFormat = `${filePrefix}*.al`;
+    } else {
+        const fullTypeName = constants.AlObjectTypesToFullTypeName(alObjectType);
+        fileLocationFormat = `*.${fullTypeName}.al`;
+    }
+    // Upercase letter may be lowercase
+    fileLocationFormat = fileLocationFormat.replace(/[A-Z]/, match => `{${match},${match.toLowerCase()}}`);
+
+    return fileLocationFormat;
+};
