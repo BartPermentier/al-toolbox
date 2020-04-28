@@ -289,8 +289,7 @@ exports.RelatedTables = [
 		folder: 'PurchaseHeader',
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
-            { id: 145, name: 'Posted Purchase Receipts' },
-            { id: 6660, name: 'Posted Return Receipt' }
+            { id: 145, name: 'Posted Purchase Receipts' }
         ]
     },
     {
@@ -317,7 +316,7 @@ exports.RelatedTables = [
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
             { id: 6650, name: 'Posted Return Shipment' },
-            { id: 6650, name: 'Posted Return Shipments' }
+            { id: 6652, name: 'Posted Return Shipments' }
         ]
     },
     //#endregion
