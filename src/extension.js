@@ -76,19 +76,20 @@ function activate(context) {
     //#endregion
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {
-        try {
-            renumber.renumberAll().then(result => {
+        renumber.renumberAll().then(result => {
                 let numberOfDocumentsChanged = 0;
                 result.forEach(list => 
                     list.forEach(changed => {
                         if (changed) ++numberOfDocumentsChanged;
                     })
                 );
-                vscode.window.showInformationMessage(`${numberOfDocumentsChanged} objects(s) renumbered.`)
-            });
-        } catch (error) {
-            vscode.window.showErrorMessage('An error occured: ' + error);
-        }
+                vscode.workspace.saveAll().then(() =>
+                    vscode.commands.executeCommand('workbench.action.closeAllEditors')
+                );
+                vscode.window.showInformationMessage(`${numberOfDocumentsChanged} objects(s) renumbered.`);
+            }, error => 
+                vscode.window.showErrorMessage('An error occured: ' + error)
+        );
     }));
 }
 

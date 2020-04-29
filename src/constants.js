@@ -8,7 +8,8 @@ exports.AlObjectTypes = {
     report: 'report',
     query: 'query',
     profile: 'profile',
-    XMLPort: 'xmlport'
+    XMLPort: 'xmlport',
+    enum: 'enum'
 }
 
 exports.AlObjectTypesToFilePrefix = (AlObjectType) => {

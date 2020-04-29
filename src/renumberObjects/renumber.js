@@ -8,31 +8,53 @@ const renumberableTypes = [
     constants.AlObjectTypes.page,
     constants.AlObjectTypes.query,
     constants.AlObjectTypes.report,
-    constants.AlObjectTypes.table
+    constants.AlObjectTypes.table,
+    constants.AlObjectTypes.enum
 ]
 
+/**
+ * Renumbers all AL objects with new ids that fit in the ranges found in app.json.
+ * This only works for workspaces with one app.json file.
+ */
 exports.renumberAll = async function renumberAll() {
-    const appFiles = await vscode.workspace.findFiles('**/app.json', undefined, 1);
+    const appFiles = await vscode.workspace.findFiles('**/app.json');
     if (appFiles.length === 0) throw "No app.json found";
-    if (appFiles.length > 1) throw "Multiple app.json files found: " + appFiles.toString();
+    if (appFiles.length > 1)
+        throw "Multiple app.json files found:\n"
+            + appFiles.map(appFile => appFile.path).join(', ') + '\n'
+            + 'This is probably because there are multiple folders in the current workspace.'
 
     const appDocument = await vscode.workspace.openTextDocument(appFiles[0])
     const numberRanges = getNumberRanges(appDocument);
 
-    return Promise.all(renumberableTypes.map(async objectType => {
-        // Get all AL files for object type
-        
-        const files = await vscode.workspace.findFiles('**/' + alFileManagement.getFileFormatForType(objectType));
+    const opbjectTypeIncrement = 100 / renumberableTypes.length;
+    return vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+			title: "Renumbering...",
+			cancellable: false
+        }, (progress) => Promise.all(renumberableTypes.map(async objectType => {
 
-        // Get id foreach file
-        let originalObjects = await Promise.all(files.map(file => mapFileToIdUriPair(file, objectType)));
-        // exclude files where no id is found, this should also filter out files with incorrect object types.
-        originalObjects = originalObjects.filter(object => object.id !== null);
-        // Get new id to use foreach file
-        const newIdMappings = createRenumberMapping(originalObjects, numberRanges);
+            // Get all AL files for object type
+            const files = await vscode.workspace.findFiles('**/' + alFileManagement.getFileFormatForType(objectType));
+            if (files.length === 0) {
+                progress.report({increment: opbjectTypeIncrement});
+                return [];
+            }
+            // Get id foreach file
+            let originalObjects = await Promise.all(files.map(file => mapFileToIdUriPair(file, objectType)));
+            // exclude files where no id is found, this should also filter out files with incorrect object types.
+            originalObjects = originalObjects.filter(object => object.id !== null);
+            // Get new id to use foreach file
+            const newIdMappings = createRenumberMapping(originalObjects, numberRanges);
 
-        return Promise.all(newIdMappings.map(newIdMapping => renumberFile(newIdMapping.newId, newIdMapping.id, newIdMapping.path)));
-    }));
+            const progressIncrement = opbjectTypeIncrement / files.length;
+            return Promise.all(newIdMappings.map(async newIdMapping => {
+                const result = await renumberFile(newIdMapping.newId, newIdMapping.id, newIdMapping.path);
+                progress.report({increment: progressIncrement});
+                return result;
+            }));
+        }))
+    );
 }
 
 /**
@@ -113,13 +135,24 @@ async function renumberFile(newNumber, oldNumber, file) {
     if (newNumber === oldNumber) return false;
     const textDocument = await vscode.workspace.openTextDocument(file);
     const text = textDocument.getText();
-    const match = objectIdRegex.exec(text);
+    let match = objectIdRegex.exec(text);
     if (match === null) return null;
-    const workspaceEdit = new vscode.WorkspaceEdit();
-    workspaceEdit.replace(file, textDocument.getWordRangeAtPosition(textDocument.positionAt(match.index)), newNumber.toString());
 
-    return vscode.workspace.applyEdit(workspaceEdit)
-        .then(result => textDocument.save()
-        .then(() => result));
+    let workspaceEdit = new vscode.WorkspaceEdit();
+    workspaceEdit.replace(file, textDocument.getWordRangeAtPosition(textDocument.positionAt(match.index)), newNumber.toString());
+    let result = vscode.workspace.applyEdit(workspaceEdit);
+
+
+    const fileContainsOldRegex = new RegExp(`${oldNumber}(?=[^/\\\\]*$)`);
+    if ((match = fileContainsOldRegex.exec(file.path)) !== null) {
+        // rename the file if oldNumber is in filename
+        const newFileName = vscode.Uri.file(file.path.replace(fileContainsOldRegex, newNumber.toString()));
+        let workspaceEdit = new vscode.WorkspaceEdit();
+        workspaceEdit.renameFile(file, newFileName, {ignoreIfExists: true});
+        await result;
+        result = vscode.workspace.applyEdit(workspaceEdit);
+    }
+
+    return result;
 }
 //#endregion
