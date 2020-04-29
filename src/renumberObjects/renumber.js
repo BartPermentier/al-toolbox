@@ -12,19 +12,22 @@ const renumberableTypes = [
 ]
 
 exports.renumberAll = async function renumberAll() {
-    let appFiles = await vscode.workspace.findFiles('**/app.json', undefined, 1);
+    const appFiles = await vscode.workspace.findFiles('**/app.json', undefined, 1);
     if (appFiles.length === 0) throw "No app.json found";
     if (appFiles.length > 1) throw "Multiple app.json files found: " + appFiles.toString();
 
-    let appDocument = await vscode.workspace.openTextDocument(appFiles[0])
-    let numberRanges = getNumberRanges(appDocument);
+    const appDocument = await vscode.workspace.openTextDocument(appFiles[0])
+    const numberRanges = getNumberRanges(appDocument);
 
     return Promise.all(renumberableTypes.map(async objectType => {
         // Get all AL files for object type
         
         const files = await vscode.workspace.findFiles('**/' + alFileManagement.getFileFormatForType(objectType));
+
         // Get id foreach file
-        const originalObjects = await Promise.all(files.map(file => mapFileToIdUriPair(file)));
+        let originalObjects = await Promise.all(files.map(file => mapFileToIdUriPair(file, objectType)));
+        // exclude files where no id is found, this should also filter out files with incorrect object types.
+        originalObjects = originalObjects.filter(object => object.id !== null);
         // Get new id to use foreach file
         const newIdMappings = createRenumberMapping(originalObjects, numberRanges);
 
@@ -71,23 +74,25 @@ function getNumberRanges(textDocument) {
 
 /**
  * @param {vscode.Uri} file
+ * @param {string} objectType
  */
-async function mapFileToIdUriPair(file) {
+async function mapFileToIdUriPair(file, objectType) {
     return {
-        id: await getObjectId(file),
+        id: await getObjectId(file, objectType),
         path: file
     };
 }
 
-const objectIdRegex = /(?<=^\w+\s+)\d+/;
 /**
  * @param {vscode.Uri} file
+ * @param {string} objectType
  * @returns {Thenable<number>}
  */
-function getObjectId(file) {
+function getObjectId(file, objectType) {
     return vscode.workspace.openTextDocument(file).then(
         textDocument => {
             const text = textDocument.getText();
+            const objectIdRegex = new RegExp(`(?<=^${objectType}\\s+)\\d+`);
             const match = objectIdRegex.exec(text);
             if (match !== null) {
                 return Number(match[0]);
@@ -98,6 +103,7 @@ function getObjectId(file) {
     );
 }
 
+const objectIdRegex = /(?<=^\w+\s+)\d+/;
 /**
  * @param {number} newNumber 
  * @param {number} oldNumber 
