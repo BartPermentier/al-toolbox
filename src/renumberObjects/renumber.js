@@ -1,4 +1,5 @@
 const alFileManagement = require('../fileManagement/alFileManagement');
+const fileManagement = require('../fileManagement/fileManagement');
 const constants = require('../constants');
 const vscode = require("vscode");
 
@@ -17,14 +18,9 @@ const renumberableTypes = [
  * This only works for workspaces with one app.json file.
  */
 exports.renumberAll = async function renumberAll() {
-    const appFiles = await vscode.workspace.findFiles('**/app.json');
-    if (appFiles.length === 0) throw "No app.json found";
-    if (appFiles.length > 1)
-        throw "Multiple app.json files found:\n"
-            + appFiles.map(appFile => appFile.path).join(', ') + '\n'
-            + 'This is probably because there are multiple folders in the current workspace.'
+    const appFile = await fileManagement.getAppFile();
 
-    const appDocument = await vscode.workspace.openTextDocument(appFiles[0])
+    const appDocument = await vscode.workspace.openTextDocument(appFile);
     const numberRanges = getNumberRanges(appDocument);
 
     const opbjectTypeIncrement = 100 / renumberableTypes.length;

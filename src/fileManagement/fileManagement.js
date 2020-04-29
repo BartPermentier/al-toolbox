@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const vscode = require("vscode");
 
 //#region File Creation
 function writeTextFileAsync(filename, data) {
@@ -33,3 +34,13 @@ function createFolder(dir) {
 }
 exports.createFolder = createFolder;
 //#endregion
+
+exports.getAppFile = async function getAppFile(){
+    const appFiles = await vscode.workspace.findFiles('**/app.json');
+    if (appFiles.length === 0) throw "No app.json found";
+    if (appFiles.length > 1)
+        throw "Multiple app.json files found:\n"
+            + appFiles.map(appFile => appFile.path).join(', ') + '\n'
+            + 'This is probably because there are multiple folders in the current workspace.';
+    return appFiles[0];
+}
