@@ -1,3 +1,4 @@
+const workspaceManagement = require('./workspaceManagement');
 const fs = require("fs");
 const path = require("path");
 const vscode = require("vscode");
@@ -35,12 +36,18 @@ function createFolder(dir) {
 exports.createFolder = createFolder;
 //#endregion
 
-exports.getAppFile = async function getAppFile(){
-    const appFiles = await vscode.workspace.findFiles('**/app.json');
-    if (appFiles.length === 0) throw "No app.json found";
-    if (appFiles.length > 1)
-        throw "Multiple app.json files found:\n"
-            + appFiles.map(appFile => appFile.path).join(', ') + '\n'
-            + 'This is probably because there are multiple folders in the current workspace.';
-    return appFiles[0];
+async function findSingleInstanceFileInCurrentWorkspaceFolder(file) {
+    const currentWorkspaceFolderPath = workspaceManagement.getCurrentWorkspaceFolderPath();
+    let files = await vscode.workspace.findFiles(`**/${file}`);
+    files = files.filter(file => file.fsPath.startsWith(currentWorkspaceFolderPath));
+
+    if (files.length === 0) throw `No ${file} found`;
+    if (files.length > 1)
+        throw `Multiple ${file} files found:\n`
+            + files.map(file => file.path).join(', ');
+    return files[0];
+}
+
+exports.getAppFile = function getAppFile() {
+    return findSingleInstanceFileInCurrentWorkspaceFolder('app.json');
 }

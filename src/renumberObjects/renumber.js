@@ -1,5 +1,6 @@
 const alFileManagement = require('../fileManagement/alFileManagement');
 const fileManagement = require('../fileManagement/fileManagement');
+const workspaceManagement = require('../fileManagement/workspaceManagement');
 const constants = require('../constants');
 const vscode = require("vscode");
 
@@ -30,8 +31,11 @@ exports.renumberAll = async function renumberAll() {
 			cancellable: false
         }, (progress) => Promise.all(renumberableTypes.map(async objectType => {
 
-            // Get all AL files for object type
-            const files = await vscode.workspace.findFiles('**/' + alFileManagement.getFileFormatForType(objectType));
+            // Get all AL files for object type in currentWorkspaceFolder
+            const currWorkspace = workspaceManagement.getCurrentWorkspaceFolderPath()
+            let files = await vscode.workspace.findFiles('**/' + alFileManagement.getFileFormatForType(objectType));
+            files = files.filter(file => file.fsPath.startsWith(currWorkspace));
+
             if (files.length === 0) {
                 progress.report({increment: opbjectTypeIncrement});
                 return [];
