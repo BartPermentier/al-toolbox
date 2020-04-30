@@ -51,3 +51,66 @@ async function findSingleInstanceFileInCurrentWorkspaceFolder(file) {
 exports.getAppFile = function getAppFile() {
     return findSingleInstanceFileInCurrentWorkspaceFolder('app.json');
 }
+
+exports.getSettingsFile = function getSettingsFile() {
+    return findSingleInstanceFileInCurrentWorkspaceFolder('.vscode/settings.json');
+}
+
+/**
+ * Renames all matches of 'regex' with 'replacement' + match group suffix. e.g.: /(TEST) (?<suffix>suff)/ => 'replacement'suff
+ * @param {vscode.TextDocument} textDocument
+ * @param {RegExp} regex RegExp that matches the word to rename
+ * @param {RegExp} toReplaceRegex RegExp that matches the part of the word that needs to change to replacement
+ * @param {string} replacement
+ */
+exports.renameAll = async function renameAll(textDocument, regex, toReplaceRegex, replacement) {
+    if (!regex.global) throw `Regex /${regex.source}/ is not global`;
+    let text = textDocument.getText();
+    const editResults = [];
+    let match;
+    while((match = regex.exec(text)) !== null) {
+        editResults.push(
+            await vscode.commands.executeCommand(
+                'vscode.executeDocumentRenameProvider',
+                textDocument.uri,
+                textDocument.positionAt(match.index),
+                match[0].replace(toReplaceRegex, replacement)
+            ).then(
+                textEdit => vscode.workspace.applyEdit(textEdit)
+            ));
+        text = textDocument.getText();
+    }
+    return Promise.all(editResults);
+}
+
+exports.replaceAll = async function replaceAll(textDocument, regex, replacement) {
+    if (!regex.global) throw `Regex /${regex.source}/ is not global`;
+    let text = textDocument.getText();
+    const textEdits = [];
+    let match;
+    while((match = regex.exec(text)) !== null) {
+        const edit = new vscode.TextEdit(
+            new vscode.Range(
+                textDocument.positionAt(match.index),
+                textDocument.positionAt(match.index + match[0].length)
+            ),
+            replacement);
+        textEdits.push(edit);
+    }
+    return applyEditAndSave(textDocument, textEdits);
+}
+
+/**
+ * @param {vscode.TextDocument} textDocument 
+ * @param {vscode.TextEdit[]} textEdits 
+ */
+async function applyEditAndSave(textDocument, textEdits) {
+    const workspaceEdit = new vscode.WorkspaceEdit();
+    workspaceEdit.set(textDocument.uri, textEdits);
+    return vscode.workspace.applyEdit(workspaceEdit)
+        .then(async result => {
+            if (result) await textDocument.save();
+            return result;
+        });
+}
+exports.applyEditAndSave = applyEditAndSave;

@@ -29,7 +29,8 @@
         "onCommand:al-toolbox.openRelatedTables",
         "onCommand:al-toolbox.openRelatedPages",
         "onCommand:al-toolbox.openRelatedTablesAndPages",
-        "onCommand:al-toolbox.renumberAll"
+        "onCommand:al-toolbox.renumberAll",
+        "onCommand:al-toolbox.changePrefix"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -96,6 +97,10 @@
             {
                 "command": "al-toolbox.renumberAll",
                 "title": "ALTB: Renumber AL objects"
+            },
+            {
+                "command": "al-toolbox.changePrefix",
+                "title": "ALTB: Change object prefix"
             }
         ],
         "configuration": [

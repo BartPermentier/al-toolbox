@@ -3,6 +3,7 @@ const relatedTables = require('./relatedTables/relatedTables');
 const alFileManagement = require('./fileManagement/alFileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
 const renumber = require('./renumberObjects/renumber');
+const changePrefix = require('./changePrefix/changePrefix');
 
 
 /**
@@ -83,14 +84,44 @@ function activate(context) {
                         if (changed) ++numberOfDocumentsChanged;
                     })
                 );
-                vscode.workspace.saveAll().then(() =>
-                    vscode.commands.executeCommand('workbench.action.closeAllEditors')
-                );
+                SaveAndCloseAll();
                 vscode.window.showInformationMessage(`${numberOfDocumentsChanged} objects(s) renumbered.`);
             }, error => 
                 vscode.window.showErrorMessage('An error occured: ' + error)
         );
     }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.changePrefix', async () => {
+        const currPrefix = await getObjectPrefix('current prefix');
+        if (currPrefix !== undefined){
+            const newPrefix = await vscode.window.showInputBox({placeHolder: 'new prefix'});
+            if (newPrefix !== undefined) {
+                if (currPrefix === newPrefix) {
+                    vscode.window.showInformationMessage(`Perfix ${newPrefix} is the same as the current prefix.`);
+                } else {
+                    const changeInSetting = await vscode.window.showQuickPick(['Yes', 'No'], {placeHolder: 'Do you want to change the prefix in settings.json?'});
+                    if (changeInSetting !== undefined) {
+                        if (changeInSetting === 'Yes')
+                            changePrefix.changePrefixSettings(currPrefix, newPrefix);
+                        changePrefix.changeObjectPrefix(currPrefix, newPrefix)
+                            .then(async results => {
+                                await SaveAndCloseAll();
+                                let numberOfDocumentsChanged = 0;
+                                results.objectResults.forEach(result => {
+                                    if (result) ++numberOfDocumentsChanged;
+                                });
+                                let numberOfFieldsChanged = 0;
+                                results.fieldResults.forEach(result => {
+                                    if (result) ++numberOfFieldsChanged;
+                                });
+                                vscode.window.showInformationMessage(
+                                    `${numberOfFieldsChanged} field${numberOfFieldsChanged !== 1?'s':''} and ${numberOfDocumentsChanged} object${numberOfDocumentsChanged !== 1?'s':''} changed.`);
+                            });
+                    }
+                }
+            }
+        }
+    }))
 }
 
 // this method is called when your extension is deactivated
@@ -104,15 +135,14 @@ module.exports = {
 /**
  * @returns {Promise<string>}
  */
-async function getObjectPrefix() {
-    let objectPrefix;
+async function getObjectPrefix(placeHolder = 'Object prefix') {
     let settings = vscode.workspace.getConfiguration('CRS');
-    objectPrefix = settings.get('ObjectNamePrefix');
+    let objectPrefix = settings.get('ObjectNamePrefix');
     if (!objectPrefix) {
         settings = vscode.workspace.getConfiguration('alVarHelper');
         objectPrefix = settings.get('ignoreALPrefix');
         if (!objectPrefix)
-            objectPrefix = await vscode.window.showInputBox({placeHolder: 'Object prefix'}).then(newPrefix => newPrefix);
+            objectPrefix = await vscode.window.showInputBox({placeHolder: placeHolder});
     }
     return objectPrefix
 }
@@ -126,4 +156,10 @@ function getFileNameFormatter() {
         return alFileManagement.oldAlFileNameFormatter;
     else
         return alFileManagement.newAlFileNameFormatter;
+}
+
+function SaveAndCloseAll() {
+    return vscode.workspace.saveAll().then(() =>
+        vscode.commands.executeCommand('workbench.action.closeAllEditors')
+    );
 }
