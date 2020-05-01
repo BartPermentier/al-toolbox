@@ -1,12 +1,16 @@
 const vscode = require('vscode');
-const constants = require('./constants');
-const fileMangagement = require('./fileManagement');
+const constants = require('../constants');
+const fileMangagement = require('../fileManagement/fileManagement');
+const alFileMangagement = require('../fileManagement/alFileManagement');
+const workspaceManagement = require('../fileManagement/workspaceManagement');
 
 /**
+ * @param {string} objectNamePrefix
+ * @param {(objectType: string, objectId: number, objectName: string) => string} fileNameFormatter
  * @returns {Promise}
  */
-exports.createRelatedTables = function createRelatedTables(objectNamePrefix) {
-    const rootPath = fileMangagement.getCurrentWorkspaceFolderPath();
+exports.createRelatedTables = function createRelatedTables(objectNamePrefix, fileNameFormatter) {
+    const rootPath = workspaceManagement.getCurrentWorkspaceFolderPath();
     // if rootpath is empty then error
     if (!rootPath) {
         return Promise.reject("No AL workspace folder is active");
@@ -24,7 +28,7 @@ exports.createRelatedTables = function createRelatedTables(objectNamePrefix) {
         fileMangagement.createFolder(destinationPath);
 
         element.objects.forEach(object => {
-            fileCreationPromises.push(fileMangagement.createAlFile(destinationPath, element.objectType, object.id, object.name, objectNamePrefix));
+            fileCreationPromises.push(alFileMangagement.createAlFile(destinationPath, element.objectType, object.id, object.name, objectNamePrefix, fileNameFormatter));
         });
     });
 
@@ -110,7 +114,7 @@ exports.RelatedTablesManager = class RelatedTablesManager {
     openRelateObjects(objectName, sourceAlObjectType, alObjectTypes) {
         const relatedObjects = this.getRelateObjects(objectName, sourceAlObjectType, alObjectTypes);
         relatedObjects.forEach(relatedObject =>
-            fileMangagement.openALFile(relatedObject.name, relatedObject.type)
+            alFileMangagement.openALFile(relatedObject.name, relatedObject.type)
         );
         return relatedObjects.length > 0;
     }

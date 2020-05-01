@@ -8,7 +8,8 @@ exports.AlObjectTypes = {
     report: 'report',
     query: 'query',
     profile: 'profile',
-    XMLPort: 'xmlport'
+    XMLPort: 'xmlport',
+    enum: 'enum'
 }
 
 exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
@@ -30,6 +31,33 @@ exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
 		    return 'Prof';
         case this.AlObjectTypes.XMLPort:
             return 'Xml';
+        default:
+            return '';
+    }
+}
+
+exports.AlObjectTypesToFullTypeName = (AlObjectType) => {
+    switch (AlObjectType) {
+        case this.AlObjectTypes.table:
+		    return 'Table';
+		case this.AlObjectTypes.tableExtension:
+		    return 'TableExt';
+        case this.AlObjectTypes.page:
+            return 'Page';
+		case this.AlObjectTypes.pageExtension:
+            return 'PageExt';
+		case this.AlObjectTypes.pageCustomization:
+		    return 'PageCust';
+        case this.AlObjectTypes.codeUnit:
+		    return 'Codeunit';
+        case this.AlObjectTypes.report:
+		    return 'Report';
+        case this.AlObjectTypes.query:
+		    return 'Query';
+        case this.AlObjectTypes.profile:
+		    return 'Profile';
+        case this.AlObjectTypes.XMLPort:
+            return 'Xmlport';
         default:
             return '';
     }
@@ -262,8 +290,7 @@ exports.RelatedTables = [
 		folder: 'PurchaseHeader',
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
-            { id: 145, name: 'Posted Purchase Receipts' },
-            { id: 6660, name: 'Posted Return Receipt' }
+            { id: 145, name: 'Posted Purchase Receipts' }
         ]
     },
     {
@@ -290,7 +317,7 @@ exports.RelatedTables = [
         objectType: this.AlObjectTypes.pageExtension,
         objects: [
             { id: 6650, name: 'Posted Return Shipment' },
-            { id: 6650, name: 'Posted Return Shipments' }
+            { id: 6652, name: 'Posted Return Shipments' }
         ]
     },
     //#endregion

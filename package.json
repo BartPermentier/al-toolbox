@@ -28,9 +28,11 @@
         "onCommand:al-toolbox.wrapAll",
         "onCommand:al-toolbox.openRelatedTables",
         "onCommand:al-toolbox.openRelatedPages",
-        "onCommand:al-toolbox.openRelatedTablesAndPages"
+        "onCommand:al-toolbox.openRelatedTablesAndPages",
+        "onCommand:al-toolbox.renumberAll",
+        "onCommand:al-toolbox.changePrefix"
     ],
-    "main": "./extension.js",
+    "main": "./src/extension.js",
     "contributes": {
         "languages": [
             {
@@ -91,6 +93,27 @@
             {
                 "command": "al-toolbox.wrapAll",
                 "title": "ALTB: Create regions for all AL functions, triggers, dataitems, and columns"
+            },
+            {
+                "command": "al-toolbox.renumberAll",
+                "title": "ALTB: Renumber AL objects"
+            },
+            {
+                "command": "al-toolbox.changePrefix",
+                "title": "ALTB: Change object prefix"
+            }
+        ],
+        "configuration": [
+            {
+                "title": "AL Toolbox Configurations",
+                "properties": {
+                    "ALTB.UseOldFileNamingConventions": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Use '<ObjectPrefix>(<ExtenedObjectId>-Ext)?<ObjectId>.<ObjectNameExcludingPrefix>.al' instead of '<ObjectNameExcludingPrefix>.<FullTypeName>(Ext)?.al' for file names",
+                        "scope": "resource"
+                    }
+                }
             }
         ]
     },
@@ -101,7 +124,6 @@
     "devDependencies": {
         "@types/glob": "^7.1.1",
         "@types/mocha": "^7.0.1",
-        "@types/node": "^12.11.7",
         "@types/vscode": "^1.42.0",
         "eslint": "^6.8.0",
         "glob": "^7.1.6",
