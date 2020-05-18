@@ -33,3 +33,12 @@ Added 4 Commands:
 - ALTB: Create regions for all AL functions and triggers | Running this command will generate Regions around all Functions that don't have regions yet.
 - ALTB: Create regions for all AL dataitems and columns | Running this command will generate Regions around all Dataitems and Columns in a report.
 - ALTB: Create regions for all AL functions, triggers, dataitems, and columns | Combination of the previous 2.
+
+## [1.1.0]
+Added 3 Commands:
+- ALTB: Renumber AL Objects | This function will renumber your objects based on the number ranges in the App.json
+- ALTB: Change Object Prefix | This function will ask you what the new prefix should be and rename all your objects andd the settings.json.
+- ALTB: Open Related Tables/Pages | This function will open the related tables/pages for the object you are working on, so you can easily copy paste fields between the related tables of Sales Header for example.
+Updated the snippets:
+- Replaced variablename with v so that it works better with the variable helper extension
+- Added rTableExtension and rPageExtension for those that still want to add in the Original id to the object they are creating (CRS Extension removed it)

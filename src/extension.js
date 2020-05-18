@@ -97,7 +97,7 @@ function activate(context) {
             const newPrefix = await vscode.window.showInputBox({placeHolder: 'new prefix'});
             if (newPrefix !== undefined) {
                 if (currPrefix === newPrefix) {
-                    vscode.window.showInformationMessage(`Perfix ${newPrefix} is the same as the current prefix.`);
+                    vscode.window.showInformationMessage(`Prefix ${newPrefix} is the same as the current prefix.`);
                 } else {
                     const changeInSetting = await vscode.window.showQuickPick(['Yes', 'No'], {placeHolder: 'Do you want to change the prefix in settings.json?'});
                     if (changeInSetting !== undefined) {
