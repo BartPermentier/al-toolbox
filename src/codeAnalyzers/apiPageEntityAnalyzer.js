@@ -3,8 +3,8 @@ const fileManagement = require('../fileManagement/fileManagement');
 const alFileManagement = require('../fileManagement/alFileManagement');
 const constants = require('../constants');
 
-const DuplicateEntityNameErrMsg = 'Duplicate entityName';
-const DuplicateEntitySetNameErrMsg = 'Dublicate entitySetName';
+const DuplicateEntityNameErrMsg = 'Duplicate EntityName';
+const DuplicateEntitySetNameErrMsg = 'Duplicate EntitySetName';
 
 const EntityType = {
     EntityName: 'EntityName',

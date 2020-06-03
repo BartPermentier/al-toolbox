@@ -108,7 +108,7 @@
                     "ALTB.DisbleAPIEntityWarnings": {
                         "type": "boolean",
                         "default": false,
-                        "description": "Disables errors for dublicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion",
+                        "description": "Disables errors for duplicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion",
                         "scope": "window"
                     }
                 }
