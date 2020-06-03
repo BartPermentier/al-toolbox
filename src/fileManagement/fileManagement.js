@@ -114,3 +114,26 @@ async function applyEditAndSave(textDocument, textEdits) {
         });
 }
 exports.applyEditAndSave = applyEditAndSave;
+
+/**
+ * Gets the position of the matched text as vscode.Range
+ * @param {RegExpExecArray} match
+ */
+exports.getMatchRange = function getMatchRange(match) {
+    const textLinesBeforeMatch = match.input.substring(0, match.index).split(/\n/g);
+    let lineNo = textLinesBeforeMatch.length - 1;
+    let charNo = textLinesBeforeMatch[textLinesBeforeMatch.length - 1].length;
+    const matchStartPos = new vscode.Position(lineNo, charNo);
+
+    const textLinesInMatch = match.input.substring(match.index, match.index + match[0].length).split(/\n/g);
+    lineNo += textLinesInMatch.length - 1;
+    if(textLinesInMatch.length === 1) {
+        // is on same line as matchStartPos
+        charNo += textLinesInMatch[0].length;
+    } else {
+        charNo = textLinesInMatch[textLinesInMatch.length - 1].length;
+    }
+    const matchEndPos = new vscode.Position(lineNo, charNo);
+    
+    return new vscode.Range(matchStartPos, matchEndPos);
+}

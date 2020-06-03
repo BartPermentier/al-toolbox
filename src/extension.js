@@ -4,7 +4,9 @@ const alFileManagement = require('./fileManagement/alFileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
 const renumber = require('./renumberObjects/renumber');
 const changePrefix = require('./changePrefix/changePrefix');
+const uniqueApiEntities = require('./codeAnalyzers/apiPageEntityAnalyzer');
 
+let fileSystemWatchers = new Map();
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -122,10 +124,44 @@ function activate(context) {
             }
         }
     }))
+
+    //#region Unique EntityNames & EntitySetName on API Pages
+    const disbleAPIEntityWarnings = vscode.workspace.getConfiguration('ALTB').get('DisbleAPIEntityWarnings');
+    if (!disbleAPIEntityWarnings){
+        const apiPageEntityAnalyzer = new uniqueApiEntities.ApiPageEntityAnalyzer();
+        
+        vscode.workspace.workspaceFolders.forEach(workspaceFolder => {
+            fileSystemWatchers.set(
+                workspaceFolder.uri.fsPath,
+                uniqueApiEntities.createFileSystemWatcher(workspaceFolder, apiPageEntityAnalyzer)
+                );
+            });
+        vscode.workspace.onDidChangeWorkspaceFolders(e => {
+            e.added.forEach(workspaceFolder => {
+                apiPageEntityAnalyzer.init();
+                fileSystemWatchers.set(
+                    workspaceFolder.uri.fsPath,
+                    uniqueApiEntities.createFileSystemWatcher(workspaceFolder, apiPageEntityAnalyzer)
+                );
+            });
+                
+            e.removed.forEach(workspaceFolder => {
+                let watcher;
+                if (watcher = fileSystemWatchers.get(workspaceFolder.uri.fsPath)) {
+                    watcher.dispose();
+                    fileSystemWatchers.delete(workspaceFolder.uri.fsPath);
+                }
+                apiPageEntityAnalyzer.removeFilesInFolder(workspaceFolder.uri);
+            });
+        })
+    }
+    //#endregion
 }
 
 // this method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() {
+    fileSystemWatchers.forEach(fileWatcher => fileWatcher.dispose());
+}
 
 module.exports = {
 	activate,

@@ -22,15 +22,7 @@
         "Snippets"
     ],
     "activationEvents": [
-        "onCommand:al-toolbox.createRelatedTables",
-        "onCommand:al-toolbox.wrapAllFunctions",
-        "onCommand:al-toolbox.wrapAllDataItemsAndColumns",
-        "onCommand:al-toolbox.wrapAll",
-        "onCommand:al-toolbox.openRelatedTables",
-        "onCommand:al-toolbox.openRelatedPages",
-        "onCommand:al-toolbox.openRelatedTablesAndPages",
-        "onCommand:al-toolbox.renumberAll",
-        "onCommand:al-toolbox.changePrefix"
+        "onLanguage:al"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -112,6 +104,12 @@
                         "default": true,
                         "description": "Use '<ObjectPrefix>(<ExtenedObjectId>-Ext)?<ObjectId>.<ObjectNameExcludingPrefix>.al' instead of '<ObjectNameExcludingPrefix>.<FullTypeName>(Ext)?.al' for file names",
                         "scope": "resource"
+                    },
+                    "ALTB.DisbleAPIEntityWarnings": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disables errors for dublicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion",
+                        "scope": "window"
                     }
                 }
             }
