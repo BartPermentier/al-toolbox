@@ -8,9 +8,11 @@ const renumberableTypes = [
     constants.AlObjectTypes.XMLPort,
     constants.AlObjectTypes.codeUnit,
     constants.AlObjectTypes.page,
+    constants.AlObjectTypes.pageExtension,
     constants.AlObjectTypes.query,
     constants.AlObjectTypes.report,
     constants.AlObjectTypes.table,
+    constants.AlObjectTypes.tableExtension,
     constants.AlObjectTypes.enum
 ]
 
@@ -41,11 +43,16 @@ exports.renumberAll = async function renumberAll() {
                 return [];
             }
             // Get id foreach file
-            let originalObjects = await Promise.all(files.map(file => mapFileToIdUriPair(file, objectType)));
-            // exclude files where no id is found, this should also filter out files with incorrect object types.
-            originalObjects = originalObjects.filter(object => object.id !== null);
+            let originalObjects = await Promise.all(files.map(file => mapFileToIdUriPair(file)));
+            // exclude files where no id is found and files with incorrect object types.
+            originalObjects = originalObjects.filter(object => object.type === objectType && object.id !== null);
             // Get new id to use foreach file
-            const newIdMappings = createRenumberMapping(originalObjects, numberRanges);
+            let newIdMappings;
+            if(constants.isExtensionType(objectType)) {
+                newIdMappings = createExtensionObjectRenumberMapping(originalObjects, numberRanges);
+            } else {
+                newIdMappings = createRenumberMapping(originalObjects, numberRanges);
+            }
 
             const progressIncrement = opbjectTypeIncrement / files.length;
             return Promise.all(newIdMappings.map(async newIdMapping => {
@@ -85,6 +92,51 @@ function createRenumberMapping(originalObjects, newNumberRanges) {
     return newIdMapping;
 }
 
+/**
+ * @param {{id: number, extendedId: number, path: vscode.Uri}[]} originalObjects
+ * @param {{from: number, to: number}[]} newNumberRanges
+ * @returns {{id: number, newId: number, path: vscode.Uri}[]}
+ */
+function createExtensionObjectRenumberMapping(originalObjects, newNumberRanges) {
+    if (isInRange(constants.ExtensionObjectNumber, newNumberRanges) === -1) {
+        return createRenumberMapping(originalObjects, newNumberRanges);
+    }
+
+    const toMapNormaly = originalObjects.filter(object => object.extendedId === undefined);
+    let newIdMapping = createRenumberMapping(toMapNormaly, newNumberRanges);
+   
+    const toMapUsingExtendedObjecId = originalObjects.filter(object => object.extendedId !== undefined)
+    if(toMapUsingExtendedObjecId.length > 0){
+        const withId = toMapUsingExtendedObjecId
+            .map((object) => Object.assign({newId: 0}, object))
+            .sort((a, b) => a.id - b.id);
+        const strIdPrefix = constants.ExtensionObjectNumber.toString();
+        const zeros = strIdPrefix.replace(/[1-9]+/,'').length;
+        
+        newIdMapping = newIdMapping.concat(
+            withId.map(mapping => {
+                const idSuffix = mapping.extendedId % (10 ** zeros);
+                mapping.newId = constants.ExtensionObjectNumber + idSuffix;
+                return mapping;
+            })
+        );    
+    }
+    return newIdMapping;
+}
+
+/**
+ * @param {number} number
+ * @param {{from: number, to: number}[]} ranges
+ * @returns {number} index of the range the number is in. Returns -1 if not in ranges.
+ */
+function isInRange(number, ranges) {
+    for(let i = 0; i < ranges.length; ++i){
+        if (ranges[i].from <= number && number <= ranges[i].to)
+            return i;
+    }
+    return -1;
+}
+
 //#region File manipulation
 /**
  * @param {vscode.TextDocument} textDocument
@@ -96,33 +148,10 @@ function getNumberRanges(textDocument) {
 
 /**
  * @param {vscode.Uri} file
- * @param {string} objectType
  */
-async function mapFileToIdUriPair(file, objectType) {
-    return {
-        id: await getObjectId(file, objectType),
-        path: file
-    };
-}
-
-/**
- * @param {vscode.Uri} file
- * @param {string} objectType
- * @returns {Thenable<number>}
- */
-function getObjectId(file, objectType) {
-    return vscode.workspace.openTextDocument(file).then(
-        textDocument => {
-            const text = textDocument.getText();
-            const objectIdRegex = new RegExp(`(?<=^${objectType}\\s+)\\d+`);
-            const match = objectIdRegex.exec(text);
-            if (match !== null) {
-                return Number(match[0]);
-            } else {
-                return null;
-            }
-        }
-    );
+async function mapFileToIdUriPair(file) {
+    const textDocument = await vscode.workspace.openTextDocument(file);
+    return new alFileManagement.AlObjectInfo(textDocument);
 }
 
 const objectIdRegex = /(?<=^\w+\s+)\d+/;
