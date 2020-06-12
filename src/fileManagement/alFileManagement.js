@@ -129,7 +129,7 @@ function getAlFileLocations(objectName, alObjectType){
         fileLocationFormat += `${filePrefix}*${compactObjectName}.al`;
     } else {
         const fullTypeName = constants.AlObjectTypesToFullTypeName(alObjectType);
-        fileLocationFormat += `${compactObjectName}.${fullTypeName}.al`;
+        fileLocationFormat += `*${compactObjectName}.${fullTypeName}.al`;
     }
 
     return glob.sync(fileLocationFormat);
@@ -173,13 +173,13 @@ class AlObjectInfo {
         const match = alObjectRegex.exec(textDocument.getText());
         this.type = match.groups.type.toLowerCase();
         if(Object.values(constants.AlObjectTypes).includes(this.type)){
-            this.name = match.groups.name;
+            this.name = match.groups.name.replace(/"/g, '');
             
             if(this.type !== constants.AlObjectTypes.interface && this.type !== constants.AlObjectTypes.controleAddIn)
                 this.id = Number(match.groups.id);
 
             if(constants.isExtensionType(this.type)) {
-                this.extendedName = match.groups.extendedName;
+                this.extendedName = match.groups.extendedName.replace(/"/g, '');
                 this.extendedId = match.groups.extendedId;
                 if(this.extendedId) {
                     this.extendedId = Number(this.extendedId);

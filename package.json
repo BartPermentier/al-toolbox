@@ -22,7 +22,8 @@
         "Snippets"
     ],
     "activationEvents": [
-        "onLanguage:al"
+        "onLanguage:al",
+        "onCommand:al-toolbox.createRelatedTables"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -93,6 +94,10 @@
             {
                 "command": "al-toolbox.changePrefix",
                 "title": "ALTB: Change object prefix"
+            },
+            {
+                "command": "al-toolbox.copyFieldsToRelatedTables",
+                "title": "ALTB: Copy fields to related tables"
             }
         ],
         "configuration": [
@@ -105,7 +110,7 @@
                         "description": "Use '<ObjectPrefix>(<ExtenedObjectId>-Ext)?<ObjectId>.<ObjectNameExcludingPrefix>.al' instead of '<ObjectNameExcludingPrefix>.<FullTypeName>(Ext)?.al' for file names",
                         "scope": "resource"
                     },
-                    "ALTB.DisbleAPIEntityWarnings": {
+                    "ALTB.DisableAPIEntityWarnings": {
                         "type": "boolean",
                         "default": false,
                         "description": "Disables errors for duplicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion",

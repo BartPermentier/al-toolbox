@@ -5,6 +5,8 @@ const regionWrapper = require('./regionWrapper/regionWrapper');
 const renumber = require('./renumberObjects/renumber');
 const changePrefix = require('./changePrefix/changePrefix');
 const uniqueApiEntities = require('./codeAnalyzers/apiPageEntityAnalyzer');
+const copyFieldsToRelatedTables = require('./relatedTables/copyFieldsToRelatedTables');
+const constands = require('./constants');
 
 let fileSystemWatchers = new Map();
 
@@ -52,7 +54,43 @@ function activate(context) {
         } else
             vscode.window.showInformationMessage('No page-/tableextension found in open file');
     }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.copyFieldsToRelatedTables', async () => {
+        const currendDoc = vscode.window.activeTextEditor.document;
+        const currentFileObjectInfo = new alFileManagement.AlObjectInfo(currendDoc);
+        if (currentFileObjectInfo.type !== constands.AlObjectTypes.tableExtension) {
+            vscode.window.showErrorMessage(`File ${currendDoc.uri} is not a tableExtension`);
+        } else {
+            const relatedObjects = RelatedTablesManager.getRelateObjects(currentFileObjectInfo.extendedName, currentFileObjectInfo.type, [constands.AlObjectTypes.tableExtension]);
+            const relatedObjectsTextDocuments = await Promise.all(
+                relatedObjects.map(nameTypePair => {
+                    const files = alFileManagement.getAlFileLocations(nameTypePair.name, nameTypePair.type);
+                    if(files.length > 0)
+                        return vscode.workspace.openTextDocument(files[0]);
+                    else
+                        return undefined;
+                }));
+            
+            const info = await copyFieldsToRelatedTables.copyFieldsToRelatedTables(
+                currendDoc,
+                relatedObjectsTextDocuments.filter(textDocument => textDocument !== undefined)
+            );
+            
+            info.faults.forEach(fault => {
+                vscode.window.showErrorMessage(fault.message, 'Go to').then(option => {
+                    if (option === 'Go to'){
+                        fault.goto();
+                    }
+                });
+            });
+            
+            vscode.window.showInformationMessage(
+                `Added ${info.nrFieldsAdded} field${info.nrFieldsAdded !== 1 ? 's' : ''}${info.nrFilesChanged !== 1 ? ` over ${info.nrFilesChanged} files` : ''}`
+            )
+        }
+    }));
     //#endregion
+    
     //#region Wrapping
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', function () {
         let editor = vscode.window.activeTextEditor;
@@ -126,8 +164,8 @@ function activate(context) {
     }))
 
     //#region Unique EntityNames & EntitySetName on API Pages
-    const disbleAPIEntityWarnings = vscode.workspace.getConfiguration('ALTB').get('DisbleAPIEntityWarnings');
-    if (!disbleAPIEntityWarnings){
+    const disableAPIEntityWarnings = vscode.workspace.getConfiguration('ALTB').get('DisableAPIEntityWarnings');
+    if (!disableAPIEntityWarnings){
         const apiPageEntityAnalyzer = new uniqueApiEntities.ApiPageEntityAnalyzer();
         
         vscode.workspace.workspaceFolders.forEach(workspaceFolder => {

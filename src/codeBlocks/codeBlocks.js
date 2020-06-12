@@ -5,11 +5,11 @@ const CodeBlockTokenTypes = {
 }
 /**
  * @param {string} text 
- * @param {RegExp} startOfCodeBlockRegex 
+ * @param {RegExp} startOfCodeBlockRegex
  * @param {RegExp} increaseRegex 
  * @param {RegExp} decreaseRegex 
  * 
- * @returns {Array<{start: number, end: number, indent: number, kind: string}>}
+ * @returns {Array<{start: number, end: number, indent: number, kind: string}>} kind = 'kind' match group of startOfCodeBlockRegex
  */
 exports.findAllCodeBlocks = function findAllCodeBlocks(text, startOfCodeBlockRegex, increaseRegex, decreaseRegex) {
     if (!startOfCodeBlockRegex.global) console.error('startOfCodeBlockRegex should have option "global"');
@@ -119,4 +119,34 @@ exports.getLineNumbersForLocations = function getLineNumbersForLocations(text, l
         start: startLineNo,
         end: startLineNo + tempString.split(/\n/).length - 1
     }
+}
+
+const commandRegex = /((?<=\/\/)(?!#(end)?region\b)|(?<=\/\/#(end)?region\b)).*/g;
+const stringRegex = /'([^'\n]|'')*'|"[^"\n]+"/g;
+/**
+ * @param {string} text
+ */
+exports.removeAllCommentsAndStrings = (text) => {
+    let newText = text.replace(commandRegex, '');
+    newText = replaceBlockCommentsWithNewlines(newText);
+    newText = newText.replace(stringRegex, '""'); // replaced with "" so that function still get recognized e.g.: 'procedure "function b"(...)' -> 'procedure ""()' 
+    return newText;
+}
+
+const blockCommandRegex = /\/\*([^\*]|\*(?!\/))*\*\//g;
+/**
+ * @param {string} text
+ */
+function replaceBlockCommentsWithNewlines(text) {
+    if (!blockCommandRegex.global) console.error('blockCommandRegex should have option "global"');
+    
+    let match;
+    let newText = text;
+    while((match = blockCommandRegex.exec(newText)) !== null){
+        const newlines = match[0].replace(/[^\n]+/g, '');
+        newText = newText.substring(0, match.index) + newlines + newText.substring(match.index + match[0].length);
+        blockCommandRegex.lastIndex = match.index + newlines.length;
+    }
+
+    return newText;
 }

@@ -3,9 +3,6 @@ const codeBlocks = require('../codeBlocks/codeBlocks');
 // import * as vscode from 'vscode';
 
 const regionStartRegex = /\/\/#region\b/;
-const commandRegex = /((?<=\/\/)(?!#(end)?region\b)|(?<=\/\/#(end)?region\b)).*/g;
-const blockCommandRegex = /\/\*([^\*]|\*(?!\/))*\*\//g;
-const stringRegex = /'([^'\n]|'')*'|"[^"\n]+"/g;
 
 const alFunctionRegex = /(\[[^\]]+\]\s*)?(\blocal\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gi;
 const beginRegex = /\bbegin\b|\bcase\b/gi;
@@ -16,9 +13,7 @@ const endRegex = /\bend;?\b/gi;
  */
 exports.WrapAllFunctions = (editBuilder, document) => {
     let text = document.getText();
-    text = text.replace(commandRegex, '');
-    text = replaceBlockCommentsWithNewlines(text);
-    text = text.replace(stringRegex, '""'); // replaced with "" so alFunctionRegex still recognizes function like: 'procedure "function b"(...)'
+    text = codeBlocks.removeAllCommentsAndStrings(text);
     
     let alFunctionLocations = codeBlocks.findAllCodeBlocks(text, alFunctionRegex, beginRegex, endRegex);
     
@@ -46,8 +41,7 @@ const DataItemOrColumnRegex = /\b(?<kind>dataitem|column)\b\s*\(/gi;
 exports.WrapAllDataItemsAndColumns = (editBuilder, document, skipSingelInstance) => {
     let editor = vscode.window.activeTextEditor;
     let text = document.getText();
-    text = text.replace(commandRegex, '');
-    text = text.replace(stringRegex, '');
+    text = codeBlocks.removeAllCommentsAndStrings(text);
 
     let dataitemAndColumnLocations = codeBlocks.findAllCodeBlocks(text, DataItemOrColumnRegex, /\{/g, /\}/g);
     dataitemAndColumnLocations.forEach(location => {
@@ -121,18 +115,4 @@ function getRegionNameForAlFunction(document, lineNo) {
         return '"error function name not found"';
     }
     return match.groups['name'];
-}
-
-function replaceBlockCommentsWithNewlines(text) {
-    if (!blockCommandRegex.global) console.error('blockCommandRegex should have option "global"');
-    
-    let match;
-    let newText = text;
-    while((match = blockCommandRegex.exec(newText)) !== null){
-        const newlines = match[0].replace(/[^\n]+/g, '');
-        newText = newText.substring(0, match.index) + newlines + newText.substring(match.index + match[0].length);
-        blockCommandRegex.lastIndex = match.index + newlines.length;
-    }
-
-    return newText;
 }
