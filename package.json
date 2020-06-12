@@ -115,6 +115,13 @@
                         "default": false,
                         "description": "Disables errors for duplicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion",
                         "scope": "window"
+                    },
+                    "ALTB.AdditionalRelatedObjects": {
+                        "type": "array",
+                        "default": [],
+                        "description":
+                            "Adds additional related pages and tables. These are used while navigating and creating related tables.\nNote that this only works for PageExtensions and TableExtensions, not your own Pages and Tables.\n\nThe syntax can be found in the AL Toolbox repository: src/constanst.js -> RelatedObjects",
+                        "scope": "resource"
                     }
                 }
             }

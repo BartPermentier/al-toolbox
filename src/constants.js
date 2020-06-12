@@ -82,9 +82,9 @@ exports.isExtensionType = (objectType) => {
     return objectType.match(/extension/i) !== null;
 }
 
-exports.RelatedTables = [
+exports.RelatedObjects = [
+    //#region Tables
     {
-        table: 'Contact',
         folder: 'Contact',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -95,7 +95,6 @@ exports.RelatedTables = [
         ]
     },
     {
-        table: 'Sales Header',
         folder: 'SalesHeader',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -108,7 +107,6 @@ exports.RelatedTables = [
         ]
     },
     {
-        table: 'Sales Line',
 		folder: 'SalesLine',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -121,7 +119,6 @@ exports.RelatedTables = [
         ]
     },
     {
-        table: 'Purchase Header',
 		folder: 'PurchaseHeader',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -134,7 +131,6 @@ exports.RelatedTables = [
         ]
     },
     {
-        table: 'Purchase Line',
 		folder: 'PurchaseLine',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -146,6 +142,7 @@ exports.RelatedTables = [
             { id: 6651, name: 'Return Shipment Line' }
         ]
     },
+    //#endregion
     //#region Pages form tables related to Contact
     {
         table: 'Contact',

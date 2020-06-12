@@ -21,7 +21,7 @@ exports.createRelatedTables = function createRelatedTables(objectNamePrefix, fil
 
     let destinationPath;
     const fileCreationPromises = [];
-    constants.RelatedTables.forEach(element => {
+    getRelatedObjectData().forEach(element => {
         destinationPath = baseDestinationPath + element.objectType;
         fileMangagement.createFolder(destinationPath);
         destinationPath += '/' + element.folder
@@ -41,13 +41,13 @@ exports.RelatedTablesManager = class RelatedTablesManager {
     pageToRelatedTable;
 
     constructor() {
-        this.setTableAndPageToRelatedObjects();
+        this.setTableAndPageToRelatedObjects(getRelatedObjectData());
     }
 
-    setTableAndPageToRelatedObjects() {
+    setTableAndPageToRelatedObjects(relatedObjects) {
         this.tableToRelatedObjects = new Map();
         this.pageToRelatedTable = new Map();
-        constants.RelatedTables.forEach(element => {
+        relatedObjects.forEach(element => {
             if (element.objectType === constants.AlObjectTypes.tableExtension) {
                 element.objects.forEach(object1 => {
                     if (!this.tableToRelatedObjects.has(object1.name)) {
@@ -165,3 +165,8 @@ exports.getExtensionObjectInfo = function getExtensionObjectInfo(document){
     return match.groups;
 }
 //#endregion
+
+function getRelatedObjectData() {
+    const additionalObjects = vscode.workspace.getConfiguration('ALTB').get('AdditionalRelatedObjects');
+    return constants.RelatedObjects.concat(additionalObjects);
+}
