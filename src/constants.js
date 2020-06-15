@@ -9,7 +9,9 @@ exports.AlObjectTypes = {
     query: 'query',
     profile: 'profile',
     XMLPort: 'xmlport',
-    enum: 'enum'
+    enum: 'enum',
+    controleAddIn: 'controladdin',
+    interface: 'interface',
 }
 
 exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
@@ -31,6 +33,10 @@ exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
 		    return 'Prof';
         case this.AlObjectTypes.XMLPort:
             return 'Xml';
+        case this.AlObjectTypes.controleAddIn:
+            return 'ControlAddin';
+        case this.AlObjectTypes.interface:
+            return 'Iface';
         default:
             return '';
     }
@@ -58,14 +64,27 @@ exports.AlObjectTypesToFullTypeName = (AlObjectType) => {
 		    return 'Profile';
         case this.AlObjectTypes.XMLPort:
             return 'Xmlport';
+        case this.AlObjectTypes.controleAddIn:
+            return 'ControlAddin';
+        case this.AlObjectTypes.interface:
+            return 'Interface';
         default:
             return '';
     }
 }
 
-exports.RelatedTables = [
+exports.ExtensionObjectNumber = 80000;
+
+/**
+ * @param {string} objectType 
+ */
+exports.isExtensionType = (objectType) => {
+    return objectType.match(/extension/i) !== null;
+}
+
+exports.RelatedObjects = [
+    //#region Tables
     {
-        table: 'Contact',
         folder: 'Contact',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -76,7 +95,6 @@ exports.RelatedTables = [
         ]
     },
     {
-        table: 'Sales Header',
         folder: 'SalesHeader',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -89,7 +107,6 @@ exports.RelatedTables = [
         ]
     },
     {
-        table: 'Sales Line',
 		folder: 'SalesLine',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -102,7 +119,6 @@ exports.RelatedTables = [
         ]
     },
     {
-        table: 'Purchase Header',
 		folder: 'PurchaseHeader',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -115,7 +131,6 @@ exports.RelatedTables = [
         ]
     },
     {
-        table: 'Purchase Line',
 		folder: 'PurchaseLine',
         objectType: this.AlObjectTypes.tableExtension,
         objects: [
@@ -127,6 +142,7 @@ exports.RelatedTables = [
             { id: 6651, name: 'Return Shipment Line' }
         ]
     },
+    //#endregion
     //#region Pages form tables related to Contact
     {
         table: 'Contact',

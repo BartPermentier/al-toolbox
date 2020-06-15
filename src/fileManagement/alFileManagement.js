@@ -129,7 +129,7 @@ function getAlFileLocations(objectName, alObjectType){
         fileLocationFormat += `${filePrefix}*${compactObjectName}.al`;
     } else {
         const fullTypeName = constants.AlObjectTypesToFullTypeName(alObjectType);
-        fileLocationFormat += `${compactObjectName}.${fullTypeName}.al`;
+        fileLocationFormat += `*${compactObjectName}.${fullTypeName}.al`;
     }
 
     return glob.sync(fileLocationFormat);
@@ -153,3 +153,51 @@ exports.getFileFormatForType = function getFileFormatForType(alObjectType) {
 
     return fileLocationFormat;
 };
+
+const alObjectRegex = /(?<type>\w+)(\s+(?<id>\d+))?\s+(?<name>\w+|"[^"]*")(\s+extends\s+(?<extendedName>\w+|"[^"]*")(\s*\/\/\s*(?<extendedId>\d+))?|\s+implements\s+(?<interfaces>(\w+|"[^"]*")(\s*,\s*(\w+|"[^"]*"))*))?/i;
+class AlObjectInfo {
+    type;
+    id;
+    name;
+    extendedName;
+    extendedId;
+    interfaces;
+
+    path;
+
+    /**
+     * @param {vscode.TextDocument} textDocument  
+     */
+    constructor(textDocument) {
+        this.path = textDocument.uri;
+        const match = alObjectRegex.exec(textDocument.getText());
+        this.type = match.groups.type.toLowerCase();
+        if(Object.values(constants.AlObjectTypes).includes(this.type)){
+            this.name = match.groups.name.replace(/"/g, '');
+            
+            if(this.type !== constants.AlObjectTypes.interface && this.type !== constants.AlObjectTypes.controleAddIn)
+                this.id = Number(match.groups.id);
+
+            if(constants.isExtensionType(this.type)) {
+                this.extendedName = match.groups.extendedName.replace(/"/g, '');
+                this.extendedId = match.groups.extendedId;
+                if(this.extendedId) {
+                    this.extendedId = Number(this.extendedId);
+                }
+            }
+
+            if(this.type === constants.AlObjectTypes.codeUnit && match.groups.interfaces) {
+                this.interfaces = match.groups.interfaces.split(",").map(interfaceName => {
+                    return interfaceName.trim();
+                });
+            }
+        } else {
+            this.type = undefined;
+        }
+    }
+
+    isExtensionObject() {
+        return this.extendedName !== undefined;
+    }
+}
+exports.AlObjectInfo = AlObjectInfo;

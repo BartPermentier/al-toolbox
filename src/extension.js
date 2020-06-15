@@ -4,7 +4,11 @@ const alFileManagement = require('./fileManagement/alFileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
 const renumber = require('./renumberObjects/renumber');
 const changePrefix = require('./changePrefix/changePrefix');
+const uniqueApiEntities = require('./codeAnalyzers/apiPageEntityAnalyzer');
+const copyFieldsToRelatedTables = require('./relatedTables/copyFieldsToRelatedTables');
+const constands = require('./constants');
 
+let fileSystemWatchers = new Map();
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -50,7 +54,43 @@ function activate(context) {
         } else
             vscode.window.showInformationMessage('No page-/tableextension found in open file');
     }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.copyFieldsToRelatedTables', async () => {
+        const currendDoc = vscode.window.activeTextEditor.document;
+        const currentFileObjectInfo = new alFileManagement.AlObjectInfo(currendDoc);
+        if (currentFileObjectInfo.type !== constands.AlObjectTypes.tableExtension) {
+            vscode.window.showErrorMessage(`File ${currendDoc.uri} is not a tableExtension`);
+        } else {
+            const relatedObjects = RelatedTablesManager.getRelateObjects(currentFileObjectInfo.extendedName, currentFileObjectInfo.type, [constands.AlObjectTypes.tableExtension]);
+            const relatedObjectsTextDocuments = await Promise.all(
+                relatedObjects.map(nameTypePair => {
+                    const files = alFileManagement.getAlFileLocations(nameTypePair.name, nameTypePair.type);
+                    if(files.length > 0)
+                        return vscode.workspace.openTextDocument(files[0]);
+                    else
+                        return undefined;
+                }));
+            
+            const info = await copyFieldsToRelatedTables.copyFieldsToRelatedTables(
+                currendDoc,
+                relatedObjectsTextDocuments.filter(textDocument => textDocument !== undefined)
+            );
+            
+            info.faults.forEach(fault => {
+                vscode.window.showErrorMessage(fault.message, 'Go to').then(option => {
+                    if (option === 'Go to'){
+                        fault.goto();
+                    }
+                });
+            });
+            
+            vscode.window.showInformationMessage(
+                `Added ${info.nrFieldsAdded} field${info.nrFieldsAdded !== 1 ? 's' : ''}${info.nrFilesChanged !== 1 ? ` over ${info.nrFilesChanged} files` : ''}`
+            )
+        }
+    }));
     //#endregion
+    
     //#region Wrapping
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', function () {
         let editor = vscode.window.activeTextEditor;
@@ -122,10 +162,44 @@ function activate(context) {
             }
         }
     }))
+
+    //#region Unique EntityNames & EntitySetName on API Pages
+    const disableAPIEntityWarnings = vscode.workspace.getConfiguration('ALTB').get('DisableAPIEntityWarnings');
+    if (!disableAPIEntityWarnings){
+        const apiPageEntityAnalyzer = new uniqueApiEntities.ApiPageEntityAnalyzer();
+        
+        vscode.workspace.workspaceFolders.forEach(workspaceFolder => {
+            fileSystemWatchers.set(
+                workspaceFolder.uri.fsPath,
+                uniqueApiEntities.createFileSystemWatcher(workspaceFolder, apiPageEntityAnalyzer)
+                );
+            });
+        vscode.workspace.onDidChangeWorkspaceFolders(e => {
+            e.added.forEach(workspaceFolder => {
+                apiPageEntityAnalyzer.init();
+                fileSystemWatchers.set(
+                    workspaceFolder.uri.fsPath,
+                    uniqueApiEntities.createFileSystemWatcher(workspaceFolder, apiPageEntityAnalyzer)
+                );
+            });
+                
+            e.removed.forEach(workspaceFolder => {
+                let watcher;
+                if (watcher = fileSystemWatchers.get(workspaceFolder.uri.fsPath)) {
+                    watcher.dispose();
+                    fileSystemWatchers.delete(workspaceFolder.uri.fsPath);
+                }
+                apiPageEntityAnalyzer.removeFilesInFolder(workspaceFolder.uri);
+            });
+        })
+    }
+    //#endregion
 }
 
 // this method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() {
+    fileSystemWatchers.forEach(fileWatcher => fileWatcher.dispose());
+}
 
 module.exports = {
 	activate,

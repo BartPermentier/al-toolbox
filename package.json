@@ -22,15 +22,8 @@
         "Snippets"
     ],
     "activationEvents": [
-        "onCommand:al-toolbox.createRelatedTables",
-        "onCommand:al-toolbox.wrapAllFunctions",
-        "onCommand:al-toolbox.wrapAllDataItemsAndColumns",
-        "onCommand:al-toolbox.wrapAll",
-        "onCommand:al-toolbox.openRelatedTables",
-        "onCommand:al-toolbox.openRelatedPages",
-        "onCommand:al-toolbox.openRelatedTablesAndPages",
-        "onCommand:al-toolbox.renumberAll",
-        "onCommand:al-toolbox.changePrefix"
+        "onLanguage:al",
+        "onCommand:al-toolbox.createRelatedTables"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -101,6 +94,10 @@
             {
                 "command": "al-toolbox.changePrefix",
                 "title": "ALTB: Change object prefix"
+            },
+            {
+                "command": "al-toolbox.copyFieldsToRelatedTables",
+                "title": "ALTB: Copy fields to related tables"
             }
         ],
         "configuration": [
@@ -111,6 +108,19 @@
                         "type": "boolean",
                         "default": true,
                         "description": "Use '<ObjectPrefix>(<ExtenedObjectId>-Ext)?<ObjectId>.<ObjectNameExcludingPrefix>.al' instead of '<ObjectNameExcludingPrefix>.<FullTypeName>(Ext)?.al' for file names",
+                        "scope": "resource"
+                    },
+                    "ALTB.DisableAPIEntityWarnings": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disables errors for duplicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion",
+                        "scope": "window"
+                    },
+                    "ALTB.AdditionalRelatedObjects": {
+                        "type": "array",
+                        "default": [],
+                        "description":
+                            "Adds additional related pages and tables. These are used while navigating and creating related tables.\nNote that this only works for PageExtensions and TableExtensions, not your own Pages and Tables.\n\nThe syntax can be found in the AL Toolbox repository: src/constanst.js -> RelatedObjects",
                         "scope": "resource"
                     }
                 }
