@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const constands = require('./constants');
 const relatedTables = require('./relatedTables/relatedTables');
 const alFileManagement = require('./fileManagement/alFileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
@@ -6,7 +7,7 @@ const renumber = require('./renumberObjects/renumber');
 const changePrefix = require('./changePrefix/changePrefix');
 const uniqueApiEntities = require('./codeAnalyzers/apiPageEntityAnalyzer');
 const copyFieldsToRelatedTables = require('./relatedTables/copyFieldsToRelatedTables');
-const constands = require('./constants');
+const AlCodeActionProvider = require('./codeFixers/AlCodeActionProvider');
 
 let fileSystemWatchers = new Map();
 
@@ -194,6 +195,12 @@ function activate(context) {
         })
     }
     //#endregion
+    
+    context.subscriptions.push(vscode.languages.registerCodeActionsProvider(
+            'al',
+            new AlCodeActionProvider.AlCodeActionProvider(context),
+            { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }
+    ));
 }
 
 // this method is called when your extension is deactivated
