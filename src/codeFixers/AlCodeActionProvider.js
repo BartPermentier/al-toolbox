@@ -12,6 +12,7 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
         this.context = context;
         this.diagnosticCodeToFix = {
             'AA0008': new codeFixers.MissingBracketsCodeFixer(context, 'AA0008'),
+            'AA0139': new codeFixers.PossibleOverflowCodeFixer(context, 'AA0139'),
         }
         this.relevantDiagnostics = Object.keys(this.diagnosticCodeToFix);
     }
@@ -49,18 +50,18 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
     createCodeActions(document, diagnostic) {
         const fix = this.diagnosticCodeToFix[diagnostic.code.toString()];
         return [
-            makeCodeAction(fix.title, fix.commandName, codeFixers.fixTypes.Once),
-            makeCodeAction(`${fix.title} (everywhere in this document)`, fix.commandName, codeFixers.fixTypes.CurrentDocument),
-            makeCodeAction(`${fix.title} (in all documents)`, fix.commandName, codeFixers.fixTypes.AllDocuments)
+            makeCodeAction(fix.title, fix.commandName, codeFixers.fixTypes.Once, diagnostic, document),
+            makeCodeAction(`${fix.title} (everywhere in this document)`, fix.commandName, codeFixers.fixTypes.CurrentDocument, diagnostic, document),
+            makeCodeAction(`${fix.title} (in all documents)`, fix.commandName, codeFixers.fixTypes.AllDocuments, diagnostic, document)
         ];
     }
 }
 
-function makeCodeAction(title, commandName, fixType) {
+function makeCodeAction(title, commandName, fixType, diagnostic, document) {
     const action = new vscode.CodeAction(title, vscode.CodeActionKind.QuickFix);
     action.command = {
         command: commandName,
-        arguments: [fixType],
+        arguments: [fixType, diagnostic, document],
         title: title
     }
     return action;

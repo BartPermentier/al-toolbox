@@ -77,13 +77,7 @@ function activate(context) {
                 relatedObjectsTextDocuments.filter(textDocument => textDocument !== undefined)
             );
             
-            info.faults.forEach(fault => {
-                vscode.window.showErrorMessage(fault.message, 'Go to').then(option => {
-                    if (option === 'Go to'){
-                        fault.goto();
-                    }
-                });
-            });
+            info.faults.forEach(fault => fault.showErrorMessage());
             
             vscode.window.showInformationMessage(
                 `Added ${info.nrFieldsAdded} field${info.nrFieldsAdded !== 1 ? 's' : ''}${info.nrFilesChanged !== 1 ? ` over ${info.nrFilesChanged} files` : ''}`

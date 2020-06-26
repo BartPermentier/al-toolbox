@@ -24,5 +24,21 @@ class Fault {
             textEditor.selection = new vscode.Selection(this.range.start, this.range.end)
         }
     }
+
+    showErrorMessage(){
+        vscode.window.showErrorMessage(this.message, 'Go to').then(option => {
+            if (option === 'Go to'){
+                this.goto();
+            }
+        });
+    }
+
+    showInformationMessage(){
+        vscode.window.showInformationMessage(this.message, 'Go to').then(option => {
+            if (option === 'Go to'){
+                this.goto();
+            }
+        });
+    }
 }
 exports.Fault = Fault;
