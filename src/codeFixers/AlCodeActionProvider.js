@@ -1,5 +1,7 @@
 const vscode = require('vscode');
-const codeFixers = require('./codeFixers');
+const codeFixer = require('./codeFixer');
+const AA0008 = require('./AA0008');
+const AA0139 = require('./AA0139');
 
 exports.AlCodeActionProvider = class AlCodeActionProvider {
     relevantDiagnostics;
@@ -11,8 +13,8 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
     constructor(context) {
         this.context = context;
         this.diagnosticCodeToFix = {
-            'AA0008': new codeFixers.MissingBracketsCodeFixer(context, 'AA0008'),
-            'AA0139': new codeFixers.PossibleOverflowCodeFixer(context, 'AA0139'),
+            'AA0008': new AA0008.MissingBracketsCodeFixer(context, 'AA0008'),
+            'AA0139': new AA0139.PossibleOverflowCodeFixer(context, 'AA0139'),
         }
         this.relevantDiagnostics = Object.keys(this.diagnosticCodeToFix);
     }
@@ -50,9 +52,9 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
     createCodeActions(document, diagnostic) {
         const fix = this.diagnosticCodeToFix[diagnostic.code.toString()];
         return [
-            makeCodeAction(fix.title, fix.commandName, codeFixers.fixTypes.Once, diagnostic, document),
-            makeCodeAction(`${fix.title} (everywhere in this document)`, fix.commandName, codeFixers.fixTypes.CurrentDocument, diagnostic, document),
-            makeCodeAction(`${fix.title} (in all documents)`, fix.commandName, codeFixers.fixTypes.AllDocuments, diagnostic, document)
+            makeCodeAction(fix.title, fix.commandName, codeFixer.fixTypes.Once, diagnostic, document),
+            makeCodeAction(`${fix.title} (everywhere in this document)`, fix.commandName, codeFixer.fixTypes.CurrentDocument, diagnostic, document),
+            makeCodeAction(`${fix.title} (in all documents)`, fix.commandName, codeFixer.fixTypes.AllDocuments, diagnostic, document)
         ];
     }
 }
