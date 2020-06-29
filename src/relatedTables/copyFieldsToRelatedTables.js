@@ -3,8 +3,8 @@ const codeBlocks = require('../codeBlocks/codeBlocks');
 const alFileManagement = require('../fileManagement/alFileManagement');
 const fault = require('../fault');
 
-const openBracked = /\{/g;
-const closeBracked = /\}/g;
+const openBracket = /\{/g;
+const closeBracket = /\}/g;
 
 /**
  * @param {vscode.TextDocument} sourceDocument
@@ -53,8 +53,8 @@ exports.copyFieldsToRelatedTables = async (sourceDocument, destinationDocuments)
             const fieldsCodeBlocks = codeBlocks.findAllCodeBlocks(
                 text,
                 /\b(?<kind>fields)\s*(?=\{)/ig,
-                openBracked,
-                closeBracked
+                openBracket,
+                closeBracket
             )
             const lineNos = codeBlocks.getLineNumbersForLocations(text, fieldsCodeBlocks[0]);
 
@@ -106,7 +106,7 @@ class FieldInfo {
 function getFields(document) {
     let text = document.getText();
     text = codeBlocks.removeAllCommentsAndStrings(text);
-    let fields = codeBlocks.findAllCodeBlocks(text, fieldRegex, openBracked, closeBracked)
+    let fields = codeBlocks.findAllCodeBlocks(text, fieldRegex, openBracket, closeBracket)
         .map(codeblock => {
             const lineNos = codeBlocks.getLineNumbersForLocations(text, codeblock);
             const range = new vscode.Range(
