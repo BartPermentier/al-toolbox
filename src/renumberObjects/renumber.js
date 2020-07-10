@@ -26,42 +26,58 @@ exports.renumberAll = async function renumberAll() {
     const appDocument = await vscode.workspace.openTextDocument(appFile);
     const numberRanges = getNumberRanges(appDocument);
 
-    const opbjectTypeIncrement = 100 / renumberableTypes.length;
     return vscode.window.withProgress({
-            location: vscode.ProgressLocation.Notification,
-			title: "Renumbering...",
-			cancellable: false
-        }, (progress) => Promise.all(renumberableTypes.map(async objectType => {
+        location: vscode.ProgressLocation.Notification,
+        title: "Renumbering...",
+        cancellable: true
+    }, async (progress, cancellationToken) => {
+        const objectTypeToObjects = new Map();
+        renumberableTypes.forEach(type => objectTypeToObjects.set(type, []));
+        
+        const currWorkspace = workspaceManagement.getCurrentWorkspaceFolderPath();
+        let allALFiles = await vscode.workspace.findFiles('**/*.al');
+        allALFiles = allALFiles.filter(file => file.fsPath.startsWith(currWorkspace));
 
-            // Get all AL files for object type in currentWorkspaceFolder
-            const currWorkspace = workspaceManagement.getCurrentWorkspaceFolderPath()
-            let files = await vscode.workspace.findFiles('**/' + alFileManagement.getFileFormatForType(objectType));
-            files = files.filter(file => file.fsPath.startsWith(currWorkspace));
-
-            if (files.length === 0) {
-                progress.report({increment: opbjectTypeIncrement});
-                return [];
+        if (cancellationToken.isCancellationRequested) return [];
+        
+        const alObjects = await Promise.all(allALFiles.map(file => getAlObjectInfo(file)));
+        alObjects.forEach(object => {
+            if (object.id != null && objectTypeToObjects.has(object.type)){
+                objectTypeToObjects.get(object.type).push(object);
             }
-            // Get id foreach file
-            let originalObjects = await Promise.all(files.map(file => mapFileToIdUriPair(file)));
-            // exclude files where no id is found and files with incorrect object types.
-            originalObjects = originalObjects.filter(object => object.type === objectType && object.id !== null);
-            // Get new id to use foreach file
+        });
+
+        if (cancellationToken.isCancellationRequested) return [];
+
+        const edit = new vscode.WorkspaceEdit();
+        let idMappings = [];
+        objectTypeToObjects.forEach((objects, type) => {
             let newIdMappings;
-            if(constants.isExtensionType(objectType)) {
-                newIdMappings = createExtensionObjectRenumberMapping(originalObjects, numberRanges);
+            if(constants.isExtensionType(type)) {
+                newIdMappings = createExtensionObjectRenumberMapping(objects, numberRanges);
             } else {
-                newIdMappings = createRenumberMapping(originalObjects, numberRanges);
+                newIdMappings = createRenumberMapping(objects, numberRanges);
             }
+            idMappings = idMappings.concat(newIdMappings);
+        });
 
-            const progressIncrement = opbjectTypeIncrement / files.length;
-            return Promise.all(newIdMappings.map(async newIdMapping => {
-                const result = await renumberFile(newIdMapping.newId, newIdMapping.id, newIdMapping.path);
-                progress.report({increment: progressIncrement});
-                return result;
-            }));
-        }))
-    );
+        if (cancellationToken.isCancellationRequested) return [];
+
+        const progressIncrement = 100 / idMappings.length;
+        const results = await Promise.all(idMappings.map(idMapping => {
+            const result = renumberFile(idMapping.newId, idMapping.id, idMapping.path, edit);
+            progress.report({increment: progressIncrement});
+            return result;
+        }));
+
+        if (cancellationToken.isCancellationRequested) return [];
+        
+        if (await vscode.workspace.applyEdit(edit)) {
+            return results;
+        } else {
+            return [];
+        }
+    });
 }
 
 /**
@@ -143,45 +159,41 @@ function isInRange(number, ranges) {
  */
 function getNumberRanges(textDocument) {
     const appJson = JSON.parse(textDocument.getText());
-    return appJson.idRanges;
+    if (appJson.idRanges) return appJson.idRanges;
+    if (appJson.idRange) return [appJson.idRange];
+    throw `No idRanges or idRange property found in ${textDocument.uri.fsPath}`;
 }
 
 /**
  * @param {vscode.Uri} file
  */
-async function mapFileToIdUriPair(file) {
+async function getAlObjectInfo(file) {
     const textDocument = await vscode.workspace.openTextDocument(file);
     return new alFileManagement.AlObjectInfo(textDocument);
 }
 
-const objectIdRegex = /(?<=^\w+\s+)\d+/;
+const objectIdRegex = /(?<=^\s*\w+\s+)\d+/m;
 /**
  * @param {number} newNumber 
  * @param {number} oldNumber 
  * @param {vscode.Uri} file
+ * @param {vscode.WorkspaceEdit} workspaceEdit
  */
-async function renumberFile(newNumber, oldNumber, file) {
+async function renumberFile(newNumber, oldNumber, file, workspaceEdit) {
     if (newNumber === oldNumber) return false;
     const textDocument = await vscode.workspace.openTextDocument(file);
     const text = textDocument.getText();
     let match = objectIdRegex.exec(text);
-    if (match === null) return null;
+    if (match === null) return false;
 
-    let workspaceEdit = new vscode.WorkspaceEdit();
     workspaceEdit.replace(file, textDocument.getWordRangeAtPosition(textDocument.positionAt(match.index)), newNumber.toString());
-    let result = vscode.workspace.applyEdit(workspaceEdit);
-
 
     const fileContainsOldRegex = new RegExp(`${oldNumber}(?=[^/\\\\]*$)`);
     if ((match = fileContainsOldRegex.exec(file.path)) !== null) {
         // rename the file if oldNumber is in filename
         const newFileName = vscode.Uri.file(file.path.replace(fileContainsOldRegex, newNumber.toString()));
-        let workspaceEdit = new vscode.WorkspaceEdit();
         workspaceEdit.renameFile(file, newFileName, {ignoreIfExists: true});
-        await result;
-        result = vscode.workspace.applyEdit(workspaceEdit);
     }
-
-    return result;
+    return true;
 }
 //#endregion
