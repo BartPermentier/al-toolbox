@@ -24,7 +24,7 @@ function activate(context) {
         if (objectPrefix !== undefined) {
             relatedTables.createRelatedTables(objectPrefix, getFileNameFormatter())
                 .then(() => vscode.window.showInformationMessage(`Related tables & pages created with prefix: '${objectPrefix}'`),
-                    () => vscode.window.showInformationMessage('Failed to create related tables & pages'));
+                    reason => vscode.window.showInformationMessage(`Failed to create related tables & pages: ${reason}`));
         }
     }));
     const RelatedTablesManager = new relatedTables.RelatedTablesManager();

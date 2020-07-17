@@ -12,11 +12,11 @@ exports.getCurrentWorkspaceFolderPath = getCurrentWorkspaceFolderPath;
 
 function getCurrentWorkspaceFolder() {
     const activeEditor = vscode.window.activeTextEditor;
-    if (activeEditor) {
-        if (activeEditor.document) {
-            lastActiveWorkspace = getWorkspaceFolderFromPath(activeEditor.document.fileName);
-            return lastActiveWorkspace;
-        }
+    if (activeEditor && activeEditor.document) {    
+        lastActiveWorkspace = getWorkspaceFolderFromPath(activeEditor.document.fileName);
+        return lastActiveWorkspace;
+    } else if (vscode.workspace.workspaceFolders.length == 1) {
+        return vscode.workspace.workspaceFolders[0];
     }
 }
 
