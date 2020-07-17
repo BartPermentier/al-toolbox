@@ -122,6 +122,12 @@
                         "description":
                             "Adds additional related pages and tables. These are used while navigating and creating related tables.\nNote that this only works for PageExtensions and TableExtensions, not your own Pages and Tables.\n\nThe syntax can be found in the AL Toolbox repository: src/constanst.js -> RelatedObjects",
                         "scope": "resource"
+                    },
+                    "ALTB.PutCreatedRelatedObjectsInSeparateFolders": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If false all objects created with 'ALTB: Start Project: Create Related Tables' are put in there respective object folder. If true each group of related objects are put in a subfolder of that object folder.",
+                        "scope": "resource"
                     }
                 }
             }

@@ -10,6 +10,18 @@ function getCurrentWorkspaceFolderPath() {
 }
 exports.getCurrentWorkspaceFolderPath = getCurrentWorkspaceFolderPath;
 
+
+function getCurrentWorkspaceFolderUri() {
+    const currentWorkspaceFolder = getCurrentWorkspaceFolder();
+    if (currentWorkspaceFolder) {
+        return currentWorkspaceFolder.uri;
+    }
+    return undefined;
+}
+exports.getCurrentWorkspaceFolderUri = getCurrentWorkspaceFolderUri;
+
+
+
 function getCurrentWorkspaceFolder() {
     const activeEditor = vscode.window.activeTextEditor;
     if (activeEditor && activeEditor.document) {    
