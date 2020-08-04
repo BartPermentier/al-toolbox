@@ -112,14 +112,12 @@ function activate(context) {
     //#endregion
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {
-        renumber.renumberAll().then(result => {
+        renumber.renumberAll().then(results => {
                 let numberOfDocumentsChanged = 0;
-                result.forEach(list => 
-                    list.forEach(changed => {
+                results.forEach(changed => {
                         if (changed) ++numberOfDocumentsChanged;
-                    })
-                );
-                SaveAndCloseAll();
+                });
+                if (numberOfDocumentsChanged > 0) SaveAndCloseAll();
                 vscode.window.showInformationMessage(`${numberOfDocumentsChanged} objects(s) renumbered.`);
             }, error => 
                 vscode.window.showErrorMessage('An error occured: ' + error)

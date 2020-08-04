@@ -154,7 +154,7 @@ exports.getFileFormatForType = function getFileFormatForType(alObjectType) {
     return fileLocationFormat;
 };
 
-const alObjectRegex = /(?<type>\w+)(\s+(?<id>\d+))?\s+(?<name>\w+|"[^"]*")(\s+extends\s+(?<extendedName>\w+|"[^"]*")(\s*\/\/\s*(?<extendedId>\d+))?|\s+implements\s+(?<interfaces>(\w+|"[^"]*")(\s*,\s*(\w+|"[^"]*"))*))?/i;
+const alObjectRegex = /^\s*(?<type>\w+)(\s+(?<id>\d+))?\s+(?<name>\w+|"[^"]*")(\s+extends\s+(?<extendedName>\w+|"[^"]*")(\s*\/\/\s*(?<extendedId>\d+))?|\s+implements\s+(?<interfaces>(\w+|"[^"]*")(\s*,\s*(\w+|"[^"]*"))*))?/im;
 class AlObjectInfo {
     type;
     id;
@@ -171,6 +171,7 @@ class AlObjectInfo {
     constructor(textDocument) {
         this.path = textDocument.uri;
         const match = alObjectRegex.exec(textDocument.getText());
+        if (match === null) return;
         this.type = match.groups.type.toLowerCase();
         if(Object.values(constants.AlObjectTypes).includes(this.type)){
             this.name = match.groups.name.replace(/"/g, '');

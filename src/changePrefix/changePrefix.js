@@ -14,9 +14,9 @@ exports.changeObjectPrefix = async function changeObjectPrefix(currPrefix, newPr
     
     const nameRegex = `("${currPrefix}[^"]+"|${currPrefix}\\w+)`;
     const objectPrefixRegex = new RegExp(
-        `(?<=^\s*${objectTypeRegex}(\\s+\\d+)?\\s+)${nameRegex}`, 'g');
+        `(?<=^\\s*${objectTypeRegex}(\\s+\\d+)?\\s+)${nameRegex}`, 'gi');
     const fieldPrefixRegex = new RegExp(
-        `(?<=field\\((\\d+;\\s*)?)${nameRegex}`, 'g');
+        `(?<=field\\((\\d+;\\s*)?)${nameRegex}`, 'gi');
     const currPrefixRegex = new RegExp(currPrefix);
     
     const currWorkspace = workspaceManagement.getCurrentWorkspaceFolderPath()
