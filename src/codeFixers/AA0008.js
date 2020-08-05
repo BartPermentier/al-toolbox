@@ -7,7 +7,7 @@ class MissingBracketsCodeFixer extends codeFixer.CodeFixer {
      * @param {string} dignosticCode 
      */
     constructor(context, dignosticCode){
-        super(context, dignosticCode, AddBrackets, 'Add brackets', 'al-toolbox.addBrackets');
+        super(context, dignosticCode, AddBrackets, 'ALTB: Add round brackets', 'al-toolbox.addBrackets');
     }
 }
 exports.MissingBracketsCodeFixer = MissingBracketsCodeFixer;

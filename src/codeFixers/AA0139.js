@@ -9,7 +9,7 @@ class PossibleOverflowCodeFixer extends codeFixer.CodeFixer {
      * @param {string} dignosticCode 
      */
     constructor(context, dignosticCode){
-        super(context, dignosticCode, surroundWithCopyStr, 'Surround with CopyStr', 'al-toolbox.surroundWithCopyStr');
+        super(context, dignosticCode, surroundWithCopyStr, 'ALTB: Surround with CopyStr', 'al-toolbox.surroundWithCopyStr');
     }
 }
 exports.PossibleOverflowCodeFixer = PossibleOverflowCodeFixer;
