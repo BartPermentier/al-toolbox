@@ -8,6 +8,7 @@ const changePrefix = require('./changePrefix/changePrefix');
 const uniqueApiEntities = require('./codeAnalyzers/apiPageEntityAnalyzer');
 const copyFieldsToRelatedTables = require('./relatedTables/copyFieldsToRelatedTables');
 const AlCodeActionProvider = require('./codeFixers/AlCodeActionProvider');
+const initGitignore = require('./initGitignore/initGitignore');
 
 let fileSystemWatchers = new Map();
 
@@ -18,6 +19,7 @@ function activate(context) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
   
+    //#region Commands
     //#region Related Tables
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.createRelatedTables', async () => {
         const objectPrefix = await getObjectPrefix();
@@ -154,7 +156,12 @@ function activate(context) {
                 }
             }
         }
-    }))
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.initGitignore', () => {
+        initGitignore.initGitignore();
+    }));
+    //#endregion
 
     //#region Unique EntityNames & EntitySetName on API Pages
     const disableAPIEntityWarnings = vscode.workspace.getConfiguration('ALTB').get('DisableAPIEntityWarnings');

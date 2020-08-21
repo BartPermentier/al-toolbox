@@ -35,6 +35,14 @@ This extension has been inspired by the GitHub user RafaelKoch with his post htt
 - ALTB: Copy fields to related tables | This will copy al fields from the current table to all related tables. If there are conflicts you will get a popup that allows you to navigate to them:
 
     ![Popup](resources/CopyFieldConflictPopup.png)
+- ALTB: init .gitignore | Creates the following .gitignore in the current workspace folder or appends the missing lines to the existing .gitignore
+```
+# ALTB
+.alpackages/
+.alcache/
+rad.json
+*.app
+```
 
 ## Settings
 

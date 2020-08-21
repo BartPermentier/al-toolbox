@@ -48,3 +48,7 @@ Added Command:
 - ALTB: Copy fields to related tables | This will copy al fields from the current table to all related tables. If there are conflicts you will get a popup that allows you to navigate to them:
 
     ![Popup](resources/CopyFieldConflictPopup.png)
+
+## [1.2.1]
+Added Command:
+- ALTB: init .gitignore

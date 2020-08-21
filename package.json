@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -98,6 +98,10 @@
             {
                 "command": "al-toolbox.copyFieldsToRelatedTables",
                 "title": "ALTB: Copy fields to related tables"
+            },
+            {
+                "command": "al-toolbox.initGitignore",
+                "title": "ALTB: init .gitignore"
             }
         ],
         "configuration": [
