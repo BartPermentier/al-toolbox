@@ -126,7 +126,7 @@
                     "ALTB.PutCreatedRelatedObjectsInSeparateFolders": {
                         "type": "boolean",
                         "default": true,
-                        "description": "If false all objects created with 'ALTB: Start Project: Create Related Tables' are put in there respective object folder. If true each group of related objects are put in a subfolder of that object folder.",
+                        "description": "If false all objects created with 'ALTB: Start Project: Create Related Tables' is put in there respective object folder. If true each group of related objects are put in a subfolder of that object folder.",
                         "scope": "resource"
                     }
                 }
