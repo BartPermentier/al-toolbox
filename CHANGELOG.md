@@ -49,6 +49,6 @@ Added Command:
 
     ![Popup](resources/CopyFieldConflictPopup.png)
 
-## [1.2.1]
+## [1.3.0]
 Added Command:
 - ALTB: init .gitignore
