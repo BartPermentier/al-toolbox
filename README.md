@@ -40,6 +40,8 @@ This extension has been inspired by the GitHub user RafaelKoch with his post htt
 # ALTB
 .alpackages/
 .alcache/
+*.json
+!app.json
 rad.json
 *.app
 ```

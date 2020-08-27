@@ -1,5 +1,15 @@
 const vscode = require('vscode');
 const workspaceManagement = require('../fileManagement/workspaceManagement');
+const genFunc = require('../generalFunctions');
+
+const lines = [
+    ".alpackages/",
+    ".alcache/",
+    "*.json",
+    "!app.json",
+    "rad.json",
+    "*.app",
+]
 
 exports.initGitignore = function initGitignore(){
     const gitignorePath = workspaceManagement.getCurrentWorkspaceFolderPath() + '/.gitignore';
@@ -17,13 +27,7 @@ exports.initGitignore = function initGitignore(){
 function createGitignore(uri) {
     const edit = new vscode.WorkspaceEdit();
     edit.createFile(uri);
-    edit.insert(uri, new vscode.Position(0, 0),
-`# ALTB
-.alpackages/
-.alcache/
-rad.json
-*.app
-`);
+    edit.insert(uri, new vscode.Position(0, 0), "# ALTB\n" + lines.join("\n") + "\n");
     vscode.workspace.applyEdit(edit);
 }
 
@@ -33,14 +37,11 @@ rad.json
 function updateGitignore(textDocument) {
     const text = textDocument.getText();
     let toAdd = '';
-    if (!/^\.alpackages\/$/m.exec(text))
-        toAdd += '.alpackages/\n';
-    if (!/^\.alcache\/$/m.exec(text))
-        toAdd += '.alcache/\n';
-    if (!/^rad\.json$/m.exec(text))
-        toAdd += 'rad.json\n';
-    if (!/^\*\.app$/m.exec(text))
-        toAdd += '*.app\n';
+    lines.forEach(line => {
+        const regex = new RegExp(`^${genFunc.escapeRegExp(line)}$`, 'm');
+        if (!regex.exec(text))
+            toAdd += line + "\n"; 
+    });
 
     if (toAdd != ''){
         const lastLine = textDocument.lineAt(textDocument.lineCount - 1);
