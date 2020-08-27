@@ -42,3 +42,13 @@ Added 3 Commands:
 Updated the snippets:
 - Replaced variablename with v so that it works better with the variable helper extension
 - Added rTableExtension and rPageExtension for those that still want to add in the Original id to the object they are creating (CRS Extension removed it)
+
+## [1.2.0]
+Added Command:
+- ALTB: Copy fields to related tables | This will copy al fields from the current table to all related tables. If there are conflicts you will get a popup that allows you to navigate to them:
+
+    ![Popup](resources/CopyFieldConflictPopup.png)
+
+## [1.2.1]
+Added Command:
+- ALTB: init .gitignore

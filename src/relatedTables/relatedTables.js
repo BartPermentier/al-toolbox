@@ -10,13 +10,14 @@ const workspaceManagement = require('../fileManagement/workspaceManagement');
  * @returns {Promise}
  */
 exports.createRelatedTables = function createRelatedTables(objectNamePrefix, fileNameFormatter) {
-    const rootPath = workspaceManagement.getCurrentWorkspaceFolderPath();
+    const rootUri = workspaceManagement.getCurrentWorkspaceFolderUri();
     // if rootpath is empty then error
-    if (!rootPath) {
+    if (!rootUri) {
         return Promise.reject("No AL workspace folder is active");
     }
+    const PutCreatedRelatedObjectsInSeparateFolders = vscode.workspace.getConfiguration('ALTB', rootUri).get('PutCreatedRelatedObjectsInSeparateFolders');
 
-    const baseDestinationPath = rootPath + '/src/';
+    const baseDestinationPath = rootUri.fsPath + '/src/';
     fileMangagement.createFolder(baseDestinationPath);
 
     let destinationPath;
@@ -24,8 +25,10 @@ exports.createRelatedTables = function createRelatedTables(objectNamePrefix, fil
     getRelatedObjectData().forEach(element => {
         destinationPath = baseDestinationPath + element.objectType;
         fileMangagement.createFolder(destinationPath);
-        destinationPath += '/' + element.folder
-        fileMangagement.createFolder(destinationPath);
+        if (PutCreatedRelatedObjectsInSeparateFolders) {
+            destinationPath += '/' + element.folder
+            fileMangagement.createFolder(destinationPath);
+        }
 
         element.objects.forEach(object => {
             fileCreationPromises.push(alFileMangagement.createAlFile(destinationPath, element.objectType, object.id, object.name, objectNamePrefix, fileNameFormatter));

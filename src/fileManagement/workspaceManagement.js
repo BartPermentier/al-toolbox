@@ -10,13 +10,25 @@ function getCurrentWorkspaceFolderPath() {
 }
 exports.getCurrentWorkspaceFolderPath = getCurrentWorkspaceFolderPath;
 
+
+function getCurrentWorkspaceFolderUri() {
+    const currentWorkspaceFolder = getCurrentWorkspaceFolder();
+    if (currentWorkspaceFolder) {
+        return currentWorkspaceFolder.uri;
+    }
+    return undefined;
+}
+exports.getCurrentWorkspaceFolderUri = getCurrentWorkspaceFolderUri;
+
+
+
 function getCurrentWorkspaceFolder() {
     const activeEditor = vscode.window.activeTextEditor;
-    if (activeEditor) {
-        if (activeEditor.document) {
-            lastActiveWorkspace = getWorkspaceFolderFromPath(activeEditor.document.fileName);
-            return lastActiveWorkspace;
-        }
+    if (activeEditor && activeEditor.document) {    
+        lastActiveWorkspace = getWorkspaceFolderFromPath(activeEditor.document.fileName);
+        return lastActiveWorkspace;
+    } else if (vscode.workspace.workspaceFolders.length == 1) {
+        return vscode.workspace.workspaceFolders[0];
     }
 }
 
