@@ -107,7 +107,7 @@
 		"prefix": "rfunction (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure Do${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var Handled: Boolean);",
+			"local procedure Do${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; Handled: Boolean);",
 			"begin",
 			"\tif Handled then exit;",
 			"\t$0",
@@ -143,7 +143,7 @@
 		"prefix": "rfunctionConfirm (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure Do${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var Handled: Boolean);",
+			"local procedure Do${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; Handled: Boolean);",
 			"begin",
 			"\tif Handled then exit;",
 			"\t$0",
@@ -317,7 +317,7 @@
 		"prefix": "rfunction2 (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure Do${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var Handled: Boolean);",
+			"local procedure Do${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; Handled: Boolean);",
 			"begin",
 			"\tif Handled then exit;",
 			"\t$0",
@@ -353,7 +353,7 @@
 		"prefix": "rfunction3 (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure Do${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName}; var Handled: Boolean);",
+			"local procedure Do${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName}; Handled: Boolean);",
 			"begin",
 			"\tif Handled then exit;",
 			"\t$0",

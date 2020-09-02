@@ -52,3 +52,6 @@ Added Command:
 ## [1.3.0]
 Added Command:
 - ALTB: init .gitignore
+
+## [1.3.1]
+- Fixed Handled parameter in Function Snippets
