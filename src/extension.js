@@ -9,6 +9,7 @@ const uniqueApiEntities = require('./codeAnalyzers/apiPageEntityAnalyzer');
 const copyFieldsToRelatedTables = require('./relatedTables/copyFieldsToRelatedTables');
 const AlCodeActionProvider = require('./codeFixers/AlCodeActionProvider');
 const initGitignore = require('./initGitignore/initGitignore');
+const regionFolding = require('./language/regionFolding');
 
 let fileSystemWatchers = new Map();
 
@@ -200,6 +201,8 @@ function activate(context) {
             new AlCodeActionProvider.AlCodeActionProvider(context),
             { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }
     ));
+
+    context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new regionFolding.RegionFoldingRangeProvider()));
 }
 
 // this method is called when your extension is deactivated
