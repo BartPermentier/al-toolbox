@@ -55,3 +55,6 @@ Added Command:
 
 ## [1.3.1]
 - Fixed Handled parameter in Function Snippets
+
+## [1.3.2]
+- Fixed [region folding not working with AL Language version 6.0.x (BC 17)](https://github.com/BartPermentier/al-toolbox/issues/17)
