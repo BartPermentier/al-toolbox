@@ -58,3 +58,6 @@ Added Command:
 
 ## [1.3.2]
 - Fixed [region folding not working with AL Language version 6.0.x (BC 17)](https://github.com/BartPermentier/al-toolbox/issues/17)
+
+## [1.3.3]
+- Added indent based folding. The default indent based folding is overridden if we add folding providers for AL.
