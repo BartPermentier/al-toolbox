@@ -10,6 +10,7 @@ const copyFieldsToRelatedTables = require('./relatedTables/copyFieldsToRelatedTa
 const AlCodeActionProvider = require('./codeFixers/AlCodeActionProvider');
 const initGitignore = require('./initGitignore/initGitignore');
 const regionFolding = require('./language/regionFolding');
+const indentFolding = require('./language/indentFolding');
 
 let fileSystemWatchers = new Map();
 
@@ -203,6 +204,7 @@ function activate(context) {
     ));
 
     context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new regionFolding.RegionFoldingRangeProvider()));
+    context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new indentFolding.IndentFoldingRangeProvider()));
 }
 
 // this method is called when your extension is deactivated
