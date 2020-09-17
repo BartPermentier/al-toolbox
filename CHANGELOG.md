@@ -61,3 +61,9 @@ Added Command:
 
 ## [1.3.3]
 - Added indent based folding. The default indent based folding is overridden if we add folding providers for AL.
+
+## [1.3.4]
+- Added Enum Snippets:
+  - rGetEnumName
+  - rConvertOrdinalToEnum
+  - rConvertTextToEnum

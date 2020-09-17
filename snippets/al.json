@@ -545,6 +545,27 @@
 	"}"
 		],
 		"description": "Create New PageExtension"
+	},
+	"GetEnumName": {
+		"prefix": "rGetEnumName (ALTB)",
+		"body": [
+			"${1:TextVar} := ${2:EnumVar}.Names.Get(${2:EnumVar}.Ordinals.IndexOf(${2:EnumVar}.AsInteger()));"
+		],
+		"description": "Create New PageExtension"
+	},
+		"ConvertOrdinalToEnum": {
+			"prefix": "rConvertOrdinalToEnum (ALTB)",
+			"body": [
+				"${1:EnumVar} := Enum::\"${2:EnumName}\".FromInteger(${3:OrdinalValue});"
+			],
+			"description": "Create New PageExtension"
+	},
+	"ConvertTextToEnum": {
+		"prefix": "rConvertTextToEnum (ALTB)",
+		"body": [
+			"${1:EnumVar} := Enum::\"${2:EnumName}\".FromInteger(${1:EnumVar}.Ordinals.Get(${1:EnumVar}.Names.IndexOf(${3:EnumTextVar})));"
+		],
+		"description": "Create New PageExtension"
 	}
 	
 }
