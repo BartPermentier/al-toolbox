@@ -116,6 +116,18 @@
                         "default": true,
                         "description": "If false all objects created with 'ALTB: Start Project: Create Related Tables' is put in there respective object folder. If true each group of related objects are put in a subfolder of that object folder.",
                         "scope": "resource"
+                    },
+                    "ALTB.UseAlRegions": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Use the standard AL regions instead of the regions previously used by this extension (No longer with '//'). This will only have effect if the runtime in app.json is higher than or equal to 6.0",
+                        "scope": "window"
+                    },
+                    "ALTB.DisableCustomFolding": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disable all folding provided by this extension (requires reload)",
+                        "scope": "window"
                     }
                 }
             }

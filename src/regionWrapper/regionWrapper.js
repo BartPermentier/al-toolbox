@@ -1,8 +1,8 @@
 const vscode = require('vscode');
 const codeBlocks = require('../codeBlocks/codeBlocks');
-// import * as vscode from 'vscode';
+const fileManagement = require('../fileManagement/fileManagement');
 
-const regionStartRegex = /\/\/#region\b/;
+const regionStartRegex = /\s*(\/\/\s*)?#region\b/;
 
 const alFunctionRegex = /(\[[^\]]+\]\s*)?(\blocal\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gi;
 const beginRegex = /\bbegin\b|\bcase\b/gi;
@@ -10,21 +10,26 @@ const endRegex = /\bend;?\b/gi;
 /**
  * @param {vscode.TextEditorEdit} editBuilder
  * @param {vscode.TextDocument} document
+ * @param {{start: string, end: string}} regionFormat
  */
-exports.WrapAllFunctions = (editBuilder, document) => {
+exports.WrapAllFunctions = (editBuilder, document, regionFormat) => {
     let text = document.getText();
     text = codeBlocks.removeAllCommentsAndStrings(text);
-    
+
     let alFunctionLocations = codeBlocks.findAllCodeBlocks(text, alFunctionRegex, beginRegex, endRegex);
-    
-    let regionCount = 0;
     alFunctionLocations.forEach(location => {
         const lineNos = codeBlocks.getLineNumbersForLocations(text, location);
-        if ((lineNos.start === 0) ||
-                !regionStartRegex.test(document.lineAt(lineNos.start-1).text)) { // check if line before function does not contain a region
-            const regionName = getRegionNameForAlFunction(document, lineNos.start);
-            addRegionStartOrEnd(editBuilder, document.lineAt(lineNos.start), regionName, false);
-            addRegionStartOrEnd(editBuilder, document.lineAt(lineNos.end), regionName, true);
+        location.start = lineNos.start;
+        location.end = lineNos.end;
+    });
+
+    let regionCount = 0;
+    alFunctionLocations.forEach(location => {
+        if ((location.start === 0) ||
+                !regionStartRegex.test(document.lineAt(location.start - 1).text)) { // check if line before function does not contain a region
+            const regionName = getRegionNameForAlFunction(document, location.start);
+            addRegionStart(editBuilder, document.lineAt(location.start), regionName, regionFormat.start);
+            addRegionEnd(editBuilder, document.lineAt(location.end), regionName, regionFormat.end);
             ++regionCount;
         }
     });
@@ -37,8 +42,9 @@ const DataItemOrColumnRegex = /\b(?<kind>dataitem|column)\b\s*\(/gi;
  * @param {vscode.TextEditorEdit} editBuilder
  * @param {vscode.TextDocument} document
  * @param {Boolean} skipSingelInstance If skipSingelInstance is true, dataitems or columns that are not followed by another don't get regions
+ * @param {{start: string, end: string}} regionFormat
  */
-exports.WrapAllDataItemsAndColumns = (editBuilder, document, skipSingelInstance) => {
+exports.WrapAllDataItemsAndColumns = (editBuilder, document, skipSingelInstance, regionFormat) => {
     let editor = vscode.window.activeTextEditor;
     let text = document.getText();
     text = codeBlocks.removeAllCommentsAndStrings(text);
@@ -55,11 +61,11 @@ exports.WrapAllDataItemsAndColumns = (editBuilder, document, skipSingelInstance)
     concatinatedBloks.forEach(location => {
         if (!(skipSingelInstance && location.concatCount === 1)) {
             if ((location.start === 0) ||
-                    !regionStartRegex.test(document.lineAt(location.start-1).text)) { // check if line before function does not contain a region
+                    !regionStartRegex.test(document.lineAt(location.start - 1).text)) { // check if line before function does not contain a region
                 let regionName = location.kind;
                 if (location.concatCount > 1) regionName += 's';
-                addRegionStartOrEnd(editBuilder, document.lineAt(location.start), regionName, false);
-                addRegionStartOrEnd(editBuilder, document.lineAt(location.end), regionName, true);
+                addRegionStart(editBuilder, document.lineAt(location.start), regionName, regionFormat.start);
+                addRegionEnd(editBuilder, document.lineAt(location.end), regionName, regionFormat.end);
                 ++regionCount;
             }
         }
@@ -68,20 +74,49 @@ exports.WrapAllDataItemsAndColumns = (editBuilder, document, skipSingelInstance)
     return regionCount;
 }
 
+exports.getRegionFormat = async function () {
+    if (vscode.workspace.getConfiguration('ALTB').get('UseAlRegions')) {
+        const appFileUri = await fileManagement.getAppFile();
+        const file = await vscode.workspace.openTextDocument(appFileUri);
+        if (file) {
+            const json = JSON.parse(file.getText());
+            if (json && json.runtime) {
+                const runtime = parseInt(json.runtime.charAt(0));
+                if (runtime >= 6)
+                    return {
+                        start: "#region",
+                        end: "#endregion",
+                    }
+            }
+        }
+    }
+    return {
+        start: "//#region",
+        end: "//#endregion",
+    }
+}
+
 /**
  * @param {vscode.TextEditorEdit} editBuilder 
  * @param {vscode.TextLine} line 
  * @param {string} name 
- * @param {boolean} isEnd 
+ * @param {string} regionText
  */
-function addRegionStartOrEnd(editBuilder, line, name, isEnd) {
+function addRegionStart(editBuilder, line, name, regionText) {
     const range = line.range;
     const currIndent = line.text.substring(0, line.firstNonWhitespaceCharacterIndex);
-    if (isEnd){
-        editBuilder.insert(range.end, '\n' + currIndent + '\/\/#endregion ' + name);
-    } else {
-        editBuilder.insert(range.start, currIndent + "\/\/#region " + name + '\n');
-    }
+    editBuilder.insert(range.start, currIndent + regionText + ' ' + name + '\n');
+}
+/**
+ * @param {vscode.TextEditorEdit} editBuilder 
+ * @param {vscode.TextLine} line 
+ * @param {string} name  
+ * @param {string} regionText
+ */
+function addRegionEnd(editBuilder, line, name, regionText) {
+    const range = line.range;
+    const currIndent = line.text.substring(0, line.firstNonWhitespaceCharacterIndex);
+    editBuilder.insert(range.end, '\n' + currIndent + regionText + ' ' + name);
 }
 
 const EventSubscriberRegex =
