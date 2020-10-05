@@ -67,3 +67,9 @@ Added Command:
   - rGetEnumName
   - rConvertOrdinalToEnum
   - rConvertTextToEnum
+
+## [2.0.0]
+- [BugFix] ENable folding for regions without '//'
+- Option to disable all folding provided by this extension: ALTB.DisableCustomFolding
+- Option to use region without '//' for region generation (snippets still use '//'): ALTB.UseAlRegions (Default will be true; set it to false if you still want to use the custom folding provided by this extension)
+- Added quick fix for AL0666 -> transforms region without '//' to regions with them.

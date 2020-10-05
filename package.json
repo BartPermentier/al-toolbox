@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "1.3.4",
+    "version": "2.0.0",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
