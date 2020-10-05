@@ -2,6 +2,7 @@ const vscode = require('vscode');
 const codeFixer = require('./codeFixer');
 const AA0008 = require('./AA0008');
 const AA0139 = require('./AA0139');
+const AL0666 = require('./AL0666');
 
 exports.AlCodeActionProvider = class AlCodeActionProvider {
     relevantDiagnostics;
@@ -15,6 +16,7 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
         this.diagnosticCodeToFix = {
             'AA0008': new AA0008.MissingBracketsCodeFixer(context, 'AA0008'),
             'AA0139': new AA0139.PossibleOverflowCodeFixer(context, 'AA0139'),
+            'AL0666': new AL0666.RegionFixer(context, 'AL0666')
         }
         this.relevantDiagnostics = Object.keys(this.diagnosticCodeToFix);
     }
