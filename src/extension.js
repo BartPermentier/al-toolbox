@@ -91,26 +91,29 @@ function activate(context) {
     //#endregion
     
     //#region Wrapping
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', function () {
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', async function () {
         let editor = vscode.window.activeTextEditor;
         let numberOfRegions; 
+        const regionFormat = await regionWrapper.getRegionFormat();
         editor.edit(editBuilder => {
-            numberOfRegions = regionWrapper.WrapAllFunctions(editBuilder, editor.document);
+            numberOfRegions = regionWrapper.WrapAllFunctions(editBuilder, editor.document, regionFormat);
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllDataItemsAndColumns', function () {
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllDataItemsAndColumns', async function () {
         let editor = vscode.window.activeTextEditor;
         let numberOfRegions; 
+        const regionFormat = await regionWrapper.getRegionFormat();
         editor.edit(editBuilder => {
-            numberOfRegions = regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false);
+            numberOfRegions = regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false, regionFormat);
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAll', function () {
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAll', async function () {
         let editor = vscode.window.activeTextEditor;
         let numberOfRegions;
+        const regionFormat = await regionWrapper.getRegionFormat();
         editor.edit(editBuilder => {
-            numberOfRegions = regionWrapper.WrapAllFunctions(editBuilder, editor.document);
-            numberOfRegions += regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false);
+            numberOfRegions = regionWrapper.WrapAllFunctions(editBuilder, editor.document, regionFormat);
+            numberOfRegions += regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false, regionFormat);
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
     //#endregion
@@ -203,8 +206,11 @@ function activate(context) {
             { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }
     ));
 
-    context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new regionFolding.RegionFoldingRangeProvider()));
-    context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new indentFolding.IndentFoldingRangeProvider()));
+    const disableCustomFolding = vscode.workspace.getConfiguration('ALTB').get('DisableCustomFolding');
+    if (!disableCustomFolding) {
+        context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new regionFolding.RegionFoldingRangeProvider()));
+        context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new indentFolding.IndentFoldingRangeProvider()));
+    }
 }
 
 // this method is called when your extension is deactivated
