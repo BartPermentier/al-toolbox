@@ -11,7 +11,11 @@ class RegionFoldingRangeProvider {
     provideFoldingRanges(document, _, token) {
         return getRegions(document.getText(), /^\s*\/\/\s*#region\b/, /^\s*\/\/\s*#endregion\b/, token).map(value => {
             return new vscode.FoldingRange(value.start, value.end, vscode.FoldingRangeKind.Region);
-        });
+        }).concat(
+            getRegions(document.getText(), /^\s*#region\b/, /^\s*#endregion\b/, token).map(value => {
+                return new vscode.FoldingRange(value.start, value.end, vscode.FoldingRangeKind.Region);
+            })
+        );
     }
 
 }
