@@ -11,6 +11,7 @@ const AlCodeActionProvider = require('./codeFixers/AlCodeActionProvider');
 const initGitignore = require('./initGitignore/initGitignore');
 const regionFolding = require('./language/regionFolding');
 const indentFolding = require('./language/indentFolding');
+const contextSnippets = require('./contextSnippets/contextSnippets');
 
 let fileSystemWatchers = new Map();
 
@@ -211,6 +212,8 @@ function activate(context) {
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new regionFolding.RegionFoldingRangeProvider()));
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new indentFolding.IndentFoldingRangeProvider()));
     }
+
+    vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r');
 }
 
 // this method is called when your extension is deactivated

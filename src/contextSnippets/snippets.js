@@ -1,4 +1,4 @@
-{
+exports.snippets = {
 	"Snippet: Table with No Series": {
 		"prefix": "rtableNoSeries (ALTB)",
 		"description": "Snippet: Table with no series Design Pattern",
