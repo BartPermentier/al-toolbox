@@ -80,6 +80,10 @@
             {
                 "command": "al-toolbox.initGitignore",
                 "title": "ALTB: init .gitignore"
+            },
+            {
+                "command": "al-toolbox.addRegion",
+                "title": "ALTB: Add region"
             }
         ],
         "configuration": [

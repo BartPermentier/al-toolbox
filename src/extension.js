@@ -117,6 +117,8 @@ function activate(context) {
             numberOfRegions += regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false, regionFormat);
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
+
+    vscode.commands.registerCommand('al-toolbox.addRegion', () => contextSnippets.addRegion(vscode.window.activeTextEditor));
     //#endregion
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {

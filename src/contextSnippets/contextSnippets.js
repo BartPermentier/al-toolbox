@@ -3,7 +3,6 @@ const snippets = require('./snippets');
 const generalFunctions = require('../generalFunctions');
 
 const commentRegionRegex = /\/\/(#(end)?region)/g;
-const nonCommentRegionRegex = /(?<!=\/\/)(#(end)?region)/g;
 
 exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
     snippets;
@@ -80,4 +79,17 @@ function replaceSnippetVarsWithDefault(snippetString) {
         .replace(tabelstopAndVariableRegex, '');
 
     return result;
+}
+
+/**
+ * @param {vscode.TextEditor} textEditor 
+ */
+exports.addRegion = function (textEditor) {
+    generalFunctions.useAlRegions()
+        .then(useAlRegions => {
+            let snippetText = snippets.snippets["Snippet: Region"].body.join('\n');
+            if (useAlRegions)
+                snippetText = snippetText.replace(commentRegionRegex, '$1');
+            textEditor.insertSnippet(new vscode.SnippetString(snippetText));
+        });
 }
