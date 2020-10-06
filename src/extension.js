@@ -12,6 +12,7 @@ const initGitignore = require('./initGitignore/initGitignore');
 const regionFolding = require('./language/regionFolding');
 const indentFolding = require('./language/indentFolding');
 const contextSnippets = require('./contextSnippets/contextSnippets');
+const textColoring = require('./textColoring/textColoring');
 
 let fileSystemWatchers = new Map();
 
@@ -216,6 +217,11 @@ function activate(context) {
     }
 
     vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r');
+
+    vscode.window.onDidChangeActiveTextEditor(textColoring.setRegionColor);
+    vscode.workspace.onDidChangeTextDocument(textColoring.setRegionColor);
+    if (vscode.window.activeTextEditor)
+        textColoring.setRegionColor();
 }
 
 // this method is called when your extension is deactivated

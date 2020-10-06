@@ -27,15 +27,6 @@
     ],
     "main": "./src/extension.js",
     "contributes": {
-        "grammars": [
-            {
-                "scopeName": "al.toolbox",
-                "path": "./syntaxes/alsyntax.tmlanguage",
-                "injectTo": [
-                    "source.al"
-                ]
-            }
-        ],
         "commands": [
             {
                 "command": "al-toolbox.createRelatedTables",
@@ -125,6 +116,18 @@
                         "type": "boolean",
                         "default": false,
                         "description": "Disable all folding provided by this extension (requires reload).",
+                        "scope": "application"
+                    },
+                    "ALTB.RegionColor": {
+                        "type": "string",
+                        "default" : "#569CD6",
+                        "description": "Region token color ((//?)#(end?)region). Set to \"\" to disable coloring.",
+                        "scope": "application"
+                    },
+                    "ALTB.RegionTextColor": {
+                        "type": "string",
+                        "default": "#D4D4D4",
+                        "description": "Color of text in regions. Set to \"\" to disable coloring.",
                         "scope": "application"
                     }
                 }
