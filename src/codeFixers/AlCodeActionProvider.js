@@ -34,7 +34,7 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
         let actions = [];
         for(let i = 0; i < diagnostics.length; i++) {
             if (token.isCancellationRequested) return;
-            actions = actions.concat(this.createCodeActions(document, diagnostics[i]));
+            actions = actions.concat(this.createCodeActions(document, range, diagnostics[i]));
         }
 
         return actions;
@@ -49,15 +49,18 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
 
     /**
      * @param {vscode.TextDocument} document 
+     * @param {vscode.Range | vscode.Selection} range 
      * @param {vscode.Diagnostic} diagnostic
      */
-    createCodeActions(document, diagnostic) {
+    createCodeActions(document, range, diagnostic) {
         const fix = this.diagnosticCodeToFix[diagnostic.code.toString()];
-        return [
-            makeCodeAction(fix.title, fix.commandName, codeFixer.fixTypes.Once, diagnostic, document),
-            makeCodeAction(`${fix.title} (everywhere in this document)`, fix.commandName, codeFixer.fixTypes.CurrentDocument, diagnostic, document),
-            makeCodeAction(`${fix.title} (in all documents)`, fix.commandName, codeFixer.fixTypes.AllDocuments, diagnostic, document)
-        ];
+        if (fix.checkIfRelevant(document, range, diagnostic))
+            return [
+                makeCodeAction(fix.title, fix.commandName, codeFixer.fixTypes.Once, diagnostic, document),
+                makeCodeAction(`${fix.title} (everywhere in this document)`, fix.commandName, codeFixer.fixTypes.CurrentDocument, diagnostic, document),
+                makeCodeAction(`${fix.title} (in all documents)`, fix.commandName, codeFixer.fixTypes.AllDocuments, diagnostic, document)
+            ];
+        else return [];
     }
 }
 
