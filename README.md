@@ -46,6 +46,8 @@ rad.json
 *.app
 ```
 
+- ALTB: Add region | Creates region around the selected text.
+
 ## Settings
 
 - ALTB.UseOldFileNamingConventions | Boolean: default `true`
@@ -61,6 +63,19 @@ rad.json
 
 - ALTB.DisableAPIEntityWarnings | Boolean: default `false`
     - Disables error messages for duplicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion
+    
+- ALTB.UseAlRegions | Boolean: default `true`
+    - Use the standard AL regions instead of the regions previously used by this extension (No longer with '//'). This will only have effect if the runtime in app.json is higher than or equal to 6.0.
+
+- ALTB.DisableCustomFolding | Boolean: default `false`
+    - Disable all folding provided by this extension (requires reload).
+
+- ALTB.RegionColor | Color: default `#569CD6` ~ blue
+    - Region marker color (`(//)?#(end)?region`). Set to `""` to disable coloring.
+
+- ALTB.RegionTextColor | Color: default `#D4D4D4` ~ white
+    - Color of text after region markers. Set to `""` to disable coloring.
+
 
 ## Known Issues
 
@@ -74,7 +89,7 @@ rad.json
 
 - ALTB: Change Object Prefix
     - This will only change the prefix of object names and fields.
-    So not from actions, events subscribers, parts on pages, keys... 
+    So not for actions, events subscribers, parts on pages, keys... 
 
 ## Before After
 ![BeforeAfter](resources/BeforeAfter.png)

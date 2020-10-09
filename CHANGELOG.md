@@ -83,3 +83,6 @@ Added Command:
 - Added command ALTB: Add region
   - Adds region arround the currend selection
 - [BugFix] Quick fix for AL0666 now only adds '//' for regions (use to do it for all "preprocessor directives")
+
+## [2.0.2]
+- Added option to disable snippets: ALTB.DisableSnippets
