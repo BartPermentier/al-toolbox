@@ -121,13 +121,19 @@
                     "ALTB.RegionColor": {
                         "type": "string",
                         "default" : "#569CD6",
-                        "description": "Region token color ((//?)#(end?)region). Set to \"\" to disable coloring.",
+                        "description": "Region marker color ((//?)#(end?)region). Set to \"\" to disable coloring.",
                         "scope": "application"
                     },
                     "ALTB.RegionTextColor": {
                         "type": "string",
                         "default": "#D4D4D4",
-                        "description": "Color of text in regions. Set to \"\" to disable coloring.",
+                        "description": "Color of text after region markers. Set to \"\" to disable coloring.",
+                        "scope": "application"
+                    },
+                    "ALTB.DisableSnippets": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disable all AL Toolbox snippets (requires reload). Our snippets start with 'r'.",
                         "scope": "application"
                     }
                 }

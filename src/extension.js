@@ -216,7 +216,9 @@ function activate(context) {
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new indentFolding.IndentFoldingRangeProvider()));
     }
 
-    vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r');
+    const disableSnippets = vscode.workspace.getConfiguration('ALTB').get('DisableSnippets');
+    if (!disableSnippets)
+        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r');
 
     vscode.window.onDidChangeActiveTextEditor(textColoring.setRegionColor);
     vscode.workspace.onDidChangeTextDocument(textColoring.setRegionColor);
