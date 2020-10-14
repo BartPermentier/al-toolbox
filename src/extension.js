@@ -11,6 +11,8 @@ const AlCodeActionProvider = require('./codeFixers/AlCodeActionProvider');
 const initGitignore = require('./initGitignore/initGitignore');
 const regionFolding = require('./language/regionFolding');
 const indentFolding = require('./language/indentFolding');
+const contextSnippets = require('./contextSnippets/contextSnippets');
+const textColoring = require('./textColoring/textColoring');
 
 let fileSystemWatchers = new Map();
 
@@ -116,6 +118,8 @@ function activate(context) {
             numberOfRegions += regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false, regionFormat);
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
+
+    vscode.commands.registerCommand('al-toolbox.addRegion', () => contextSnippets.addRegion(vscode.window.activeTextEditor));
     //#endregion
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {
@@ -211,6 +215,15 @@ function activate(context) {
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new regionFolding.RegionFoldingRangeProvider()));
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new indentFolding.IndentFoldingRangeProvider()));
     }
+
+    const disableSnippets = vscode.workspace.getConfiguration('ALTB').get('DisableSnippets');
+    if (!disableSnippets)
+        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r');
+
+    vscode.window.onDidChangeActiveTextEditor(textColoring.setRegionColor);
+    vscode.workspace.onDidChangeTextDocument(textColoring.setRegionColor);
+    if (vscode.window.activeTextEditor)
+        textColoring.setRegionColor();
 }
 
 // this method is called when your extension is deactivated

@@ -56,7 +56,8 @@ exports.CodeFixer = class CodeFixer {
     async fixAllInDocument(uri) {
         const edit = new vscode.WorkspaceEdit();
         const diagnostics = vscode.languages.getDiagnostics(uri);
-        await Promise.all(diagnostics.filter(diagnostic => diagnostic.code === this.dignosticCode).map(diagnostic => {
+        const document = await vscode.workspace.openTextDocument(uri);
+        await Promise.all(diagnostics.filter(diagnostic => this.isRelevant(document, diagnostic)).map(diagnostic => {
             return this.func(edit, uri, diagnostic);
         }));
         return vscode.workspace.applyEdit(edit);
@@ -68,8 +69,9 @@ exports.CodeFixer = class CodeFixer {
         const uris = [];
         await Promise.all(uriDiagnosticPairs.map(async uriDiagnosticPair => {
             const uri = uriDiagnosticPair[0];
+            const document = await vscode.workspace.openTextDocument(uri);
             const diagnostics = uriDiagnosticPair[1];
-            await Promise.all(diagnostics.filter(diagnostic => diagnostic.code === this.dignosticCode).map(diagnostic => {
+            await Promise.all(diagnostics.filter(diagnostic => this.isRelevant(document, diagnostic)).map(diagnostic => {
                 return this.func(edit, uri, diagnostic);
             }));
             uris.push(uri);
@@ -82,5 +84,24 @@ exports.CodeFixer = class CodeFixer {
             }
             return success;
         });
+    }
+
+    /**
+     * This function is meant to be overwritten by class extensions
+     * @param {vscode.TextDocument} document 
+     * @param {vscode.Range | vscode.Selection} range 
+     * @param {vscode.Diagnostic} diagnostic
+     */
+    checkIfRelevant(document, range, diagnostic) {
+        return true;
+    }
+
+    /**
+     * @param {vscode.TextDocument} document
+     * @param {vscode.Diagnostic} diagnostic
+     */
+    isRelevant(document, diagnostic) {
+        return diagnostic.code === this.dignosticCode
+            && this.checkIfRelevant(document, diagnostic.range, diagnostic);
     }
 }

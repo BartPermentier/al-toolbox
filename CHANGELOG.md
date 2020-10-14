@@ -69,7 +69,20 @@ Added Command:
   - rConvertTextToEnum
 
 ## [2.0.0]
-- [BugFix] ENable folding for regions without '//'
-- Option to disable all folding provided by this extension: ALTB.DisableCustomFolding
-- Option to use region without '//' for region generation (snippets still use '//'): ALTB.UseAlRegions (Default will be true; set it to false if you still want to use the custom folding provided by this extension)
+- [BugFix] Enable folding for regions without '//'
+- Option to disable all folding provided by this extension: ALTB.DisableCustomFolding (Disables folding for "//#region"s)
+- Option to use region without '//' for region generation (snippets still use '//'): ALTB.UseAlRegions (Default will be true; set it to false if you still want to use the custom regions provided by this extension)
 - Added quick fix for AL0666 -> transforms region without '//' to regions with them.
+
+## [2.0.1]
+- Added custom coloring for regions:
+  - ALTB.RegionColor: color for region markers (e.g. #region)
+  - ALTB.RegionTextColor: color for text after the region markers
+- Snippets now use regions without '//' if ALTB.UseAlRegions is true and runtime in app.json >= 6.0
+  - Snippets will no longer work with the 'Insert Snippet' command
+- Added command ALTB: Add region
+  - Adds region arround the currend selection
+- [BugFix] Quick fix for AL0666 now only adds '//' for regions (use to do it for all "preprocessor directives")
+
+## [2.0.2]
+- Added option to disable snippets: ALTB.DisableSnippets

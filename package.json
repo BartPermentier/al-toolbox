@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "2.0.0",
+    "version": "2.0.2",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -27,21 +27,6 @@
     ],
     "main": "./src/extension.js",
     "contributes": {
-        "snippets": [
-            {
-                "language": "al",
-                "path": "./snippets/al.json"
-            }
-        ],
-        "grammars": [
-            {
-                "scopeName": "al.toolbox",
-                "path": "./syntaxes/alsyntax.tmlanguage",
-                "injectTo": [
-                    "source.al"
-                ]
-            }
-        ],
         "commands": [
             {
                 "command": "al-toolbox.createRelatedTables",
@@ -86,6 +71,10 @@
             {
                 "command": "al-toolbox.initGitignore",
                 "title": "ALTB: init .gitignore"
+            },
+            {
+                "command": "al-toolbox.addRegion",
+                "title": "ALTB: Add region"
             }
         ],
         "configuration": [
@@ -95,20 +84,20 @@
                     "ALTB.UseOldFileNamingConventions": {
                         "type": "boolean",
                         "default": true,
-                        "description": "Use '<ObjectPrefix>(<ExtenedObjectId>-Ext)?<ObjectId>.<ObjectNameExcludingPrefix>.al' instead of '<ObjectNameExcludingPrefix>.<FullTypeName>(Ext)?.al' for file names",
+                        "description": "Use '<ObjectPrefix>(<ExtenedObjectId>-Ext)?<ObjectId>.<ObjectNameExcludingPrefix>.al' instead of '<ObjectNameExcludingPrefix>.<FullTypeName>(Ext)?.al' for file names.",
                         "scope": "resource"
                     },
                     "ALTB.DisableAPIEntityWarnings": {
                         "type": "boolean",
                         "default": false,
-                        "description": "Disables errors for duplicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion",
+                        "description": "Disables errors for duplicate EntityName and/or EntitySetName from API pages that have the same APIPublisher, APIGroup, and APIVersion.",
                         "scope": "window"
                     },
                     "ALTB.AdditionalRelatedObjects": {
                         "type": "array",
                         "default": [],
                         "description":
-                            "Adds additional related pages and tables. These are used while navigating and creating related tables.\nNote that this only works for PageExtensions and TableExtensions, not your own Pages and Tables.\n\nThe syntax can be found in the AL Toolbox repository: src/constanst.js -> RelatedObjects",
+                            "Adds additional related pages and tables. These are used while navigating and creating related tables.\nNote that this only works for PageExtensions and TableExtensions, not your own Pages and Tables.\n\nThe syntax can be found in the AL Toolbox repository: src/constanst.js -> RelatedObjects.",
                         "scope": "resource"
                     },
                     "ALTB.PutCreatedRelatedObjectsInSeparateFolders": {
@@ -120,14 +109,32 @@
                     "ALTB.UseAlRegions": {
                         "type": "boolean",
                         "default": true,
-                        "description": "Use the standard AL regions instead of the regions previously used by this extension (No longer with '//'). This will only have effect if the runtime in app.json is higher than or equal to 6.0",
+                        "description": "Use the standard AL regions instead of the regions previously used by this extension (No longer with '//'). This will only have effect if the runtime in app.json is higher than or equal to 6.0.",
                         "scope": "window"
                     },
                     "ALTB.DisableCustomFolding": {
                         "type": "boolean",
                         "default": false,
-                        "description": "Disable all folding provided by this extension (requires reload)",
-                        "scope": "window"
+                        "description": "Disable all folding provided by this extension (requires reload).",
+                        "scope": "application"
+                    },
+                    "ALTB.RegionColor": {
+                        "type": "string",
+                        "default" : "#569CD6",
+                        "description": "Region marker color ((//?)#(end?)region). Set to \"\" to disable coloring.",
+                        "scope": "application"
+                    },
+                    "ALTB.RegionTextColor": {
+                        "type": "string",
+                        "default": "#D4D4D4",
+                        "description": "Color of text after region markers. Set to \"\" to disable coloring.",
+                        "scope": "application"
+                    },
+                    "ALTB.DisableSnippets": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disable all AL Toolbox snippets (requires reload). Our snippets start with 'r'.",
+                        "scope": "application"
                     }
                 }
             }

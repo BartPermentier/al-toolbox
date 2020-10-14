@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const codeBlocks = require('../codeBlocks/codeBlocks');
-const fileManagement = require('../fileManagement/fileManagement');
+const generalFunctions = require('../generalFunctions');
 
 const regionStartRegex = /\s*(\/\/\s*)?#region\b/;
 
@@ -75,25 +75,16 @@ exports.WrapAllDataItemsAndColumns = (editBuilder, document, skipSingelInstance,
 }
 
 exports.getRegionFormat = async function () {
-    if (vscode.workspace.getConfiguration('ALTB').get('UseAlRegions')) {
-        const appFileUri = await fileManagement.getAppFile();
-        const file = await vscode.workspace.openTextDocument(appFileUri);
-        if (file) {
-            const json = JSON.parse(file.getText());
-            if (json && json.runtime) {
-                const runtime = parseInt(json.runtime.charAt(0));
-                if (runtime >= 6)
-                    return {
-                        start: "#region",
-                        end: "#endregion",
-                    }
-            }
+    if (await generalFunctions.useAlRegions())
+        return {
+            start: "#region",
+            end: "#endregion",
         }
-    }
-    return {
-        start: "//#region",
-        end: "//#endregion",
-    }
+    else
+        return {
+            start: "//#region",
+            end: "//#endregion",
+        }
 }
 
 /**
