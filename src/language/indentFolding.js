@@ -20,7 +20,7 @@ class IndentFoldingRangeProvider {
                 
                 if (indent > currentIndent) {
                     startRanges.push({lineNo: lastNonWhitespaceLineNo, indent: currentIndent});
-                } else if (indent < currentIndent) {
+                } else if (indent < currentIndent && startRanges[startRanges.length - 1].indent >= indent) {
                     do
                         foldingRanges.push(new vscode.FoldingRange(startRanges.pop().lineNo, lineNo - 1));
                     while(startRanges.length > 0 && startRanges[startRanges.length-1].indent >= indent)
