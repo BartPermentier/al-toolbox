@@ -119,7 +119,9 @@ function activate(context) {
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
 
-    vscode.commands.registerCommand('al-toolbox.addRegion', () => contextSnippets.addRegion(vscode.window.activeTextEditor));
+    context.subscriptions.push(
+        vscode.commands.registerCommand('al-toolbox.addRegion', () => contextSnippets.addRegion(vscode.window.activeTextEditor))
+    );
     //#endregion
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {
@@ -183,7 +185,7 @@ function activate(context) {
                 uniqueApiEntities.createFileSystemWatcher(workspaceFolder, apiPageEntityAnalyzer)
                 );
             });
-        vscode.workspace.onDidChangeWorkspaceFolders(e => {
+        context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(e => {
             e.added.forEach(workspaceFolder => {
                 apiPageEntityAnalyzer.init();
                 fileSystemWatchers.set(
@@ -200,7 +202,7 @@ function activate(context) {
                 }
                 apiPageEntityAnalyzer.removeFilesInFolder(workspaceFolder.uri);
             });
-        })
+        }));
     }
     //#endregion
     
@@ -217,11 +219,12 @@ function activate(context) {
     }
 
     const disableSnippets = vscode.workspace.getConfiguration('ALTB').get('DisableSnippets');
-    if (!disableSnippets)
-        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r');
+    if (!disableSnippets) context.subscriptions.push(
+        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r')
+    );
 
-    vscode.window.onDidChangeActiveTextEditor(textColoring.setRegionColor);
-    vscode.workspace.onDidChangeTextDocument(textColoring.setRegionColor);
+    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(textColoring.setRegionColor));
+    context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(textColoring.setRegionColor));
     if (vscode.window.activeTextEditor)
         textColoring.setRegionColor();
 }
