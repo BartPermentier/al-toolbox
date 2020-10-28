@@ -1,48 +1,125 @@
 const vscode = require('vscode');
 
 const regionRegex = /^(\s*(\/\/\s*)?#(end)?region)\b.*$/mg;
+const regionTokenRegex = /#(end)?region/;
+exports.RegionColorManager = class RegionColorManager {
 
-let regionDecoration;
-let regionTextDecoration;
-exports.setRegionColor = function () {
-    const document = vscode.window.activeTextEditor.document;
-    if (document.languageId !== 'al') return;
-    if (regionDecoration) regionDecoration.dispose();
-    if (regionTextDecoration) regionTextDecoration.dispose();
+    /**
+     * @param {vscode.ExtensionContext} context
+     */
+    constructor(context) {
+        context.subscriptions.push(
+            vscode.window.onDidChangeVisibleTextEditors(
+                this.setRegionColorForEditors, this),
 
-    const altbConfig = vscode.workspace.getConfiguration('ALTB');
-    const regionColor = altbConfig.get('RegionColor');
-    const regionTextColor = altbConfig.get('RegionTextColor');
-    if (regionColor === "" && regionTextColor === "") return;
+            vscode.workspace.onDidChangeTextDocument(
+                this.setRegionColorForChangedDocument, this),
 
-    regionDecoration = vscode.window.createTextEditorDecorationType({
-        color: regionColor
-    });
-    
-    regionTextDecoration = vscode.window.createTextEditorDecorationType({
-        color: regionTextColor
-    });
-    
-    const text = document.getText();
-    const regionTokenRanges = [];
-    const regionTextRanges = [];
-    let match;
-    while((match = regionRegex.exec(text))){
-        if (regionColor !== "")
-            regionTokenRanges.push(new vscode.Range(
-                document.positionAt(match.index),
-                document.positionAt(match.index + match[1].length)
-            ))
-        if (regionTextColor !== "")
-            regionTextRanges.push(new vscode.Range(
-                document.positionAt(match.index + match[1].length),
-                document.positionAt(match.index + match[0].length)
-            ))
+            vscode.workspace.onDidChangeConfiguration(e => {
+                if (e.affectsConfiguration("ALTB.RegionColor") ||
+                    e.affectsConfiguration("ALTB.RegionTextColor")) {
+                        this.updateDecorations();
+                }
+            }, this),
+        );
+        this.updateDecorations();
     }
 
-    if (regionTokenRanges.length > 0)
-        vscode.window.activeTextEditor.setDecorations(regionDecoration, regionTokenRanges);
+    dispose() {
+        if (this.regionDecoration) this.regionDecoration.dispose();
+        if (this.regionTextDecoration) this.regionTextDecoration.dispose();
+    }
+
+    updateDecorations() {
+        this.dispose();
+        const altbConfig = vscode.workspace.getConfiguration('ALTB');
+        const regionColor = altbConfig.get('RegionColor');
+        const regionTextColor = altbConfig.get('RegionTextColor');
+        if (regionColor === "")
+            this.regionDecoration = undefined;
+        else
+            this.regionDecoration = vscode.window.createTextEditorDecorationType({
+                color: regionColor
+            });
+
+        if (regionTextColor === "")
+            this.regionTextDecoration = undefined;
+        else   
+            this.regionTextDecoration = vscode.window.createTextEditorDecorationType({
+                color: regionTextColor
+            });
         
-    if (regionTextRanges.length > 0)
-        vscode.window.activeTextEditor.setDecorations(regionTextDecoration, regionTextRanges);
+        this.setRegionColorForEditors(vscode.window.visibleTextEditors);
+    }
+   
+    /**
+     * @param {vscode.TextEditor} textEditor
+     */
+    setRegionColor(textEditor) {
+        const document = textEditor.document;
+        if (document.languageId !== 'al') return;
+
+        const text = document.getText();
+        const regionTokenRanges = [];
+        const regionTextRanges = [];
+        let match;
+        if (this.regionDecoration || this.regionTextDecoration) {
+            while((match = regionRegex.exec(text))){
+                if (this.regionDecoration)
+                    regionTokenRanges.push(new vscode.Range(
+                        document.positionAt(match.index),
+                        document.positionAt(match.index + match[1].length)
+                    ));
+                if (this.regionTextDecoration)
+                    regionTextRanges.push(new vscode.Range(
+                        document.positionAt(match.index + match[1].length),
+                        document.positionAt(match.index + match[0].length)
+                    ));
+            }
+        }
+    
+        if (regionTokenRanges.length > 0)
+            textEditor.setDecorations(this.regionDecoration, regionTokenRanges);
+            
+        if (regionTextRanges.length > 0)
+            textEditor.setDecorations(this.regionTextDecoration, regionTextRanges);
+    }
+
+    /**
+     * @param {Array<vscode.TextEditor>} textEditors 
+     */
+    setRegionColorForEditors(textEditors){
+        textEditors.forEach(textEditor => {
+            this.setRegionColor(textEditor);
+        });
+    }
+
+    /**
+     * @param {vscode.TextDocumentChangeEvent} textDocumentChangeEvent 
+     */
+    setRegionColorForChangedDocument(textDocumentChangeEvent) {
+        const visibleTextEditors = vscode.window.visibleTextEditors;
+        const document = textDocumentChangeEvent.document;
+        let textEditor;
+        if ((textEditor = visibleTextEditors.find(visibleTextEditor => visibleTextEditor.document === document))) {
+            let changeIncludesRegion = false
+            for(let i = 0; !changeIncludesRegion && i < textDocumentChangeEvent.contentChanges.length; ++i) {
+                const contentChange = textDocumentChangeEvent.contentChanges[i];
+                changeIncludesRegion = 
+                    (contentChange.text.length === 0 && contentChange.rangeLength > 0) // If text is deleted -> recolor
+                    || regionRegex.test(contentChange.text); // If new text includes a region -> recolor
+                if (!changeIncludesRegion) {
+                    const text = document.getText(new vscode.Range(
+                        new vscode.Position(contentChange.range.start.line, 0),
+                        new vscode.Position(contentChange.range.end.line + 2, 0)
+                    ));
+                    
+                    changeIncludesRegion = regionTokenRegex.test(text); // If lines that were changed include a region -> recolor           
+                }
+            }
+            
+            if (changeIncludesRegion)
+                this.setRegionColor(textEditor);
+        }
+    }
 }

@@ -15,6 +15,7 @@ const contextSnippets = require('./contextSnippets/contextSnippets');
 const textColoring = require('./textColoring/textColoring');
 
 let fileSystemWatchers = new Map();
+let regionColorManager;
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -217,16 +218,13 @@ function activate(context) {
     if (!disableSnippets) context.subscriptions.push(
         vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r')
     );
-
-    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(textColoring.setRegionColor));
-    context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(textColoring.setRegionColor));
-    if (vscode.window.activeTextEditor)
-        textColoring.setRegionColor();
+    regionColorManager = new textColoring.RegionColorManager(context);
 }
 
 // this method is called when your extension is deactivated
 function deactivate() {
     fileSystemWatchers.forEach(fileWatcher => fileWatcher.dispose());
+    if (regionColorManager) regionColorManager.dispose();
 }
 
 module.exports = {
