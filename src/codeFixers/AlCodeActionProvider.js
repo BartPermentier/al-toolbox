@@ -44,7 +44,7 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
      * @param {readonly vscode.Diagnostic[]} diagnostics 
      */
     filterOutIrrelevantDiagnostics(diagnostics) {
-        return diagnostics.filter(diagnostic => this.relevantDiagnostics.includes(diagnostic.code));
+        return diagnostics.filter(diagnostic => this.relevantDiagnostics.includes(diagnostic.code.toString()));
     }
 
     /**

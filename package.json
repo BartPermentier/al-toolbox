@@ -23,7 +23,10 @@
     ],
     "activationEvents": [
         "onLanguage:al",
-        "onCommand:al-toolbox.createRelatedTables"
+        "onCommand:al-toolbox.createRelatedTables",
+        "onCommand:al-toolbox.renumberAll",
+        "onCommand:al-toolbox.changePrefix",
+        "onCommand:al-toolbox.initGitignore"
     ],
     "main": "./src/extension.js",
     "contributes": {

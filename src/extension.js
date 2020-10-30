@@ -15,6 +15,7 @@ const contextSnippets = require('./contextSnippets/contextSnippets');
 const textColoring = require('./textColoring/textColoring');
 
 let fileSystemWatchers = new Map();
+let regionColorManager;
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -34,27 +35,24 @@ function activate(context) {
         }
     }));
     const RelatedTablesManager = new relatedTables.RelatedTablesManager();
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.openRelatedTables', () => {
-        const currendDoc = vscode.window.activeTextEditor.document;
-        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(currendDoc);
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.openRelatedTables', textEditor => {
+        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(textEditor.document);
         if (extensionObjectInfo) {
             if (!RelatedTablesManager.openRelateTables(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
                 vscode.window.showInformationMessage('No related tables found');
         } else
             vscode.window.showInformationMessage('No page-/tableextension found in open file');
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.openRelatedPages', () => {
-        const currendDoc = vscode.window.activeTextEditor.document;
-        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(currendDoc);
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.openRelatedPages', textEditor => {
+        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(textEditor.document);
         if (extensionObjectInfo) {
             if (!RelatedTablesManager.openRelatePages(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
                 vscode.window.showInformationMessage('No related pages found');
         } else
             vscode.window.showInformationMessage('No page-/tableextension found in open file');
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.openRelatedTablesAndPages', () => {
-        const currendDoc = vscode.window.activeTextEditor.document;
-        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(currendDoc);
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.openRelatedTablesAndPages', textEditor => {
+        const extensionObjectInfo = relatedTables.getExtensionObjectInfo(textEditor.document);
         if (extensionObjectInfo) {
             if(!RelatedTablesManager.openRelatePagesAndTables(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
                 vscode.window.showInformationMessage('No related tables or pages found');
@@ -62,8 +60,8 @@ function activate(context) {
             vscode.window.showInformationMessage('No page-/tableextension found in open file');
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.copyFieldsToRelatedTables', async () => {
-        const currendDoc = vscode.window.activeTextEditor.document;
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.copyFieldsToRelatedTables', async textEditor => {
+        const currendDoc = textEditor.document;
         const currentFileObjectInfo = new alFileManagement.AlObjectInfo(currendDoc);
         if (currentFileObjectInfo.type !== constands.AlObjectTypes.tableExtension) {
             vscode.window.showErrorMessage(`File ${currendDoc.uri} is not a tableExtension`);
@@ -93,24 +91,22 @@ function activate(context) {
     //#endregion
     
     //#region Wrapping
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllFunctions', async function () {
-        let editor = vscode.window.activeTextEditor;
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.wrapAllFunctions', async (editor) => {
         let numberOfRegions; 
         const regionFormat = await regionWrapper.getRegionFormat();
+        
         editor.edit(editBuilder => {
             numberOfRegions = regionWrapper.WrapAllFunctions(editBuilder, editor.document, regionFormat);
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAllDataItemsAndColumns', async function () {
-        let editor = vscode.window.activeTextEditor;
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.wrapAllDataItemsAndColumns', async function (editor) {
         let numberOfRegions; 
         const regionFormat = await regionWrapper.getRegionFormat();
         editor.edit(editBuilder => {
             numberOfRegions = regionWrapper.WrapAllDataItemsAndColumns(editBuilder, editor.document, false, regionFormat);
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.wrapAll', async function () {
-        let editor = vscode.window.activeTextEditor;
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.wrapAll', async function (editor) {
         let numberOfRegions;
         const regionFormat = await regionWrapper.getRegionFormat();
         editor.edit(editBuilder => {
@@ -119,7 +115,9 @@ function activate(context) {
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
 
-    vscode.commands.registerCommand('al-toolbox.addRegion', () => contextSnippets.addRegion(vscode.window.activeTextEditor));
+    context.subscriptions.push(
+        vscode.commands.registerTextEditorCommand('al-toolbox.addRegion', (editor) => contextSnippets.addRegion(editor))
+    );
     //#endregion
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {
@@ -183,7 +181,7 @@ function activate(context) {
                 uniqueApiEntities.createFileSystemWatcher(workspaceFolder, apiPageEntityAnalyzer)
                 );
             });
-        vscode.workspace.onDidChangeWorkspaceFolders(e => {
+        context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(e => {
             e.added.forEach(workspaceFolder => {
                 apiPageEntityAnalyzer.init();
                 fileSystemWatchers.set(
@@ -200,7 +198,7 @@ function activate(context) {
                 }
                 apiPageEntityAnalyzer.removeFilesInFolder(workspaceFolder.uri);
             });
-        })
+        }));
     }
     //#endregion
     
@@ -217,18 +215,16 @@ function activate(context) {
     }
 
     const disableSnippets = vscode.workspace.getConfiguration('ALTB').get('DisableSnippets');
-    if (!disableSnippets)
-        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r');
-
-    vscode.window.onDidChangeActiveTextEditor(textColoring.setRegionColor);
-    vscode.workspace.onDidChangeTextDocument(textColoring.setRegionColor);
-    if (vscode.window.activeTextEditor)
-        textColoring.setRegionColor();
+    if (!disableSnippets) context.subscriptions.push(
+        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider())
+    );
+    regionColorManager = new textColoring.RegionColorManager(context);
 }
 
 // this method is called when your extension is deactivated
 function deactivate() {
     fileSystemWatchers.forEach(fileWatcher => fileWatcher.dispose());
+    if (regionColorManager) regionColorManager.dispose();
 }
 
 module.exports = {

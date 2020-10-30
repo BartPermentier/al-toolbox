@@ -121,7 +121,7 @@ exports.getLineNumbersForLocations = function getLineNumbersForLocations(text, l
     }
 }
 
-const commandRegex = /((?<=\/\/)(?!#(end)?region\b)|(?<=\/\/#(end)?region\b)).*/g;
+const commandRegex = /((?<=\/\/)(?!#(end)?region\b)|(?<=(\/\/)?#(end)?region\b)).*/g;
 const stringRegex = /'([^'\n]|'')*'|"[^"\n]+"/g;
 /**
  * @param {string} text
