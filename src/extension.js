@@ -216,7 +216,7 @@ function activate(context) {
 
     const disableSnippets = vscode.workspace.getConfiguration('ALTB').get('DisableSnippets');
     if (!disableSnippets) context.subscriptions.push(
-        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider(), 'r')
+        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider())
     );
     regionColorManager = new textColoring.RegionColorManager(context);
 }
