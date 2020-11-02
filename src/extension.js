@@ -166,6 +166,16 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.initGitignore', () => {
         initGitignore.initGitignore();
     }));
+    
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.generateSetLoadFields', textEditor => {
+        setLoadFields.generateSetLoadFields(textEditor, textEditor.selection.start).then(result => {
+            if (result)
+                if (result.fieldsAddedCount > 0) vscode.window.showInformationMessage(
+                    `${result.fieldsAddedCount} field${result.fieldsAddedCount !== 1 ? 's' : ''} added over ${result.setLoadFieldsAddedOrModifiedCount} SetLoadField${result.setLoadFieldsAddedOrModifiedCount !== 1 ? 's' : ''}`); 
+                else
+                    vscode.window.showInformationMessage('No fields added');
+        });
+    }));
     //#endregion
 
     //#region Unique EntityNames & EntitySetName on API Pages
@@ -217,16 +227,6 @@ function activate(context) {
         vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider())
     );
     regionColorManager = new textColoring.RegionColorManager(context);
-
-    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.generateSetLoadFields', textEditor => {
-        setLoadFields.generateSetLoadFields(textEditor, textEditor.selection.start).then(result => {
-            if (result)
-                if (result.fieldsAddedCount > 0) vscode.window.showInformationMessage(
-                    `${result.fieldsAddedCount} field${result.fieldsAddedCount !== 1 ? 's' : ''} added over ${result.setLoadFieldsAddedOrModifiedCount} SetLoadField${result.setLoadFieldsAddedOrModifiedCount !== 1 ? 's' : ''}`); 
-                else
-                    vscode.window.showInformationMessage('No fields added');
-        });
-    }));
 }
 
 // this method is called when your extension is deactivated
