@@ -2,7 +2,7 @@ const vscode = require('vscode');
 
 const lookAheadLineCount = 5;
 const findRecRegex = /^\s*\.\s*(Find(First|Last|Set)?|Get)\s*\(/i;
-const fieldRegex = /^\s*\.\s*("[^"\n]*"|\w+\b)(?!\s*(\(|:=))/i;
+const fieldRegex = /^\s*\.\s*(TestField\(\s*)?(?<field>"[^"\n]*"|\w+\b)(?!\s*(\(|:=))/i;
 const setLoadFieldsRegex = /^\s*\.\s*SetLoadFields\s*\(([^)]*)/i;
 
 /**
@@ -82,7 +82,7 @@ exports.generateSetLoadFields = async function (textEditor, recordPosition) {
                     currentFields = [];
                 }
                 else if ((match = fieldRegex.exec(text)) && !currentFields.includes(match[1]))
-                    currentFields.push(match[1]);
+                    currentFields.push(match.groups.field);
                 else if ((match = setLoadFieldsRegex.exec(text))) {
                     latestSetLoadFields = {
                         existingFields: match[1].split(/\s*,\s*/).map(field => field.trim()).filter(field => field !== ''),
