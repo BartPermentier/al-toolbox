@@ -89,3 +89,4 @@ Added Command:
 
 ## [2.0.5]
 - Added command "ALTB: Generate SetLoadFields"
+- Show field description on hover

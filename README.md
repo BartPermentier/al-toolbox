@@ -81,6 +81,8 @@ This extension has been inspired by the GitHub user RafaelKoch with his post htt
 - ALTB.RegionTextColor | Color: default `#D4D4D4` ~ white
     - Color of text after region markers. Set to `""` to disable coloring.
 
+- ALTB.DisableHoverProviders | Boolean: default `false`
+    - AL Toolbox shows the field description on hover.
 
 ## Known Issues
 

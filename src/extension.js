@@ -11,6 +11,7 @@ const AlCodeActionProvider = require('./codeFixers/AlCodeActionProvider');
 const initGitignore = require('./initGitignore/initGitignore');
 const regionFolding = require('./language/regionFolding');
 const indentFolding = require('./language/indentFolding');
+const fieldHover = require('./language/fieldHover');
 const contextSnippets = require('./contextSnippets/contextSnippets');
 const textColoring = require('./textColoring/textColoring');
 const setLoadFields = require('./codeGeneration/setLoadFields/setLoadFields');
@@ -22,6 +23,7 @@ let regionColorManager;
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+    const config = vscode.workspace.getConfiguration('ALTB');
     //#region Commands
     //#region Related Tables
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.createRelatedTables', async () => {
@@ -166,7 +168,7 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.initGitignore', () => {
         initGitignore.initGitignore();
     }));
-    
+
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.generateSetLoadFields', textEditor => {
         setLoadFields.generateSetLoadFields(textEditor, textEditor.selection.start).then(result => {
             if (result)
@@ -179,7 +181,7 @@ function activate(context) {
     //#endregion
 
     //#region Unique EntityNames & EntitySetName on API Pages
-    const disableAPIEntityWarnings = vscode.workspace.getConfiguration('ALTB').get('DisableAPIEntityWarnings');
+    const disableAPIEntityWarnings = config.get('DisableAPIEntityWarnings');
     if (!disableAPIEntityWarnings){
         const apiPageEntityAnalyzer = new uniqueApiEntities.ApiPageEntityAnalyzer();
         
@@ -215,17 +217,22 @@ function activate(context) {
             new AlCodeActionProvider.AlCodeActionProvider(context),
             { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }
     ));
+    if(!config.get('DisableHoverProviders'))
+        context.subscriptions.push(vscode.languages.registerHoverProvider(
+            'al', new fieldHover.FieldHoverProvider()
+        ));
 
-    const disableCustomFolding = vscode.workspace.getConfiguration('ALTB').get('DisableCustomFolding');
+    const disableCustomFolding = config.get('DisableCustomFolding');
     if (!disableCustomFolding) {
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new regionFolding.RegionFoldingRangeProvider()));
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new indentFolding.IndentFoldingRangeProvider()));
     }
 
-    const disableSnippets = vscode.workspace.getConfiguration('ALTB').get('DisableSnippets');
+    const disableSnippets = config.get('DisableSnippets');
     if (!disableSnippets) context.subscriptions.push(
         vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider())
     );
+    
     regionColorManager = new textColoring.RegionColorManager(context);
 }
 
