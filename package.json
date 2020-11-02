@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "2.0.2",
+    "version": "2.0.5",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -78,6 +78,10 @@
             {
                 "command": "al-toolbox.addRegion",
                 "title": "ALTB: Add region"
+            },
+            {
+                "command": "al-toolbox.generateSetLoadFields",
+                "title": "ALTB: Generate SetLoadFields"
             }
         ],
         "configuration": [

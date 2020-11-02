@@ -86,3 +86,6 @@ Added Command:
 
 ## [2.0.2]
 - Added option to disable snippets: ALTB.DisableSnippets
+
+## [2.0.5]
+- Added command "ALTB: Generate SetLoadFields"

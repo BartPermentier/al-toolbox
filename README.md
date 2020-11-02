@@ -36,17 +36,22 @@ This extension has been inspired by the GitHub user RafaelKoch with his post htt
 
     ![Popup](resources/CopyFieldConflictPopup.png)
 - ALTB: init .gitignore | Creates the following .gitignore in the current workspace folder or appends the missing lines to the existing .gitignore
-```
-# ALTB
-.alpackages/
-.alcache/
-*.json
-!app.json
-rad.json
-*.app
-```
+    ```
+    # ALTB
+    .alpackages/
+    .alcache/
+    *.json
+    !app.json
+    rad.json
+    *.app
+    ```
 
 - ALTB: Add region | Creates region around the selected text.
+- ALTB: Generate SetLoadFields | Creates SetLoadFields or adds missing fields to SetLoadFields for a record.
+    - Looks for a record at the current mouse position.
+    - Only works for local records.
+    - For each Get, Find, FindFirst, ... a SetLoadFields function is generated the line before it, unless it already exists.
+    - All used fields are added. Assignment is not seen as usage.
 
 ## Settings
 
@@ -89,8 +94,24 @@ rad.json
 
 - ALTB: Change Object Prefix
     - This will only change the prefix of object names and fields.
-    So not for actions, events subscribers, parts on pages, keys... 
+    So not for actions, events subscribers, parts on pages, keys...
 
+- ALTB: Generate SetLoadFields
+    - If there's a Get, Find, ... in a statement over multiple lines, the genered code can be incorrect. e.g:
+        ```
+        if
+            RecVar.Get()
+        then
+            TestFunction(RecVar.TestField);
+
+        // Will genereate:
+        if
+            RecVar.SetLoadFields(TestField);
+            RecVar.Get()
+        then
+            TestFunction(RecVar.TestField);
+        ```
+    
 ## Before After
 ![BeforeAfter](resources/BeforeAfter.png)
 
@@ -104,7 +125,7 @@ Example format:
     {  // For adding tableextensions
         folder: 'SalesHeader', // subfolder of src where to place the objects when using "ALTB: Start Project: Create Related Tables"
         objectType: this.AlObjectTypes.tableExtension,
-        objects: [ // these tables wil be considered related
+        objects: [ // these tables will be considered related
             { id: 36, name: 'Sales Header' },
             { id: 110, name: 'Sales Shipment Header' },
             { id: 112, name: 'Sales Invoice Header' },
