@@ -8,11 +8,12 @@ The AL Toolbox extension adds the region functionality to the Microsoft AL langu
 
 The extension also adds some usefull snippets with this region functionality and some Design Pattern Snippets.
 
+## Update as of AL Language 6.0
+
+Either //#Region or the default #Region can be used with this extension. The snippets/actions will adjust automatically according to the runtime you are using.
+#Region will now be colored like //#Region; you can change the colors in the User Setup
+
 ![Simple Example](resources/SimpleExample.gif)
-
-## Inspiration
-
-This extension has been inspired by the GitHub user RafaelKoch with his post https://github.com/Microsoft/AL/issues/1007 to implement regions into the AL language. I've been using the suggestion of anzwdev to manually add it to the al extension every month. I got tired of it so I created this extension to do it automatically.
 
 ## Commands
 
