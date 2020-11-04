@@ -126,25 +126,25 @@ Example format:
 ```
 [
     {  // For adding tableextensions
-        folder: 'SalesHeader', // subfolder of src where to place the objects when using "ALTB: Start Project: Create Related Tables"
-        objectType: this.AlObjectTypes.tableExtension,
-        objects: [ // these tables will be considered related
-            { id: 36, name: 'Sales Header' },
-            { id: 110, name: 'Sales Shipment Header' },
-            { id: 112, name: 'Sales Invoice Header' },
-            { id: 114, name: 'Sales Cr.Memo Header' },
-            { id: 5107, name: 'Sales Header Archive' },
-            { id: 6660, name: 'Return Receipt Header' }
+        "folder": "SalesHeader", // subfolder of src where to place the objects when using "ALTB: Start Project: Create Related Tables"
+        "objectType": "tableextension",
+        "objects": [ // these tables will be considered related
+            { "id": 36, "name": "Sales Header" },
+            { "id": 110, "name": "Sales Shipment Header" },
+            { "id": 112, "name": "Sales Invoice Header" },
+            { "id": 114, "name": "Sales Cr.Memo Header" },
+            { "id": 5107, "name": "Sales Header Archive" },
+            { "id": 6660, "name": "Return Receipt Header" }
         ]
     },
     ...
     {  // For adding pageextensions
-        table: 'Contact',  // source table of pageextension
-        folder: 'Contact',   // subfolder of src where to place the objects when using "ALTB: Start Project: Create Related Tables"
-        objectType: this.AlObjectTypes.pageExtension,
-        objects: [  // pages for the source table
-            { id: 5050, name: 'Contact Card' },
-            { id: 5052, name: 'Contact List' }
+        "table": "Contact",  // source table of pageextension
+        "folder": "Contact",   // subfolder of src where to place the objects when using "ALTB: Start Project: Create Related Tables"
+        "objectType": "pageextension",
+        "objects": [  // pages for the source table
+            { "id": 5050, "name": "Contact Card" },
+            { "id": 5052, "name": "Contact List" }
         ]
     },
     ...
