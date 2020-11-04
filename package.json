@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "2.0.3",
+    "version": "2.0.5",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -78,6 +78,10 @@
             {
                 "command": "al-toolbox.addRegion",
                 "title": "ALTB: Add region"
+            },
+            {
+                "command": "al-toolbox.generateSetLoadFields",
+                "title": "ALTB: Generate SetLoadFields"
             }
         ],
         "configuration": [
@@ -137,6 +141,12 @@
                         "type": "boolean",
                         "default": false,
                         "description": "Disable all AL Toolbox snippets (requires reload). Our snippets start with 'r'.",
+                        "scope": "application"
+                    },
+                    "ALTB.DisableHoverProviders": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disable Hover Providers (requires reload). AL Toolbox shows the field description on hover.",
                         "scope": "application"
                     }
                 }

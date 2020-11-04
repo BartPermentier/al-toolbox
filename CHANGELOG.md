@@ -89,3 +89,7 @@ Added Command:
 
 ## [2.0.3]
 - Bugfix: AL Toobox prevents folding icons in .al files with many lines #23
+
+## [2.0.5]
+- Added command "ALTB: Generate SetLoadFields"
+- Show field description on hover
