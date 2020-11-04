@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 
-const descriptionRegex = /^\s*;\s*\w+\s*\[\s*\d+\s*\]\s*\)\s*\{(\s*\w+\s*=[^;]*;)*\s*description\s*=\s*'(?<description>([^']|'')*)';/i;
+const descriptionRegex = /^\s*;\s*\w+(\s*\[\s*\d+\s*\])?\s*\)\s*\{(\s*\w+\s*=[^;]*;)*\s*description\s*=\s*'(?<description>([^']|'')*)';/i;
 
 exports.FieldHoverProvider = class FieldHoverProvider {
     
