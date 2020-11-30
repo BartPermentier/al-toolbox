@@ -93,3 +93,6 @@ Added Command:
 ## [2.0.5]
 - Added command "ALTB: Generate SetLoadFields"
 - Show field description on hover
+
+## [2.0.6]
+- Added option for checking format of label comments required by the 'AL Language Tools' extension for generating XLIFF files: ALTB.CheckCommentTranslations

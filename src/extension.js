@@ -15,6 +15,7 @@ const fieldHover = require('./language/fieldHover');
 const contextSnippets = require('./contextSnippets/contextSnippets');
 const textColoring = require('./textColoring/textColoring');
 const setLoadFields = require('./codeGeneration/setLoadFields/setLoadFields');
+const checkTranslations = require('./codeAnalyzers/XLF/checkTranslations');
 
 let fileSystemWatchers = new Map();
 let regionColorManager;
@@ -180,6 +181,7 @@ function activate(context) {
     }));
     //#endregion
 
+    //#region Diagnostics
     //#region Unique EntityNames & EntitySetName on API Pages
     const disableAPIEntityWarnings = config.get('DisableAPIEntityWarnings');
     if (!disableAPIEntityWarnings){
@@ -210,6 +212,18 @@ function activate(context) {
             });
         }));
     }
+    //#endregion
+
+    //#region Translation Diagnostics
+    let translationDiagnosticMangager = new checkTranslations.CommentTranslationDiagnosticMangager();
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
+        if (e.affectsConfiguration(`ALTB.${translationDiagnosticMangager.enabledSetting}`)) {
+            translationDiagnosticMangager.dispose();
+            translationDiagnosticMangager.activate();
+        }
+    }));
+    context.subscriptions.push(translationDiagnosticMangager);
+    //#endregion
     //#endregion
     
     context.subscriptions.push(vscode.languages.registerCodeActionsProvider(

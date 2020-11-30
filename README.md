@@ -115,6 +115,9 @@ Either //#Region or the default #Region can be used with this extension. The sni
 - ALTB.DisableHoverProviders | Boolean: default `false`
     - AL Toolbox shows the field description on hover.
 
+- ALTB.CheckCommentTranslations | Boolean: default `false`
+    - Checks if label comments match the format required by the 'AL Language Tools' extension for generating XLIFF files
+
 ## Known Issues
 
 - ALTB: Renumber AL Objects
