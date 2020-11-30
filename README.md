@@ -4,38 +4,63 @@ Please visit https://www.altoolbox.com/ for more in depth information and AL Lan
 
 ## Features
 
-The AL Toolbox extension adds the region functionality to the Microsoft AL language for Business Central.
+- Regions Pre AL Language 6.0
+- Custom Region Colors
+- Snippets
+- Actions
+- Added Code Cop Warning
 
-The extension also adds some usefull snippets with this region functionality and some Design Pattern Snippets.
+## Quick Overview Features
+  - [Custom Color of Regions](#custom-color-of-regions)
+  - [Hover over a field and see its Description Parameter](#hover-over-a-field-and-see-its-description-parameter)
+  - [Quickfixes: Surround with CopyStr](#quickfixes-surround-with-copystr)
+  - [Action: Create Region](#action-create-region)
+  - [Action: Renumber AL Objects](#action-renumber-al-objects)
+  - [Action: Change Object Prefix](#action-change-object-prefix)
+  - [Action: Create Related Tables](#action-create-related-tables)
+  - [Action: Open Related Tables](#action-open-related-tables)
+  - [Action: Copy Fields Related Tables](#action-copy-fields-related-tables)
+  - [Action: Init Git Ignore](#action-init-git-ignore)
+  - [Action: Generate SetLoadFields](#action-generate-setloadfields)
+  - [Region Functionality for PRE AL Language 6.0](#region-functionality-for-pre-al-language-60)
+  - [Settings](#settings)
+  - [Known Issues](#known-issues)
+  ## Custom Color of Regions
+![RegionColors](resources/RegionColors.png)
 
-## Update as of AL Language 6.0
+You can change the color in UserSettings
 
-Either //#Region or the default #Region can be used with this extension. The snippets/actions will adjust automatically according to the runtime you are using.
-#Region will now be colored like //#Region; you can change the colors in the User Setup
+![RegionColorsSettings](resources/RegionColorsSettings.png)
+## Hover over a field and see its Description Parameter
+![HoverExample1](resources/HoverExample1.png)
+![HoverExample2](resources/HoverExample2.png)
+## Quickfixes: Surround with CopyStr
+Automatic fix for AL(AA0139)
 
-![Simple Example](resources/SimpleExample.gif)
+![CopyStr](resources/CopyStr.png)
 
-## Commands
-
-- ALTB: Start Project: Create Related Tables | This function will create Tableextensions for Sales Header/Line, Purchase Header/Line and Contact + their Pageextensions.
-
+## Action: Create Region
 - ALTB: Create regions for all AL functions and triggers | Running this command will generate Regions around all Functions that don't have regions yet.
 
 - ALTB: Create regions for all AL dataitems and columns | Running this command will generate Regions around all Dataitems and Columns in a report.
 
 - ALTB: Create regions for all AL functions, triggers, dataitems, and columns | Combination of the previous 2.
-
+## Action: Renumber AL Objects
 - ALTB: Renumber AL Objects | This function will renumber your objects based on the number ranges in the App.json
     - Objects will be numbered in ascending order stating with the lowest number in first available range. The ranges are taken from idRange(s) in the app.json file.
     - Extension objects will be added to the 80,000-89,999 range if 80,000 is in the available ranges. If not the same is done as for the other objects.
-
+## Action: Change Object Prefix
 - ALTB: Change Object Prefix | This function will ask you what the new prefix should be and rename all your objects and the settings.json.
-
+## Action: Create Related Tables
+This will create a set of tableextensions that should have the same fields so that there is no issue when standard code issues a TransferFields().
+![RelatedTables](resources/RelatedTables.png)
+## Action: Open Related Tables
 - ALTB: Open Related Tables/Pages | This function will open the related tables/pages for the object you are working on, so you can easily copy paste fields between the related tables of Sales Header for example.
-
+## Action: Copy Fields Related Tables
 - ALTB: Copy fields to related tables | This will copy al fields from the current table to all related tables. If there are conflicts you will get a popup that allows you to navigate to them:
 
-    ![Popup](resources/CopyFieldConflictPopup.png)
+![Popup](resources/CopyFieldConflictPopup.png)
+## Action: Init Git Ignore
 - ALTB: init .gitignore | Creates the following .gitignore in the current workspace folder or appends the missing lines to the existing .gitignore
     ```
     # ALTB
@@ -46,13 +71,18 @@ Either //#Region or the default #Region can be used with this extension. The sni
     rad.json
     *.app
     ```
-
-- ALTB: Add region | Creates region around the selected text.
-- ALTB: Generate SetLoadFields | Creates SetLoadFields or adds missing fields to SetLoadFields for a record.
+## Action: Generate SetLoadFields
+ALTB: Generate SetLoadFields | Creates SetLoadFields or adds missing fields to SetLoadFields for a record.
     - Looks for a record at the current mouse position.
     - Only works for local records.
     - For each Get, Find, FindFirst, ... a SetLoadFields function is generated the line before it, unless it already exists.
     - All used fields are added. Assignment is not seen as usage.
+## Region Functionality for PRE AL Language 6.0
+
+Either //#Region or the default #Region can be used with this extension. The snippets/actions will adjust automatically according to the runtime you are using.
+#Region will now be colored like //#Region; you can change the colors in the User Setup
+
+![Simple Example](resources/SimpleExample.gif)
 
 ## Settings
 
@@ -115,7 +145,7 @@ Either //#Region or the default #Region can be used with this extension. The sni
             TestFunction(RecVar.TestField);
         ```
     
-## Before After
+## Folding with Regions Example
 ![BeforeAfter](resources/BeforeAfter.png)
 
 ## Related Objects
@@ -155,3 +185,6 @@ The default related objects can be found in [src/constants.js](https://github.co
 ## Contributers
 
 Kasper De Smedt: Great work on the commands that generate regions automatically! I wouldn't have been able to do it myself!
+
+## Special Thanks
+Special thanks to ESC BV for investing in this tool! https://esc.be/
