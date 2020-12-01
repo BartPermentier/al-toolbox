@@ -5,6 +5,7 @@ const constants = require('../constants');
 
 const DuplicateEntityNameErrMsg = 'Duplicate EntityName';
 const DuplicateEntitySetNameErrMsg = 'Duplicate EntitySetName';
+const DiagnosticSource = 'AL Toolbox';
 
 const EntityType = {
     EntityName: 'EntityName',
@@ -87,11 +88,15 @@ class ApiPageEntityInfo {
     }
 
     getAsEntityDiagnostic() {
-        return new vscode.Diagnostic(this.entityRange, DuplicateEntityNameErrMsg, vscode.DiagnosticSeverity.Error);
+        const diagnostic = new vscode.Diagnostic(this.entityRange, DuplicateEntityNameErrMsg, vscode.DiagnosticSeverity.Error);
+        diagnostic.source = DiagnosticSource;
+        return diagnostic;
     }
 
     getAsEntitySetDiagnostic() {
-        return new vscode.Diagnostic(this.entitySetRange, DuplicateEntitySetNameErrMsg, vscode.DiagnosticSeverity.Error);
+        const diagnostic = new vscode.Diagnostic(this.entitySetRange, DuplicateEntitySetNameErrMsg, vscode.DiagnosticSeverity.Error);
+        diagnostic.source = DiagnosticSource;
+        return diagnostic;
     }
 }
 

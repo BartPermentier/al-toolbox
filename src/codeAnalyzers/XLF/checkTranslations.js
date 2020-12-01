@@ -47,9 +47,11 @@ function checkTranslationFormat(text) {
 function createTranslationDiagnostics(uri) {
     return vscode.workspace.openTextDocument(uri)
         .then(textDoc => getFautyTranslations(textDoc))
-        .then(ranges => ranges.map(range => 
-            new vscode.Diagnostic(range, 'Translation format is incorrect. Must match regex /\\w{3}="[^"=]*"(,\\w{3}="[^"=]*")*/.', vscode.DiagnosticSeverity.Warning)
-        ));
+        .then(ranges => ranges.map(range => {
+            const diagnostic = new vscode.Diagnostic(range, 'Translation format is incorrect. Must match regex /\\w{3}="[^"=]*"(,\\w{3}="[^"=]*")*/.', vscode.DiagnosticSeverity.Warning)
+            diagnostic.source = 'AL Toolbox';
+            return diagnostic;
+        }));
 }
 
 exports.CommentTranslationDiagnosticMangager = class CommentTranslationDiagnosticMangager extends DiagnosticManager {
