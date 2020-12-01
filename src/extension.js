@@ -25,6 +25,7 @@ let regionColorManager;
  */
 function activate(context) {
     const config = vscode.workspace.getConfiguration('ALTB');
+    console.log('AL Toolbox: Started activating extension');
     //#region Commands
     //#region Related Tables
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.createRelatedTables', async () => {
@@ -180,7 +181,8 @@ function activate(context) {
         });
     }));
     //#endregion
-
+    console.log('AL Toolbox: Finished creating Commands');
+    
     //#region Diagnostics
     //#region Unique EntityNames & EntitySetName on API Pages
     const disableAPIEntityWarnings = config.get('DisableAPIEntityWarnings');
@@ -225,7 +227,8 @@ function activate(context) {
     context.subscriptions.push(translationDiagnosticMangager);
     //#endregion
     //#endregion
-    
+    console.log('AL Toolbox: Finished creating Diagnostics');
+
     context.subscriptions.push(vscode.languages.registerCodeActionsProvider(
             'al',
             new AlCodeActionProvider.AlCodeActionProvider(context),
@@ -248,12 +251,14 @@ function activate(context) {
     );
     
     regionColorManager = new textColoring.RegionColorManager(context);
+    console.log('AL Toolbox: Finished activating');
 }
 
 // this method is called when your extension is deactivated
 function deactivate() {
     fileSystemWatchers.forEach(fileWatcher => fileWatcher.dispose());
     if (regionColorManager) regionColorManager.dispose();
+    console.log('Extension "AL Toolbox" is now deactivate');
 }
 
 module.exports = {
