@@ -55,14 +55,14 @@ exports.RelatedTablesManager = class RelatedTablesManager {
                 element.objects.forEach(object1 => {
                     if (!this.tableToRelatedObjects.has(object1.name)) {
                         this.tableToRelatedObjects.set(object1.name, {
-                            [constants.AlObjectTypes.tableExtension]: [],
-                            [constants.AlObjectTypes.pageExtension]: []
+                            [constants.AlObjectTypes.tableExtension]: new Set(),
+                            [constants.AlObjectTypes.pageExtension]: new Set()
                         });
                     }
                     element.objects.forEach(object2 => {
                         if (object1.name !== object2.name) {
                             this.tableToRelatedObjects.get(object1.name)
-                                [constants.AlObjectTypes.tableExtension].push(object2.name);
+                                [constants.AlObjectTypes.tableExtension].add(object2.name);
                         }
                     });
                 });
@@ -70,12 +70,12 @@ exports.RelatedTablesManager = class RelatedTablesManager {
                 element.objects.forEach(object => {
                     if (!this.tableToRelatedObjects.has(element.table)) {
                         this.tableToRelatedObjects.set(element.table, {
-                            [constants.AlObjectTypes.tableExtension]: [],
-                            [constants.AlObjectTypes.pageExtension]: []
+                            [constants.AlObjectTypes.tableExtension]: new Set(),
+                            [constants.AlObjectTypes.pageExtension]: new Set()
                         });
                     }
                     this.tableToRelatedObjects.get(element.table)
-                        [constants.AlObjectTypes.pageExtension].push(object.name);
+                        [constants.AlObjectTypes.pageExtension].add(object.name);
                     this.pageToRelatedTable.set(object.name, element.table);
                 });
             }
