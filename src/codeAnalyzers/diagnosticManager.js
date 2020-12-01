@@ -1,4 +1,3 @@
-const { textSpanIsEmpty } = require('typescript');
 const vscode = require('vscode');
 
 /**
