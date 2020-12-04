@@ -295,7 +295,7 @@ exports.RelatedObjects = [
             { id: 52, name: 'Purchase Credit Memo' },
             { id: 6640, name: 'Purchase Return Order' },
             { id: 9306, name: 'Purchase Quotes' },
-            { id: 9307, name: 'Purchase List' },
+            { id: 9307, name: 'Purchase Order List' },
             { id: 9308, name: 'Purchase Invoices' },
             { id: 9309, name: 'Purchase Credit Memos' },
             { id: 9311, name: 'Purchase Return Order List' }
