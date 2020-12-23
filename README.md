@@ -49,10 +49,13 @@ Automatic fix for AL(AA0139)
 - ALTB: Renumber AL Objects | This function will renumber your objects based on the number ranges in the App.json
     - Objects will be numbered in ascending order stating with the lowest number in first available range. The ranges are taken from idRange(s) in the app.json file.
     - Extension objects will be added to the 80,000-89,999 range if 80,000 is in the available ranges. If not the same is done as for the other objects.
+- ALTB: Renumber fields | Renumbers field numbers in the active editor
+- ALTB: Renumber all fields | Renumbers fields in all tables and table extensions objects (in all workspace folders). 
 ## Action: Change Object Prefix
 - ALTB: Change Object Prefix | This function will ask you what the new prefix should be and rename all your objects and the settings.json.
 ## Action: Create Related Tables
 This will create a set of tableextensions that should have the same fields so that there is no issue when standard code issues a TransferFields().
+
 ![RelatedTables](resources/RelatedTables.png)
 ## Action: Open Related Tables
 - ALTB: Open Related Tables/Pages | This function will open the related tables/pages for the object you are working on, so you can easily copy paste fields between the related tables of Sales Header for example.

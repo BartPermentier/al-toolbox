@@ -96,3 +96,8 @@ Added Command:
 
 ## [2.0.6]
 - Added option for checking format of label comments required by the 'AL Language Tools' extension for generating XLIFF files: ALTB.CheckCommentTranslations
+
+## [2.0.8]
+- Added commands:
+  - ALTB: Renumber fields | Renumbers field numbers in the active editor
+  - ALTB: Renumber all fields | Renumbers fields in all tables and table extensions objects (in all workspace folders). 
