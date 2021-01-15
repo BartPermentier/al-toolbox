@@ -1,9 +1,10 @@
 const vscode = require('vscode');
-const constands = require('./constants');
+const constants = require('./constants');
 const relatedTables = require('./relatedTables/relatedTables');
 const alFileManagement = require('./fileManagement/alFileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
 const renumber = require('./renumberObjects/renumber');
+const renumberFields = require('./renumberObjects/renumberFields');
 const changePrefix = require('./changePrefix/changePrefix');
 const uniqueApiEntities = require('./codeAnalyzers/apiPageEntityAnalyzer');
 const copyFieldsToRelatedTables = require('./relatedTables/copyFieldsToRelatedTables');
@@ -65,10 +66,10 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.copyFieldsToRelatedTables', async textEditor => {
         const currendDoc = textEditor.document;
         const currentFileObjectInfo = new alFileManagement.AlObjectInfo(currendDoc);
-        if (currentFileObjectInfo.type !== constands.AlObjectTypes.tableExtension) {
+        if (currentFileObjectInfo.type !== constants.AlObjectTypes.tableExtension) {
             vscode.window.showErrorMessage(`File ${currendDoc.uri} is not a tableExtension`);
         } else {
-            const relatedObjects = RelatedTablesManager.getRelateObjects(currentFileObjectInfo.extendedName, currentFileObjectInfo.type, [constands.AlObjectTypes.tableExtension]);
+            const relatedObjects = RelatedTablesManager.getRelateObjects(currentFileObjectInfo.extendedName, currentFileObjectInfo.type, [constants.AlObjectTypes.tableExtension]);
             const relatedObjectsTextDocuments = await Promise.all(
                 relatedObjects.map(nameTypePair => {
                     const files = alFileManagement.getAlFileLocations(nameTypePair.name, nameTypePair.type);
@@ -122,6 +123,7 @@ function activate(context) {
     );
     //#endregion
 
+    //#region Renumber
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {
         renumber.renumberAll().then(results => {
                 let numberOfDocumentsChanged = 0;
@@ -134,6 +136,30 @@ function activate(context) {
                 vscode.window.showErrorMessage('An error occured: ' + error)
         );
     }));
+
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.renumberFields', textEditor => {
+        requestNumber('Start number (1, 80000, ...)').then(info => {
+            if (info.ok)
+                renumberFields.renumberFields(textEditor.document, info.number)
+                    .then(ok => {
+                        if(ok) textEditor.document.save();
+                    });
+        })
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAllFields', () => {
+        requestNumber('Start number for tables (1, 80000, ...)').then(async tablesInfo => {
+            if (tablesInfo.ok) {
+                const tableExtInfo = await requestNumber('Start number for table extensions (1, 80000, ...)');
+                if (tableExtInfo.ok)
+                    renumberFields.renumberAllFields(tablesInfo.number, tableExtInfo.number)
+                        .then(count => {
+                            vscode.window.showInformationMessage(`${count} object(s) renumbered`);
+                            SaveAndCloseAll();
+                        })
+            }
+        })
+    }));
+    //#endregion
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.changePrefix', async () => {
         const currPrefix = await getObjectPrefix('current prefix');
@@ -279,6 +305,20 @@ async function getObjectPrefix(placeHolder = 'Object prefix') {
             objectPrefix = await vscode.window.showInputBox({placeHolder: placeHolder});
     }
     return objectPrefix
+}
+
+async function requestNumber(placeHolder = ''){
+    return vscode.window.showInputBox({placeHolder: placeHolder})
+        .then(value => {
+            if (value !== undefined && value.length !== 0){
+                const number = Number(value);
+                if (isNaN(number)) {
+                    vscode.window.showErrorMessage(`"${value}" is not a number`);
+                } else
+                    return { ok: true, number: number };
+            }
+            return { ok: false, number: -1};
+        });
 }
 /**
  * @returns {(objectType: string, objectId: number, objectName: string) => string}

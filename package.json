@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "2.0.7",
+    "version": "2.0.8",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -26,7 +26,8 @@
         "onCommand:al-toolbox.createRelatedTables",
         "onCommand:al-toolbox.renumberAll",
         "onCommand:al-toolbox.changePrefix",
-        "onCommand:al-toolbox.initGitignore"
+        "onCommand:al-toolbox.initGitignore",
+        "onCommand:al-toolbox.renumberAllFields"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -82,6 +83,14 @@
             {
                 "command": "al-toolbox.generateSetLoadFields",
                 "title": "ALTB: Generate SetLoadFields"
+            },
+            {
+                "command": "al-toolbox.renumberFields",
+                "title": "ALTB: Renumber fields"
+            },
+            {
+                "command": "al-toolbox.renumberAllFields",
+                "title": "ALTB: Renumber all fields"
             }
         ],
         "configuration": [
