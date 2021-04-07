@@ -3,6 +3,7 @@ const codeFixer = require('./codeFixer');
 const AA0008 = require('./AA0008');
 const AA0139 = require('./AA0139');
 const AL0666 = require('./AL0666');
+const PRAGMA = require('./pragma');
 
 exports.AlCodeActionProvider = class AlCodeActionProvider {
     relevantDiagnostics;
@@ -16,7 +17,8 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
         this.diagnosticCodeToFix = {
             'AA0008': new AA0008.MissingBracketsCodeFixer(context, 'AA0008'),
             'AA0139': new AA0139.PossibleOverflowCodeFixer(context, 'AA0139'),
-            'AL0666': new AL0666.RegionFixer(context, 'AL0666')
+            'AL0666': new AL0666.RegionFixer(context, 'AL0666'),
+            'PRAGMA': new PRAGMA.AddPragmaCodeFixer(context, 'PRAGMA')
         }
         this.relevantDiagnostics = Object.keys(this.diagnosticCodeToFix);
     }
@@ -30,13 +32,20 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
      */
     provideCodeActions(document, range, context, token) {
         if (context.diagnostics.length === 0) return;
-        const diagnostics = this.filterOutIrrelevantDiagnostics(context.diagnostics);
+        const diagnostics = this.filterOutIrrelevantDiagnostics(context.diagnostics);        
         let actions = [];
         for(let i = 0; i < diagnostics.length; i++) {
             if (token.isCancellationRequested) return;
             actions = actions.concat(this.createCodeActions(document, range, diagnostics[i]));
         }
-
+        // Add Pragma action for all warnings
+        let warnings = context.diagnostics.filter(diagnostic=>diagnostic.severity==vscode.DiagnosticSeverity.Warning);
+        warnings = warnings.filter(warning=> !["AA0021","AL0604","AA0139"].includes(warning.code.toString()));
+        const fix = this.diagnosticCodeToFix["PRAGMA"];
+        for(let i = 0; i < warnings.length; i++) {
+            if (token.isCancellationRequested) return;
+            actions = actions.concat([makeCodeAction(fix.title.replace("{0}",warnings[i].code), fix.commandName, codeFixer.fixTypes.Once, warnings[i], document)]);
+        }
         return actions;
     }
 
