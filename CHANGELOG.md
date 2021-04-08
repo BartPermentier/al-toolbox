@@ -101,3 +101,7 @@ Added Command:
 - Added commands:
   - ALTB: Renumber fields | Renumbers field numbers in the active editor
   - ALTB: Renumber all fields | Renumbers fields in all tables and table extensions objects (in all workspace folders). 
+## [2.0.9]
+- Added CodeActions to Add Pragma around warnings.
+- Modified the GitIgnore from "*.json", to "launch.json"
+- Fixed the CodeunitSubscriber Snippet

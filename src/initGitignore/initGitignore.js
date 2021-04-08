@@ -5,7 +5,7 @@ const genFunc = require('../generalFunctions');
 const lines = [
     ".alpackages/",
     ".alcache/",
-    "*.json",
+    "launch.json",
     "!app.json",
     "rad.json",
     "*.app",

@@ -39,7 +39,7 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
             actions = actions.concat(this.createCodeActions(document, range, diagnostics[i]));
         }
         // Add Pragma action for all warnings
-        let warnings = context.diagnostics.filter(diagnostic=>diagnostic.severity==vscode.DiagnosticSeverity.Warning);
+        let warnings = context.diagnostics.filter(diagnostic=>[diagnostic.severity==vscode.DiagnosticSeverity.Warning,diagnostic.severity==vscode.DiagnosticSeverity.Information]);
         warnings = warnings.filter(warning=> !["AA0021","AL0604","AA0139"].includes(warning.code.toString()));
         const fix = this.diagnosticCodeToFix["PRAGMA"];
         for(let i = 0; i < warnings.length; i++) {

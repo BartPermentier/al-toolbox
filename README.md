@@ -14,6 +14,7 @@ Please visit https://www.altoolbox.com/ for more in depth information and AL Lan
   - [Custom Color of Regions](#custom-color-of-regions)
   - [Hover over a field and see its Description Parameter](#hover-over-a-field-and-see-its-description-parameter)
   - [Quickfixes: Surround with CopyStr](#quickfixes-surround-with-copystr)
+  - [Quickfixes: Pragma Warnings](#pragma-warnings)
   - [Action: Create Region](#action-create-region)
   - [Action: Renumber AL Objects](#action-renumber-al-objects)
   - [Action: Change Object Prefix](#action-change-object-prefix)
@@ -25,7 +26,8 @@ Please visit https://www.altoolbox.com/ for more in depth information and AL Lan
   - [Region Functionality for PRE AL Language 6.0](#region-functionality-for-pre-al-language-60)
   - [Settings](#settings)
   - [Known Issues](#known-issues)
-  ## Custom Color of Regions
+
+## Custom Color of Regions
 ![RegionColors](resources/RegionColors.png)
 
 You can change the color in UserSettings
@@ -38,7 +40,14 @@ You can change the color in UserSettings
 Automatic fix for AL(AA0139)
 
 ![CopyStr](resources/CopyStr.png)
-
+## Pragma Warnings
+Every warning/information line will now show a CodeAction to surround with Pragma to ignore it. So that warnings that you can do nothing about can be ignored easily.
+- Example:
+![](resources/2021-04-08-12-07-41.png)
+- Click the Lightbulb:
+![](resources/2021-04-08-12-08-29.png)
+- Result:
+![](resources/2021-04-08-12-09-17.png)
 ## Action: Create Region
 - ALTB: Create regions for all AL functions and triggers | Running this command will generate Regions around all Functions that don't have regions yet.
 
@@ -190,7 +199,8 @@ The default related objects can be found in [src/constants.js](https://github.co
 
 ## Contributers
 
-Kasper De Smedt: Great work on the commands that generate regions automatically! I wouldn't have been able to do it myself!
+- Kasper De Smedt
+- Kris Jordaens
 
 ## Special Thanks
 Special thanks to ESC BV for investing in this tool! https://esc.be/

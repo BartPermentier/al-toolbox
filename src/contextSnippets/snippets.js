@@ -252,13 +252,13 @@ exports.snippets = {
 		"description": "Create a Subscriber to a codeunit",
 		"prefix": "rSubscribeCodeunit (ALTB)",
 		"body": [
-	"//#region EventSubscriber Codeunit ${1:Object No.} ${2:Trigger}",
-	"[EventSubscriber(ObjectType::Codeunit, Codeunit::${3:CodeunitName}, '${2:Trigger}', '', true, true)]",
-	"local procedure ${2:Trigger}_C${1:Object No.}(var Rec: Record ${4:RecName});",
+	"//#region EventSubscriber Codeunit ${1:Object No.} ${3:Trigger}",
+	"[EventSubscriber(ObjectType::Codeunit, Codeunit::${2:CodeunitName}, '${3:Trigger}', '', true, true)]",
+	"local procedure ${3:Trigger}_C${1:Object No.}(var Rec: Record ${4:RecName});",
 	"begin",
 		"\t$0",
 	"end;",
-	"//#endregion EventSubscriber Codeunit ${1:Object No.} ${2:Trigger}"
+	"//#endregion EventSubscriber Codeunit ${1:Object No.} ${3:Trigger}"
 		]
 	},
 	"Snippet: Subsriber to a Page":{
