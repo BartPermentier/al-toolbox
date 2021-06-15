@@ -10,8 +10,9 @@ exports.AlObjectTypes = {
     profile: 'profile',
     XMLPort: 'xmlport',
     enum: 'enum',
+    enumextension: 'enumextension',
     controleAddIn: 'controladdin',
-    interface: 'interface',
+    interface: 'interface'    
 }
 
 exports.AlObjectTypesToFilePrefix = (AlObjectType) => {

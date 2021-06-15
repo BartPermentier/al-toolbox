@@ -13,7 +13,8 @@ const renumberableTypes = [
     constants.AlObjectTypes.report,
     constants.AlObjectTypes.table,
     constants.AlObjectTypes.tableExtension,
-    constants.AlObjectTypes.enum
+    constants.AlObjectTypes.enum,
+    constants.AlObjectTypes.enumextension,
 ]
 
 /**
