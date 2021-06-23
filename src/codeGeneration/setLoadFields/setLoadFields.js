@@ -158,6 +158,7 @@ function checkIfIsLocalVar(endOfDefinitionPos, document) {
  */
 function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFieldsInfo, recName) {
     if (fields.length === 0) return 0;
+    fields = fields.filter((v,i) => fields.indexOf(v) === i)
     const line = document.lineAt(position.line);
     const indent = line.text.substr(0, line.firstNonWhitespaceCharacterIndex);
     if (loadFieldsInfo) {
