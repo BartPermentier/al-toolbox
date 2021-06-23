@@ -112,8 +112,7 @@
                     "ALTB.AdditionalRelatedObjects": {
                         "type": "array",
                         "default": [],
-                        "description":
-                            "Adds additional related pages and tables. These are used while navigating and creating related tables.\nNote that this only works for PageExtensions and TableExtensions, not your own Pages and Tables.\n\nThe syntax can be found in the AL Toolbox repository: src/constanst.js -> RelatedObjects.",
+                        "description": "Adds additional related pages and tables. These are used while navigating and creating related tables.\nNote that this only works for PageExtensions and TableExtensions, not your own Pages and Tables.\n\nThe syntax can be found in the AL Toolbox repository: src/constanst.js -> RelatedObjects.",
                         "scope": "resource"
                     },
                     "ALTB.PutCreatedRelatedObjectsInSeparateFolders": {
@@ -136,7 +135,7 @@
                     },
                     "ALTB.RegionColor": {
                         "type": "string",
-                        "default" : "#569CD6",
+                        "default": "#569CD6",
                         "description": "Region marker color ((//?)#(end?)region). Set to \"\" to disable coloring.",
                         "scope": "application"
                     },
@@ -182,7 +181,5 @@
         "typescript": "^3.7.5",
         "vscode-test": "^1.3.0"
     },
-    "dependencies": {
-        "glob": "7.1.6"
-    }
+    "dependencies": {}
 }
