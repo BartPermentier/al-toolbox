@@ -83,6 +83,27 @@ exports.renameAll = async function renameAll(textDocument, regex, toReplaceRegex
     return Promise.all(editResults);
 }
 
+exports.renameAllWithoutQuotes = async function renameAllWithoutQuotes(textDocument, regex, toReplaceRegex, replacement) {
+    if (!regex.global) throw `Regex /${regex.source}/ is not global`;
+    let text = textDocument.getText();
+    const editResults = [];
+    let match;
+    while((match = regex.exec(text)) !== null) {
+        console.log(match[0]);
+        editResults.push(
+            await vscode.commands.executeCommand(
+                'vscode.executeDocumentRenameProvider',
+                textDocument.uri,
+                textDocument.positionAt(match.index),
+                match[0].replace(/['"]+/g, '').replace(toReplaceRegex, replacement)
+            ).then(
+                textEdit => vscode.workspace.applyEdit(textEdit)
+            ));
+        text = textDocument.getText();
+    }
+    return Promise.all(editResults);
+}
+
 exports.replaceAll = async function replaceAll(textDocument, regex, replacement) {
     if (!regex.global) throw `Regex /${regex.source}/ is not global`;
     let text = textDocument.getText();
