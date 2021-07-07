@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "2.0.9",
+    "version": "2.0.14",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -181,5 +181,7 @@
         "typescript": "^3.7.5",
         "vscode-test": "^1.3.0"
     },
-    "dependencies": {}
+    "dependencies": {
+        "glob": "7.1.6"
+    }
 }
