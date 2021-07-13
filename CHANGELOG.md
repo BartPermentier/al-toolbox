@@ -109,3 +109,8 @@ Added Command:
 ## [2.0.10]
 - Duplicate fields in ALTB: Generate SetLoadFields: #39
 - EnumExtensions are not getting renumbered via "Renumber AL objects" #38
+
+- Fixed the CodeunitSubscriber Snippet
+
+## [2.0.14]
+- [Prefix Objects adds too many double quotes](https://github.com/BartPermentier/al-toolbox/issues/44)
