@@ -105,3 +105,7 @@ Added Command:
 - Added CodeActions to Add Pragma around warnings.
 - Modified the GitIgnore from "*.json", to "launch.json"
 - Fixed the CodeunitSubscriber Snippet
+
+## [2.0.10]
+- Duplicate fields in ALTB: Generate SetLoadFields: #39
+- EnumExtensions are not getting renumbered via "Renumber AL objects" #38
