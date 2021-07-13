@@ -16,7 +16,7 @@ exports.changeObjectPrefix = async function changeObjectPrefix(currPrefix, newPr
     const objectPrefixRegex = new RegExp(
         `(?<=^\\s*${objectTypeRegex}(\\s+\\d+)?\\s+)${nameRegex}`, 'gi');
     const fieldPrefixRegex = new RegExp(
-        `(?<=field\\((\\d+;\\s*)?)${nameRegex}`, 'gi');
+        `(?<=field\\((\\d+;\\s*))${nameRegex}`, 'gi');
     const currPrefixRegex = new RegExp(currPrefix);
     
     const currWorkspace = workspaceManagement.getCurrentWorkspaceFolderPath()
@@ -35,9 +35,9 @@ exports.changeObjectPrefix = async function changeObjectPrefix(currPrefix, newPr
         let fieldResults = [];
         for (let i = 0; i < files.length; ++i) {
             const textDocument = await vscode.workspace.openTextDocument(files[i]);
-            let results = await fileManagement.renameAll(textDocument, objectPrefixRegex, currPrefixRegex, newPrefix);
+            let results = await fileManagement.renameAllWithoutQuotes(textDocument, objectPrefixRegex, currPrefixRegex, newPrefix);
             objectResults = objectResults.concat(results);
-            results = await fileManagement.renameAll(textDocument, fieldPrefixRegex, currPrefixRegex, newPrefix);
+            results = await fileManagement.renameAllWithoutQuotes(textDocument, fieldPrefixRegex, currPrefixRegex, newPrefix);
             fieldResults = fieldResults.concat(results);
             progress.report({increment: fileProgressIncrement});
         }
