@@ -202,5 +202,5 @@ function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFi
 
 function isSystemFieldOrFunction(field) {
     const systemFieldOrFunctions =  ["RecordId", "SystemId"];
-    return systemFieldOrFunctions.indexOf(field) > -1;
+    return systemFieldOrFunctions.find(key => key.toUpperCase() === field.toUpperCase()) != undefined;
 }
