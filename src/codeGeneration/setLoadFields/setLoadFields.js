@@ -45,11 +45,12 @@ exports.generateSetLoadFields = async function (textEditor, recordPosition) {
             vscode.window.showErrorMessage(`${currentRecName} is not a Record`);
             return;
         }
-        if (!checkIfIsLocalVar(endOfDefinitionPos, document)) {
-            vscode.window.showErrorMessage(`${currentRecName} is not a local Record`);
-            return;
-        }
 
+        if (!checkIfIsLocalVar(endOfDefinitionPos, document) && !checkIfParameterVar(endOfDefinitionPos, document)) {
+            vscode.window.showErrorMessage(`${currentRecName} is not a local Record or parameter`);
+            return;
+        }    
+        
         // Get all used fields and find/get positions
         progress.report({ message: 'Searching for used fields...' });
         const locations = await vscode.commands.executeCommand('vscode.executeReferenceProvider', document.uri, textEditor.selection.start);
@@ -143,6 +144,30 @@ function checkIfIsLocalVar(endOfDefinitionPos, document) {
     ));
 
     return functionWithVarsRegex.test(text);
+}
+
+/**
+ * functionWithParamsRegex finds a function declaration with parameters.
+ * e.g.:
+ * +--------------------------------------------------------------------+
+ * | ...                                                                |
+ * | procedure test(RecordVar$): Boolean;                               |
+ * +--------------------------------------------------------------------+
+ * where $ is the end of the string.     
+ */
+ 
+ const functionWithParamsRegex = /\b(procedure|trigger)\s+("[^"\n]*"|\w+)\s*\(((var)?\s*((\b\w+\b|"[^"]*")\s*)+:\s*\w+\b[^;]*;?)*((var)?\s*((\b\w+\b|"[^"]*")\s*)+)+\s*$/i;
+
+/**
+ * @param {vscode.Position} endOfDefinitionPos 
+ * @param {vscode.TextDocument} document 
+ */
+ function checkIfParameterVar(endOfDefinitionPos, document) {
+    const text = document.getText(new vscode.Range(
+        new vscode.Position(0, 0), endOfDefinitionPos
+    ));
+
+    return functionWithParamsRegex.test(text);
 }
 
 /**
