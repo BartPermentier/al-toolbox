@@ -182,8 +182,8 @@ function checkIfIsLocalVar(endOfDefinitionPos, document) {
  * @returns number of fields added
  */
 function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFieldsInfo, recName) {
+    fields = fields.filter((v,i) => fields.indexOf(v) === i && !isSystemFieldOrFunction(v))
     if (fields.length === 0) return 0;
-    fields = fields.filter((v,i) => fields.indexOf(v) === i)
     const line = document.lineAt(position.line);
     const indent = line.text.substr(0, line.firstNonWhitespaceCharacterIndex);
     if (loadFieldsInfo) {
@@ -198,4 +198,9 @@ function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFi
             `${indent}${recName}.SetLoadFields(${fields.join(', ')});\n`
         );
     return fields.length;
+}
+
+function isSystemFieldOrFunction(field) {
+    const systemFieldOrFunctions =  ["RecordId", "SystemId"];
+    return systemFieldOrFunctions.indexOf(field) > -1;
 }
