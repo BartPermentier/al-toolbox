@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const genFunc = require('../../generalFunctions');
 
 const lookAheadLineCount = 5;
 const findRecRegex = /^\s*\.\s*(Find(First|Last|Set)?|Get)\s*\(/i;
@@ -182,7 +183,8 @@ function checkIfIsLocalVar(endOfDefinitionPos, document) {
  * @returns number of fields added
  */
 function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFieldsInfo, recName) {
-    fields = fields.filter((v,i) => fields.indexOf(v) === i && !isSystemFieldOrFunction(v))
+    fields = genFunc.removeDuplicates(fields);
+        fields = fields.filter((v,i) => fields.indexOf(v) === i && !isSystemFieldOrFunction(v))    
     if (fields.length === 0) return 0;
     const line = document.lineAt(position.line);
     const indent = line.text.substr(0, line.firstNonWhitespaceCharacterIndex);
