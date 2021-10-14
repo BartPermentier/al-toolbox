@@ -1,7 +1,8 @@
 const vscode = require('vscode');
 const codeFixer = require('./codeFixer');
+const pragmaBase = require('./pragmaBase');
 
-class AddPragmaCodeFixer extends codeFixer.CodeFixer {
+class AddPragmaCodeFixer extends pragmaBase.PragmaBase {
     /**
      * @param {vscode.ExtensionContext} context 
      * @param {string} dignosticCode 
@@ -18,18 +19,5 @@ exports.AddPragmaCodeFixer = AddPragmaCodeFixer;
  * @param {vscode.Diagnostic} diagnostic 
  */
 async function surroundWithPragma(edit, uri, diagnostic) {
-    const disable = '#pragma warning disable ' + diagnostic.code;
-    const restore = '#pragma warning restore ' + diagnostic.code;
-    const editor = vscode.window.activeTextEditor;
-    const document = await vscode.workspace.openTextDocument(uri);
-   
-    return editor.edit(editBuilder=>{
-        addPragmaText(editBuilder, document.lineAt(diagnostic.range.start.line),disable);
-        addPragmaText(editBuilder, document.lineAt(diagnostic.range.end.line+1),restore);
-    });
-}
-
-function addPragmaText(editBuilder, line, param) {
-    const range = line.range;
-    editBuilder.insert(range.start, param + '\n');
+    pragmaBase.PragmaBase.insertPragma(edit,uri,diagnostic,false) 
 }
