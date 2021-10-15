@@ -5,6 +5,7 @@ const lookAheadLineCount = 5;
 const findRecRegex = /^\s*\.\s*(Find(First|Last|Set)?|Get)\s*\(/i;
 const fieldRegex = /^\s*\.\s*(TestField\(\s*)?(?<field>"[^"\n]*"|\w+\b)(?!\s*(\(|:=))/i;
 const setLoadFieldsRegex = /^\s*\.\s*SetLoadFields\s*\(([^)]*)/i;
+const ifThenRegex = /^[^(\/\/|\/*)].*then$/i;
 
 /**
  * Adds or modifies SetLoadFields from the record at recordPosition.
@@ -194,11 +195,31 @@ function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFi
         edit.insert(
             loadFieldsInfo.endPosition,
             `${loadFieldsInfo.existingFields.length === 0 ? '' : ', '}${fields.join(', ')}`);
-    } else
+    } else {
+        if(position.line > 1) {
+            const prevLine = document.lineAt(position.line - 1);
+            if (ifThenRegex.test(prevLine.text.trim())) {
+                const prevLineIndent = prevLine.text.substr(0, prevLine.firstNonWhitespaceCharacterIndex);
+                const endPrevLine =  new vscode.Position(prevLine.lineNumber, prevLine.text.trimEnd().length);
+                const nextLine = document.lineAt(position.line + 1);
+
+                edit.insert(
+                    nextLine.range.start,
+                    `${prevLineIndent}end;\n`
+                );                                  
+                
+                edit.insert(
+                    endPrevLine,
+                    ' begin'
+                );                              
+            }
+        }
+
         edit.insert(
             line.range.start,
             `${indent}${recName}.SetLoadFields(${fields.join(', ')});\n`
         );
+    }
     return fields.length;
 }
 
