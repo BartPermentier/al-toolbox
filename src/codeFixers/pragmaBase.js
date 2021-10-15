@@ -30,8 +30,8 @@ exports.PragmaBase = class PragmaBase extends codeFixer.CodeFixer {
         const editor = vscode.window.activeTextEditor;
         const document = await vscode.workspace.openTextDocument(uri);
 
-        const disable = '#pragma warning disable ' + diagnostic.code + this.addTodo(comment);
-        const restore = '#pragma warning restore ' + diagnostic.code + this.addTodo(comment);
+        const disable = '#pragma warning disable ' + diagnostic.code + this.addTodo(addTodo,comment);
+        const restore = '#pragma warning restore ' + diagnostic.code + this.addTodo(addTodo,comment);
        
         return editor.edit(editBuilder=>{
             this.addPragmaText(editBuilder, document.lineAt(diagnostic.range.start.line),disable);
@@ -40,9 +40,13 @@ exports.PragmaBase = class PragmaBase extends codeFixer.CodeFixer {
     }
 
     /**
+     * @param {boolean} addTodo 
      * @param {string} comment 
      */
-    static addTodo(comment) {        
+    static addTodo(addTodo,comment) { 
+        if (!addTodo)
+            return "";
+        
         let todo = ' // TODO';
         if (comment.length != 0) {
             todo += ' - ' + comment;
