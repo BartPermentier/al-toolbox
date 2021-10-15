@@ -121,5 +121,6 @@ Added Command:
   - Exclude SystemId, RecordId and several other system functions #51
   - Only add unique fields (case-insensitive) #50
   - Surround single if ... then or else with begin..end #45
+  - Fixed issue on local records of the same type as the current object #48
 - Added CodeAction to Add Pragma with TODO Tag #46 & #53
 
