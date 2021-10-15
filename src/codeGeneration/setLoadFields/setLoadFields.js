@@ -6,6 +6,7 @@ const findRecRegex = /^\s*\.\s*(Find(First|Last|Set)?|Get)\s*\(/i;
 const fieldRegex = /^\s*\.\s*(TestField\(\s*)?(?<field>"[^"\n]*"|\w+\b)(?!\s*(\(|:=))/i;
 const setLoadFieldsRegex = /^\s*\.\s*SetLoadFields\s*\(([^)]*)/i;
 const ifThenRegex = /^[^(\/\/|\/*)].*then$/i;
+const elseRegex = /^(end else|else){1}$/i
 
 /**
  * Adds or modifies SetLoadFields from the record at recordPosition.
@@ -198,7 +199,7 @@ function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFi
     } else {
         if(position.line > 1) {
             const prevLine = document.lineAt(position.line - 1);
-            if (ifThenRegex.test(prevLine.text.trim())) {
+            if (ifThenRegex.test(prevLine.text.trim()) || elseRegex.test(prevLine.text.trim())) {
                 const prevLineIndent = prevLine.text.substr(0, prevLine.firstNonWhitespaceCharacterIndex);
                 const endPrevLine =  new vscode.Position(prevLine.lineNumber, prevLine.text.trimEnd().length);
                 const nextLine = document.lineAt(position.line + 1);
