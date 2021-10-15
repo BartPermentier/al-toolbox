@@ -386,3 +386,5 @@ exports.RelatedObjects = [
     }
     //#endregion
 ];
+
+exports.alObjectRegex = /^\s*(?<type>\w+)(\s+(?<id>\d+))?\s+(?<name>\w+|"[^"]*")(\s+extends\s+(?<extendedName>\w+|"[^"]*")(\s*\/\/\s*(?<extendedId>\d+))?|\s+implements\s+(?<interfaces>(\w+|"[^"]*")(\s*,\s*(\w+|"[^"]*"))*))?/im;

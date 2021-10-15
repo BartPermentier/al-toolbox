@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const genFunc = require('../../generalFunctions');
+const constants = require('../../constants');
 
 const lookAheadLineCount = 5;
 const findRecRegex = /^\s*\.\s*(Find(First|Last|Set)?|Get)\s*\(/i;
@@ -37,9 +38,9 @@ exports.generateSetLoadFields = async function (textEditor, recordPosition) {
             vscode.window.showErrorMessage(`Multiple definitions found for ${currentRecName}`);
             return;
         }
-        
+       
         let endOfDefinitionPos;
-        if (definition[0].uri.fsPath !== document.uri.fsPath)
+        if ((definition[0].uri.fsPath !== document.uri.fsPath) || ((definition[0].uri.fsPath === document.uri.fsPath) && (isObjectDefinition(document,definition[0].range.start.line))))
             endOfDefinitionPos = currentWordRange.end;
         else
             endOfDefinitionPos = definition[0].range.end;
@@ -230,4 +231,13 @@ function isSystemFieldOrFunction(field) {
         "HasLinks","IsEmpty","IsTemporary","MarkedOnly","SecurityFiltering","TableCaption","TableName","WritePermission"];
         
     return systemFieldOrFunctions.find(key => key.toUpperCase() === field.toUpperCase()) != undefined;
+}
+
+    /**
+     * @param {vscode.TextDocument} document
+     * @param {number} definitionLineNo
+     */
+function isObjectDefinition(document,definitionLineNo) {
+    const definitionLine = document.lineAt(definitionLineNo);        
+    return constants.alObjectRegex.test(definitionLine.text);
 }
