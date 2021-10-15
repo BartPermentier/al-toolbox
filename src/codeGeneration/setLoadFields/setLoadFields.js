@@ -225,19 +225,18 @@ function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFi
     return fields.length;
 }
 
-function isSystemFieldOrFunction(field) {
-    const systemFieldOrFunctions =  ["RecordId", "SystemId", "SystemCreatedAt","SystemCreatedBy","SystemCreatedAt","SystemModifiedBy", 
-        "Ascending", "Count", "CountApprox","CurrentCompany","CurrentKey","IsEmpty","FilterGroup","GetFilters","HasFilter",
-        "HasLinks","IsEmpty","IsTemporary","MarkedOnly","SecurityFiltering","TableCaption","TableName","WritePermission"];
-        
-    return systemFieldOrFunctions.find(key => key.toUpperCase() === field.toUpperCase()) != undefined;
+/**
+ * @param {string} field
+ */
+function isSystemFieldOrFunction(field) {           
+    return constants.SystemFieldAndFunctions.find(key => key.toUpperCase() === field.toUpperCase()) != undefined;
 }
 
-    /**
-     * @param {vscode.TextDocument} document
-     * @param {number} definitionLineNo
-     */
+/**
+ * @param {vscode.TextDocument} document
+ * @param {number} definitionLineNo
+ */
 function isObjectDefinition(document,definitionLineNo) {
     const definitionLine = document.lineAt(definitionLineNo);        
-    return constants.alObjectRegex.test(definitionLine.text);
+    return constants.AlObjectRegex.test(definitionLine.text);
 }

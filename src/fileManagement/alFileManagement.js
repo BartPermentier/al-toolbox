@@ -169,7 +169,7 @@ class AlObjectInfo {
      */
     constructor(textDocument) {
         this.path = textDocument.uri;
-        const match = constants.alObjectRegex.exec(textDocument.getText());
+        const match = constants.AlObjectRegex.exec(textDocument.getText());
         if (match === null) return;
         this.type = match.groups.type.toLowerCase();
         if(Object.values(constants.AlObjectTypes).includes(this.type)){
