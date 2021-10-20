@@ -40,7 +40,7 @@ exports.generateSetLoadFields = async function (textEditor, recordPosition) {
         }
        
         let endOfDefinitionPos;
-        if ((definition[0].uri.fsPath !== document.uri.fsPath) || ((definition[0].uri.fsPath === document.uri.fsPath) && (isObjectDefinition(document,definition[0].range.start.line))))
+        if ((definition[0].uri.fsPath !== document.uri.fsPath) || ((definition[0].uri.fsPath === document.uri.fsPath) && (isTableObjectDefinition(document,definition[0].range.start.line))))
             endOfDefinitionPos = currentWordRange.end;
         else
             endOfDefinitionPos = definition[0].range.end;
@@ -236,7 +236,9 @@ function isSystemFieldOrFunction(field) {
  * @param {vscode.TextDocument} document
  * @param {number} definitionLineNo
  */
-function isObjectDefinition(document,definitionLineNo) {
+function isTableObjectDefinition(document,definitionLineNo) {
     const definitionLine = document.lineAt(definitionLineNo);        
-    return constants.AlObjectRegex.test(definitionLine.text);
+    const match = constants.AlObjectRegex.exec(definitionLine.text);
+    if (match === null) return false;
+    return match.groups.type.toLowerCase() == "table";    
 }
