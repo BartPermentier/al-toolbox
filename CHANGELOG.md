@@ -123,4 +123,4 @@ Added Command:
   - Surround single if ... then or else with begin..end #45
   - Fixed issue on local records of the same type as the current object #48
 - Added CodeAction to Add Pragma with TODO Tag #46 & #53
-
+- Added CodeAction to Add Pragma for all error occurences in all documents #42
