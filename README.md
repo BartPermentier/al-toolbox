@@ -48,6 +48,10 @@ Every warning/information line will now show a CodeAction to surround with Pragm
 ![](resources/2021-04-08-12-08-29.png)
 - Result:
 ![](resources/2021-04-08-12-09-17.png)
+
+Some variants on the above Pragma CodeAction were added as well:
+- Surround ### with Pragma & add TODO tag (with comment)
+- Surround ### with Pragma (in all documents)  
 ## Action: Create Region
 - ALTB: Create regions for all AL functions and triggers | Running this command will generate Regions around all Functions that don't have regions yet.
 
