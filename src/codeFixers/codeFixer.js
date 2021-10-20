@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const faults = require('../fault');
+const constants = require('../constants');
 
 const fixTypes = {
     Once: 0,
@@ -30,7 +31,7 @@ exports.CodeFixer = class CodeFixer {
                     this.fix(document.uri, diagnostic);
                     break;
                 case fixTypes.AllDocuments:
-                    this.fixAll();
+                    this.fixAll(diagnostic);
                     break;
                 case fixTypes.CurrentDocument:            
                 default:
@@ -63,7 +64,11 @@ exports.CodeFixer = class CodeFixer {
         return vscode.workspace.applyEdit(edit);
     }
 
-    async fixAll() {
+    /**
+     * @param {vscode.Diagnostic} diagnosticToFix
+     */
+    async fixAll(diagnosticToFix) {
+        diagnosticToFix.code
         const edit = new vscode.WorkspaceEdit();
         const uriDiagnosticPairs = vscode.languages.getDiagnostics();
         const uris = [];
@@ -71,7 +76,7 @@ exports.CodeFixer = class CodeFixer {
             const uri = uriDiagnosticPair[0];
             const document = await vscode.workspace.openTextDocument(uri);
             const diagnostics = uriDiagnosticPair[1];
-            await Promise.all(diagnostics.filter(diagnostic => this.isRelevant(document, diagnostic)).map(diagnostic => {
+            await Promise.all(diagnostics.filter(diagnostic => this.isRelevant(document, diagnostic) || this.isPragmaAll(diagnostic,diagnosticToFix)).map(diagnostic => {
                 return this.func(edit, uri, diagnostic);
             }));
             uris.push(uri);
@@ -103,5 +108,13 @@ exports.CodeFixer = class CodeFixer {
     isRelevant(document, diagnostic) {
         return diagnostic.code === this.dignosticCode
             && this.checkIfRelevant(document, diagnostic.range, diagnostic);
+    }
+
+    /**
+     * @param {vscode.Diagnostic} diagnostic
+     * @param {vscode.Diagnostic} diagnosticToFix
+     */
+    isPragmaAll(diagnostic, diagnosticToFix) {
+        return (this.dignosticCode == constants.PragmaAll) && (diagnostic.code == diagnosticToFix.code)
     }
 }

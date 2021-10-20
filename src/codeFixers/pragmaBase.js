@@ -30,13 +30,12 @@ exports.PragmaBase = class PragmaBase extends codeFixer.CodeFixer {
         const editor = vscode.window.activeTextEditor;
         const document = await vscode.workspace.openTextDocument(uri);
 
-        const disable = '#pragma warning disable ' + diagnostic.code + this.addTodo(addTodo,comment);
-        const restore = '#pragma warning restore ' + diagnostic.code + this.addTodo(addTodo,comment);
+        const pragmaTexts = this.getPragmaTexts(diagnostic,addTodo,comment);
        
         return editor.edit(editBuilder=>{
-            this.addPragmaText(editBuilder, document.lineAt(diagnostic.range.start.line),disable);
-            this.addPragmaText(editBuilder, document.lineAt(diagnostic.range.end.line+1),restore);
-        });        
+            this.addPragmaText(editBuilder, document.lineAt(diagnostic.range.start.line),pragmaTexts.disableText);
+            this.addPragmaText(editBuilder, document.lineAt(diagnostic.range.end.line+1),pragmaTexts.restoreText);
+        });  
     }
 
     /**
@@ -53,10 +52,25 @@ exports.PragmaBase = class PragmaBase extends codeFixer.CodeFixer {
         } 
 
         return todo;
-    } 
-    
+    }
+
     static addPragmaText(editBuilder, line, param) {
         const range = line.range;
         editBuilder.insert(range.start, param + '\n');
     }  
+    
+    /**
+     * @param {vscode.Diagnostic} diagnostic 
+     * @param {boolean} addTodo 
+     * @param {string} comment 
+     */
+     static getPragmaTexts(diagnostic, addTodo, comment) {
+        const disableText = '#pragma warning disable ' + diagnostic.code + this.addTodo(addTodo,comment);
+        const restoreText = '#pragma warning restore ' + diagnostic.code + this.addTodo(addTodo,comment);
+
+        return {
+            disableText: disableText,
+            restoreText: restoreText
+        }
+    }
 }

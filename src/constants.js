@@ -394,3 +394,5 @@ exports.SystemFieldAndFunctions = [
     "Ascending", "Count", "CountApprox","CurrentCompany","CurrentKey","IsEmpty","FilterGroup","GetFilters","HasFilter",
     "HasLinks","IsEmpty","IsTemporary","MarkedOnly","SecurityFiltering","TableCaption","TableName","WritePermission"
 ];
+
+exports.PragmaAll = "PRAGMAALL";
