@@ -24,3 +24,15 @@ exports.useAlRegions = async function () {
     }
     return false;
 }
+
+exports.removeDuplicates = function(arr) {
+    var arrayWithoutDuplicates = [];
+    
+    arr.forEach(element => {
+        if(arrayWithoutDuplicates.find(key => key.toUpperCase() === element.toUpperCase()) == undefined) {
+            arrayWithoutDuplicates.push(element);
+        }    
+    });    
+    
+    return arrayWithoutDuplicates;
+}

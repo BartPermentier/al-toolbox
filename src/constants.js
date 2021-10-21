@@ -386,3 +386,13 @@ exports.RelatedObjects = [
     }
     //#endregion
 ];
+
+exports.AlObjectRegex = /^\s*(?<type>\w+)(\s+(?<id>\d+))?\s+(?<name>\w+|"[^"]*")(\s+extends\s+(?<extendedName>\w+|"[^"]*")(\s*\/\/\s*(?<extendedId>\d+))?|\s+implements\s+(?<interfaces>(\w+|"[^"]*")(\s*,\s*(\w+|"[^"]*"))*))?/im;
+
+exports.SystemFieldAndFunctions = [
+    "RecordId", "SystemId", "SystemCreatedAt","SystemCreatedBy","SystemCreatedAt","SystemModifiedBy", 
+    "Ascending", "Count", "CountApprox","CurrentCompany","CurrentKey","IsEmpty","FilterGroup","GetFilters","HasFilter",
+    "HasLinks","IsEmpty","IsTemporary","MarkedOnly","SecurityFiltering","TableCaption","TableName","WritePermission"
+];
+
+exports.PragmaAll = "PRAGMAALL";

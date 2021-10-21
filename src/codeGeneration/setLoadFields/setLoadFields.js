@@ -1,9 +1,13 @@
 const vscode = require('vscode');
+const genFunc = require('../../generalFunctions');
+const constants = require('../../constants');
 
 const lookAheadLineCount = 5;
 const findRecRegex = /^\s*\.\s*(Find(First|Last|Set)?|Get)\s*\(/i;
 const fieldRegex = /^\s*\.\s*(TestField\(\s*)?(?<field>"[^"\n]*"|\w+\b)(?!\s*(\(|:=))/i;
 const setLoadFieldsRegex = /^\s*\.\s*SetLoadFields\s*\(([^)]*)/i;
+const ifThenRegex = /^[^(\/\/|\/*)].*then$/i;
+const elseRegex = /^(end else|else){1}$/i
 
 /**
  * Adds or modifies SetLoadFields from the record at recordPosition.
@@ -34,9 +38,9 @@ exports.generateSetLoadFields = async function (textEditor, recordPosition) {
             vscode.window.showErrorMessage(`Multiple definitions found for ${currentRecName}`);
             return;
         }
-        
+       
         let endOfDefinitionPos;
-        if (definition[0].uri.fsPath !== document.uri.fsPath)
+        if ((definition[0].uri.fsPath !== document.uri.fsPath) || ((definition[0].uri.fsPath === document.uri.fsPath) && (isTableObjectDefinition(document,definition[0].range.start.line))))
             endOfDefinitionPos = currentWordRange.end;
         else
             endOfDefinitionPos = definition[0].range.end;
@@ -45,11 +49,12 @@ exports.generateSetLoadFields = async function (textEditor, recordPosition) {
             vscode.window.showErrorMessage(`${currentRecName} is not a Record`);
             return;
         }
-        if (!checkIfIsLocalVar(endOfDefinitionPos, document)) {
-            vscode.window.showErrorMessage(`${currentRecName} is not a local Record`);
-            return;
-        }
 
+        if (!checkIfIsLocalVar(endOfDefinitionPos, document) && !checkIfParameterVar(endOfDefinitionPos, document)) {
+            vscode.window.showErrorMessage(`${currentRecName} is not a local Record or parameter`);
+            return;
+        }    
+        
         // Get all used fields and find/get positions
         progress.report({ message: 'Searching for used fields...' });
         const locations = await vscode.commands.executeCommand('vscode.executeReferenceProvider', document.uri, textEditor.selection.start);
@@ -146,6 +151,30 @@ function checkIfIsLocalVar(endOfDefinitionPos, document) {
 }
 
 /**
+ * functionWithParamsRegex finds a function declaration with parameters.
+ * e.g.:
+ * +--------------------------------------------------------------------+
+ * | ...                                                                |
+ * | procedure test(RecordVar$): Boolean;                               |
+ * +--------------------------------------------------------------------+
+ * where $ is the end of the string.     
+ */
+ 
+ const functionWithParamsRegex = /\b(procedure|trigger)\s+("[^"\n]*"|\w+)\s*\(((var)?\s*((\b\w+\b|"[^"]*")\s*)+:\s*\w+\b[^;]*;?)*((var)?\s*((\b\w+\b|"[^"]*")\s*)+)+\s*$/i;
+
+/**
+ * @param {vscode.Position} endOfDefinitionPos 
+ * @param {vscode.TextDocument} document 
+ */
+ function checkIfParameterVar(endOfDefinitionPos, document) {
+    const text = document.getText(new vscode.Range(
+        new vscode.Position(0, 0), endOfDefinitionPos
+    ));
+
+    return functionWithParamsRegex.test(text);
+}
+
+/**
  * 
  * @param {vscode.TextEditorEdit} edit 
  * @param {vscode.Position} position 
@@ -157,8 +186,9 @@ function checkIfIsLocalVar(endOfDefinitionPos, document) {
  * @returns number of fields added
  */
 function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFieldsInfo, recName) {
+    fields = genFunc.removeDuplicates(fields);
+        fields = fields.filter((v,i) => fields.indexOf(v) === i && !isSystemFieldOrFunction(v))    
     if (fields.length === 0) return 0;
-    fields = fields.filter((v,i) => fields.indexOf(v) === i)
     const line = document.lineAt(position.line);
     const indent = line.text.substr(0, line.firstNonWhitespaceCharacterIndex);
     if (loadFieldsInfo) {
@@ -167,10 +197,48 @@ function addOrModifySetLoadFieldsToEdit(edit, position, fields, document, loadFi
         edit.insert(
             loadFieldsInfo.endPosition,
             `${loadFieldsInfo.existingFields.length === 0 ? '' : ', '}${fields.join(', ')}`);
-    } else
+    } else {
+        if(position.line > 1) {
+            const prevLine = document.lineAt(position.line - 1);
+            if (ifThenRegex.test(prevLine.text.trim()) || elseRegex.test(prevLine.text.trim())) {
+                const prevLineIndent = prevLine.text.substr(0, prevLine.firstNonWhitespaceCharacterIndex);
+                const endPrevLine =  new vscode.Position(prevLine.lineNumber, prevLine.text.trimEnd().length);
+                const nextLine = document.lineAt(position.line + 1);
+
+                edit.insert(
+                    nextLine.range.start,
+                    `${prevLineIndent}end;\n`
+                );                                  
+                
+                edit.insert(
+                    endPrevLine,
+                    ' begin'
+                );                              
+            }
+        }
+
         edit.insert(
             line.range.start,
             `${indent}${recName}.SetLoadFields(${fields.join(', ')});\n`
         );
+    }
     return fields.length;
+}
+
+/**
+ * @param {string} field
+ */
+function isSystemFieldOrFunction(field) {           
+    return constants.SystemFieldAndFunctions.find(key => key.toUpperCase() === field.toUpperCase()) != undefined;
+}
+
+/**
+ * @param {vscode.TextDocument} document
+ * @param {number} definitionLineNo
+ */
+function isTableObjectDefinition(document,definitionLineNo) {
+    const definitionLine = document.lineAt(definitionLineNo);        
+    const match = constants.AlObjectRegex.exec(definitionLine.text);
+    if (match === null) return false;
+    return match.groups.type.toLowerCase() == "table";    
 }
