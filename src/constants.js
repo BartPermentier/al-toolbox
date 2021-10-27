@@ -396,3 +396,14 @@ exports.SystemFieldAndFunctions = [
 ];
 
 exports.PragmaAll = "PRAGMAALL";
+
+exports.AlObjectTypeVariables = [
+    "record",
+    "page",
+    "report",
+    "codeunit",
+    "query",
+    "xmlport",
+    "enum",
+    "interface",
+]
