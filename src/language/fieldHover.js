@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const constants = require('../constants');
 
 const descriptionRegex = /^\s*;\s*\w+(\s*\[\s*\d+\s*\])?\s*\)\s*\{(\s*\w+\s*=[^;]*;)*\s*description\s*=\s*'(?<description>([^']|'')*)';/i;
 
@@ -14,6 +15,12 @@ exports.FieldHoverProvider = class FieldHoverProvider {
      * @returns {vscode.ProviderResult<vscode.Hover>}
      */
     provideHover(document, position, token) {
+        const line = document.lineAt(position.line); 
+        const match = /^\s*.*\s*:\s*(?<type>\w+)\b/i.exec(line.text)
+        if(match !== null) {
+            if(constants.AlObjectTypeVariables.includes(match.groups.type.toLowerCase())) return
+        }
+
         return vscode.commands.executeCommand('vscode.executeDefinitionProvider', document.uri, position)
             .then(definitions => {
                 if (token.isCancellationRequested) return Promise.reject('Canceled');

@@ -124,3 +124,6 @@ Added Command:
   - Fixed issue on local records of the same type as the current object #48
 - Added CodeAction to Add Pragma with TODO Tag #46 & #53
 - Added CodeAction to Add Pragma for all error occurences in all documents #42
+
+## [2.0.16]
+'Go to Definition' opened in side window when hovering object derived variable #55
