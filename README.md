@@ -12,7 +12,6 @@ Please visit https://www.altoolbox.com/ for more in depth information and AL Lan
 
 ## Quick Overview Features
   - [Custom Color of Regions](#custom-color-of-regions)
-  - [Hover over a field and see its Description Parameter](#hover-over-a-field-and-see-its-description-parameter)
   - [Quickfixes: Surround with CopyStr](#quickfixes-surround-with-copystr)
   - [Quickfixes: Pragma Warnings](#pragma-warnings)
   - [Action: Create Region](#action-create-region)
@@ -33,9 +32,6 @@ Please visit https://www.altoolbox.com/ for more in depth information and AL Lan
 You can change the color in UserSettings
 
 ![RegionColorsSettings](resources/RegionColorsSettings.png)
-## Hover over a field and see its Description Parameter
-![HoverExample1](resources/HoverExample1.png)
-![HoverExample2](resources/HoverExample2.png)
 ## Quickfixes: Surround with CopyStr
 Automatic fix for AL(AA0139)
 

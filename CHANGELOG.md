@@ -127,3 +127,6 @@ Added Command:
 
 ## [2.0.16]
 'Go to Definition' opened in side window when hovering object derived variable #55
+
+## [2.0.17]
+Disable field description on hover functionality #55
