@@ -260,10 +260,10 @@ function activate(context) {
             new AlCodeActionProvider.AlCodeActionProvider(context),
             { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }
     ));
-    if(!config.get('DisableHoverProviders'))
-        context.subscriptions.push(vscode.languages.registerHoverProvider(
-            'al', new fieldHover.FieldHoverProvider()
-        ));
+    // if(!config.get('DisableHoverProviders'))
+    //     context.subscriptions.push(vscode.languages.registerHoverProvider(
+    //         'al', new fieldHover.FieldHoverProvider()
+    //     ));
 
     const disableCustomFolding = config.get('DisableCustomFolding');
     if (!disableCustomFolding) {
