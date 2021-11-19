@@ -201,6 +201,8 @@ The default related objects can be found in [src/constants.js](https://github.co
 
 - Kasper De Smedt
 - Kris Jordaens
+- Daan Saveyn
+- Johannes Wikman (jwikman)
 
 ## Special Thanks
 Special thanks to ESC BV for investing in this tool! https://esc.be/
