@@ -45,6 +45,7 @@ exports.AlCodeActionProvider = class AlCodeActionProvider {
         }
         // Add Pragma action for all warnings
         let warnings = context.diagnostics.filter(diagnostic=>[diagnostic.severity==vscode.DiagnosticSeverity.Warning,diagnostic.severity==vscode.DiagnosticSeverity.Information]);
+        warnings.map(warning => warning.code = warning.code.value !== undefined ? warning.code.value : warning.code)
         warnings = warnings.filter(warning=> !["AA0021","AL0604","AA0139"].includes(warning.code.toString()));
         const fix = this.diagnosticCodeToFix["PRAGMA"];
         const fixAll = this.diagnosticCodeToFix["PRAGMAALL"];
