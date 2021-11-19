@@ -130,3 +130,6 @@ Added Command:
 
 ## [2.0.17]
 Disable field description on hover functionality #55
+
+## [2.0.18]
+Remove hyperlink from diagnostic code #61
