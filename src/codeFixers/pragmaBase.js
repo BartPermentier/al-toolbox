@@ -46,7 +46,7 @@ exports.PragmaBase = class PragmaBase extends codeFixer.CodeFixer {
         if (!addTodo)
             return "";
         
-        let todo = ' // TODO';
+        let todo = ' // TODO:';
         if (comment.length != 0) {
             todo += ' - ' + comment;
         } 
