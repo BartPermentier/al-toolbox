@@ -133,3 +133,7 @@ Disable field description on hover functionality #55
 
 ## [2.0.18]
 Remove hyperlink from diagnostic code #61
+
+## [2.0.19]
+- Add a colon after TODO (https://github.com/BartPermentier/al-toolbox/issues/59)
+- Related Tables : provide support for 'Customer Templ.' (https://github.com/BartPermentier/al-toolbox/issues/67)
