@@ -92,7 +92,8 @@ exports.RelatedObjects = [
             { id: 18, name: 'Customer' },
             { id: 23, name: 'Vendor' },
             { id: 270, name: 'Bank Account' },
-            { id: 5050, name: 'Contact' }
+            { id: 1381, name: 'Customer Templ.' },
+            { id: 5050, name: 'Contact' }            
         ]
     },
     {
@@ -179,6 +180,15 @@ exports.RelatedObjects = [
         objects: [
             { id: 370, name: 'Bank Account Card' },
             { id: 371, name: 'Bank Account List' }
+        ]
+    },
+    {
+        table: 'Customer Templ.',
+        folder: 'Contact',
+        objectType: this.AlObjectTypes.pageExtension,
+        objects: [
+            { id: 1382, name: 'Customer Templ. Card' },
+            { id: 1381, name: 'Customer Templ. List' }
         ]
     },
     //#endregion
