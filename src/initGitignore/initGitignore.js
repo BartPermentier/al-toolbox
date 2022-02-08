@@ -5,10 +5,13 @@ const genFunc = require('../generalFunctions');
 const lines = [
     ".alpackages/",
     ".alcache/",
+    ".altemplates/",
+    ".altestrunner/",
     "launch.json",
     "!app.json",
     "rad.json",
-    "*.app",
+    "*.app",    
+    "*.g.xlf"
 ]
 
 exports.initGitignore = function initGitignore(){
