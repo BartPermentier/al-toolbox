@@ -78,10 +78,13 @@ This will create a set of tableextensions that should have the same fields so th
     # ALTB
     .alpackages/
     .alcache/
+    .altemplates/
+    .altestrunner/
     *.json
     !app.json
     rad.json
     *.app
+    *.g.xlf
     ```
 ## Action: Generate SetLoadFields
 ALTB: Generate SetLoadFields | Creates SetLoadFields or adds missing fields to SetLoadFields for a record.
