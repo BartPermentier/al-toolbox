@@ -137,3 +137,6 @@ Remove hyperlink from diagnostic code #61
 ## [2.0.19]
 - Add a colon after TODO (https://github.com/BartPermentier/al-toolbox/issues/59)
 - Related Tables : provide support for 'Customer Templ.' (https://github.com/BartPermentier/al-toolbox/issues/67)
+
+## [2.0.20]
+- Fix Dev/Debug Version in Marketplace #71 (https://github.com/BartPermentier/al-toolbox/issues/71)
