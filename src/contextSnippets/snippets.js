@@ -15,7 +15,7 @@ exports.snippets = {
 			"\t\t{",
 			"\t\t\tCaption = '${3:MyField}';",
 			"\t\t\tDataClassification = SystemMetadata;",
-			"\t\t\ttrigger OnValidate();",
+			"\t\t\ttrigger OnValidate()",
 			"\t\t\tvar",
 			"\t\t\t\t${6:SetupName}: Record ${5:SetupRec};",
 			"\t\t\t\tNoSeriesManagement: Codeunit NoSeriesManagement;",
@@ -48,7 +48,7 @@ exports.snippets = {
 			"\t\t}",
 			"\t}",
 			"",
-			"\ttrigger OnInsert();",
+			"\ttrigger OnInsert()",
 			"\tvar",
 			"\t\t${6:SetupName}: Record ${5:SetupRec};",
 			"\t\tNoSeriesManagement: Codeunit NoSeriesManagement;",
@@ -107,14 +107,14 @@ exports.snippets = {
 		"prefix": "rfunction (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure Do${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; Handled: Boolean);",
+			"local procedure Do${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; Handled: Boolean)",
 			"begin",
 			"\tif Handled then exit;",
 			"\t$0",
 			"end;",
 			"",
 			"//#region MainFunction And Publishers",
-			"procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName});",
+			"internal procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName})",
 			"var",
 			"\tHandled: Boolean;",
 			"begin",
@@ -126,12 +126,12 @@ exports.snippets = {
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
-			"local procedure OnBefore${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var Handled : Boolean);",
+			"local procedure OnBefore${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var Handled : Boolean)",
 			"begin",
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
-			"local procedure OnAfter${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName});",
+			"local procedure OnAfter${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName})",
 			"begin",
 			"end;",
 			"//#endregion MainFunction And Publishers",
@@ -143,14 +143,14 @@ exports.snippets = {
 		"prefix": "rfunctionConfirm (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure Do${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; Handled: Boolean);",
+			"local procedure Do${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; Handled: Boolean)",
 			"begin",
 			"\tif Handled then exit;",
 			"\t$0",
 			"end;",
 			"",
 			"//#region MainFunction, Confirmation And Publishers",
-			"procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName});",
+			"internal procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName})",
 			"var",
 			"\tHandled: Boolean;",
 			"begin",
@@ -168,16 +168,16 @@ exports.snippets = {
 			"\tLbl${1:MethodName}: Label '${5:Are you sure?}';",
 			"begin",
 			"\tif not GuiAllowed or ${4:v}.GetHideValidationDialog() then exit(true);",
-			"\texit(Confirm(Lbl${1:MethodName}));",
+			"\texit(Confirm(Lbl${1:MethodName}))",
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
-			"local procedure OnBefore${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var Handled : Boolean);",
+			"local procedure OnBefore${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var Handled : Boolean)",
 			"begin",
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
-			"local procedure OnAfter${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName});",
+			"local procedure OnAfter${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName})",
 			"begin",
 			"end;",
 			"//#endregion MainFunction And Publishers",
@@ -189,12 +189,12 @@ exports.snippets = {
 		"prefix": "rHideValidation (ALTB)",
 		"body": [
 			"//#region HideValidationDialog",
-			"procedure HideValidationDialog(HideDialog: Boolean);",
+			"procedure HideValidationDialog(HideDialog: Boolean)",
 			"begin",
 			"\tHideValidationDialog := HideDialog;",
 			"end;",
 			"",
-			"procedure GetHideValidationDialog():Boolean;",
+			"procedure GetHideValidationDialog():Boolean",
 			"begin",
 			"\texit(HideValidationDialog);",
 			"end;",
@@ -208,7 +208,7 @@ exports.snippets = {
 		"prefix": "rSimpleFunction (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName});",
+			"local procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName})",
 			"begin",
 			"\t$0",
 			"end;",
@@ -219,19 +219,19 @@ exports.snippets = {
 		"description": "Snippet to Create an Install Codeunit",
 		"prefix": "rInstalCodeunit (ALTB)",
 		"body": [
-	"codeunit ${1:ID} ${2:Name}",
+	"codeunit ${1:ID} \"${2:Name}\"",
 	"{",
-	"Subtype=Install;",
-	"trigger OnInstallAppPerCompany()",
-	"begin",
-		"\t//Code for company related operations",
-		"\t$0",
-	"end;",
+	"\tSubtype=Install;",
+	"\ttrigger OnInstallAppPerCompany()",
+	"\tbegin",
+		"\t\t//Code for company related operations",
+		"\t\t$0",
+	"\tend;",
 	"",
-	"trigger OnInstallAppPerDatabase()",
-	"begin",
-	"\t// Code for database related operations",
-	"end;",
+	"\ttrigger OnInstallAppPerDatabase()",
+	"\tbegin",
+	"\t\t// Code for database related operations",
+	"\tend;",
 	"}"
 		]
 	},
@@ -241,7 +241,7 @@ exports.snippets = {
 		"body": [
 	"//#region EventSubscriber Table ${2:Object No.} ${3|OnBeforeInsertEvent,OnBeforeModifyEvent,OnBeforeDeleteEvent,OnBeforeRenameEvent,OnBeforeValidateEvent,OnAfterInsertEvent,OnAfterModifyEvent,OnAfterDeleteEvent,OnAfterRenameEvent,OnAfterValidateEvent|} ${4:TriggerFieldOrActionName}",
 	"[EventSubscriber(ObjectType::Table, Database::${6:RecName}, '${3:Trigger}', '${4:TriggerFieldOrActionName}', true, true)]",
-	"local procedure ${3:Trigger}${4:TriggerFieldOrActionName}_T${2:Object No.}(var Rec: Record ${6:RecName}; var xRec: Record ${6:RecName}; CurrFieldNo: Integer);",
+	"local procedure ${3:Trigger}${4:TriggerFieldOrActionName}_T${2:Object No.}(var Rec: Record ${6:RecName}; var xRec: Record ${6:RecName}; CurrFieldNo: Integer)",
 	"begin",
 		"\t$0",
 	"end;",
@@ -254,7 +254,7 @@ exports.snippets = {
 		"body": [
 	"//#region EventSubscriber Codeunit ${1:Object No.} ${3:Trigger}",
 	"[EventSubscriber(ObjectType::Codeunit, Codeunit::${2:CodeunitName}, '${3:Trigger}', '', true, true)]",
-	"local procedure ${3:Trigger}_C${1:Object No.}(var Rec: Record ${4:RecName});",
+	"local procedure ${3:Trigger}_C${1:Object No.}(var Rec: Record ${4:RecName})",
 	"begin",
 		"\t$0",
 	"end;",
@@ -309,7 +309,7 @@ exports.snippets = {
 			"description": "Snippet Tooltip",
 			"prefix": "rTooltip (ALTB)",
 			"body": [
-				"ToolTip = 'ToolTip: $1';"
+				"ToolTip = '$1';"
 			]
 	},
 	"Snippet: Function2":{
@@ -317,14 +317,14 @@ exports.snippets = {
 		"prefix": "rfunction2 (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure Do${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; Handled: Boolean);",
+			"local procedure Do${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; Handled: Boolean)",
 			"begin",
 			"\tif Handled then exit;",
 			"\t$0",
 			"end;",
 			"",
 			"//#region MainFunction And Publishers",
-			"procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName});",
+			"internal procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName})",
 			"var",
 			"\tHandled: Boolean;",
 			"begin",
@@ -336,12 +336,12 @@ exports.snippets = {
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
-			"local procedure OnBefore${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var Handled : Boolean);",
+			"local procedure OnBefore${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var Handled : Boolean)",
 			"begin",
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
-			"local procedure OnAfter${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName});",
+			"local procedure OnAfter${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName})",
 			"begin",
 			"end;",
 			"//#endregion MainFunction And Publishers",
@@ -353,14 +353,14 @@ exports.snippets = {
 		"prefix": "rfunction3 (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"local procedure Do${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName}; Handled: Boolean);",
+			"local procedure Do${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName}; Handled: Boolean)",
 			"begin",
 			"\tif Handled then exit;",
 			"\t$0",
 			"end;",
 			"",
 			"//#region Main Function And Publishers",
-			"procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName});",
+			"internal procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName})",
 			"var",
 			"\tHandled: Boolean;",
 			"begin",
@@ -372,12 +372,12 @@ exports.snippets = {
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
-			"local procedure OnBefore${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName}; var Handled : Boolean);",
+			"local procedure OnBefore${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName}; var Handled : Boolean)",
 			"begin",
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
-			"local procedure OnAfter${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName});",
+			"local procedure OnAfter${1:MethodName}(var ${4:Rec}: ${2:ObjectType} ${3:ObjectName}; var ${7:xRec}: ${5:ObjectType} ${6:ObjectName}; var ${10:VarName3}: ${8:ObjectType} ${9:ObjectName})",
 			"\tbegin",
 			"\tend;",
 			"//#endregion MainFunction And Publishers",
@@ -390,7 +390,7 @@ exports.snippets = {
 		"body": [
 		"//#region Test${1:MethodName}",
 		"[Test]",
-		"procedure Test${1:MethodName}();",
+		"procedure Test${1:MethodName}()",
 		"var",
 			"\t${4:v}: ${2:ObjectType} ${3:ObjectName};",
 		"begin",
@@ -427,7 +427,7 @@ exports.snippets = {
 		"prefix": "rTableMethod (ALTB)",
 		"body": [
 			"//#region ${1:MethodName}",
-			"procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName});",
+			"procedure ${1:MethodName}(var ${4:v}: ${2:ObjectType} ${3:ObjectName})",
 			"var",
 			"\t${6:MgtCodeunitName}: Codeunit ${5:MgtCodeunitObjectName};",
 			"begin",
@@ -443,7 +443,7 @@ exports.snippets = {
 			"//#region MyNotifications",
 			"//#region EventSubscriber Page 1518 OnInitializingNotificationWithDefaultState",
 			"[EventSubscriber(ObjectType::Page, Page::\"My Notifications\", 'OnInitializingNotificationWithDefaultState', '', true, true)]",
-			"local procedure OnInitializingNotificationWithDefaultState_P1518();",
+			"local procedure OnInitializingNotificationWithDefaultState_P1518()",
 			"var",
 			"\tMyNotifications: Record \"My Notifications\";",
 			"\t${1:NotificationName}: Label '${2:X happens}';",
@@ -455,6 +455,7 @@ exports.snippets = {
 			"\t\tDatabase::${6:TableToFilterOn});",
 			"end;",
 			"//#endregion EventSubscriber Page 1518 OnInitializingNotificationWithDefaultState",
+			"",
 			"//#region ${5:ReturnNotificationIdFunction}",
 			"local procedure ${5:ReturnNotificationIdFunction}(): Guid;",
 			"begin",
@@ -502,6 +503,7 @@ exports.snippets = {
 			"\tPromotedCategory = ${6|Process,New,Report|};",
 			"\tPromotedIsBig = true;",
 			"\tImage = ${7:Image};",
+			"",
             "\ttrigger OnAction()",
             "\tbegin",
             "\t\t$0",
@@ -519,7 +521,7 @@ exports.snippets = {
 	"Snippet: TableExtension": {
         "prefix": "rTableExtension (ALTB)",
         "body": [
-            "tableextension ${1:Id} ${3:ExtensionName} extends ${2:TableName} //${4:OriginalId}",
+            "tableextension ${1:Id} \"${3:ExtensionName}\" extends \"${2:TableName}\" //${4:OriginalId}",
 "{",
     "\tfields",
     "\t{",
@@ -532,7 +534,7 @@ exports.snippets = {
 	"Snippet: PageExtension": {
         "prefix": "rPageExtension (ALTB)",
         "body": [
-            "pageextension ${1:Id} ${3:ExtensionName} extends ${2:PageName} //${4:OriginalId}",
+            "pageextension ${1:Id} \"${3:ExtensionName}\" extends \"${2:PageName}\" //${4:OriginalId}",
 "{",
 	"\tlayout",
     "\t{",
@@ -551,21 +553,21 @@ exports.snippets = {
 		"body": [
 			"${1:TextVar} := ${2:EnumVar}.Names.Get(${2:EnumVar}.Ordinals.IndexOf(${2:EnumVar}.AsInteger()));"
 		],
-		"description": "Create New PageExtension"
+		"description": "Get Enum Name"
 	},
 		"ConvertOrdinalToEnum": {
 			"prefix": "rConvertOrdinalToEnum (ALTB)",
 			"body": [
 				"${1:EnumVar} := Enum::\"${2:EnumName}\".FromInteger(${3:OrdinalValue});"
 			],
-			"description": "Create New PageExtension"
+			"description": "Convert Ordinal to Enum"
 	},
 	"ConvertTextToEnum": {
 		"prefix": "rConvertTextToEnum (ALTB)",
 		"body": [
 			"${1:EnumVar} := Enum::\"${2:EnumName}\".FromInteger(${1:EnumVar}.Ordinals.Get(${1:EnumVar}.Names.IndexOf(${3:EnumTextVar})));"
 		],
-		"description": "Create New PageExtension"
+		"description": "Convert Text to Enum"
 	}
 	
 }
