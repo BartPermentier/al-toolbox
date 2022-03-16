@@ -568,6 +568,26 @@ exports.snippets = {
 			"${1:EnumVar} := Enum::\"${2:EnumName}\".FromInteger(${1:EnumVar}.Ordinals.Get(${1:EnumVar}.Names.IndexOf(${3:EnumTextVar})));"
 		],
 		"description": "Convert Text to Enum"
-	}
-
+	},
+	"NLBComment": {
+		"prefix": "rNLBComment (ALTB)",
+		"body": [
+			", comment = 'NLB=\"${1:NlbText}\"';",
+		],
+		"description": "Add comment (NLB)"
+	},
+	"FRBComment": {
+		"prefix": "rFRBComment (ALTB)",
+		"body": [
+			", comment = 'FRB=\"${1:FrbText}\"';",
+		],
+		"description": "Add comment (FRB)"
+	},
+	"NLFRBComment": {
+		"prefix": "rNLFRBComment (ALTB)",
+		"body": [
+			", comment = 'NLB=\"${1:NlbText}\",FRB=\"${2:FrbText}\"';",
+		],
+		"description": "Add comment (NLB / FRB)"
+	}	
 }
