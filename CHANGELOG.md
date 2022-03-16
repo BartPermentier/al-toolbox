@@ -140,3 +140,12 @@ Remove hyperlink from diagnostic code #61
 
 ## [2.0.20]
 - Fix Dev/Debug Version in Marketplace #71 (https://github.com/BartPermentier/al-toolbox/issues/71)
+
+## [2.0.21]
+- Surround names with " " for object related snippets
+- Removed trailing ; from procedures
+- Added internal to the (non-table) function snippets (so new functions will not be exposed by default)
+- Added rNLBComment, rFRBComment, rNLBFRBComment snippets to add comments to captions, tooltips, ...
+- Optimized rTestFunction snippet
+- Added rTestCodeunit (inspired by NAB AL Tools)
+- Minor snippet cleanup / format
