@@ -168,7 +168,7 @@ exports.snippets = {
 			"\tLbl${1:MethodName}: Label '${5:Are you sure?}';",
 			"begin",
 			"\tif not GuiAllowed or ${4:v}.GetHideValidationDialog() then exit(true);",
-			"\texit(Confirm(Lbl${1:MethodName}))",
+			"\texit(Confirm(Lbl${1:MethodName}));",
 			"end;",
 			"",
 			"[IntegrationEvent(false, false)]",
