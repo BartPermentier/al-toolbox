@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "2.0.21",
+    "version": "2.0.22",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -162,7 +162,23 @@
                         "default": false,
                         "description": "Checks if label comments match the format required by the 'AL Language Tools' extension for generating XLIFF files",
                         "scope": "resource"
-                    }
+                    },
+                    "ALTB.snippetTargetLanguage": {
+                        "type": "string",
+                        "default": "NLB",
+                        "description": "Primary target language identifier used for translations",
+                        "scope": "resource",
+                        "pattern": "^([a-z]{2}-[A-Z]{2})$|^[A-Z]{3}$",
+                        "patternErrorMessage": "Supported formats: xx-XX or XXX (for example: nl-BE or NLB)"
+                    },
+                    "ALTB.snippetTargetLanguage2": {
+                        "type": "string",
+                        "default": "FRB",
+                        "description": "Secondary target language identifier used for translations",
+                        "scope": "resource",
+                        "pattern": "^([a-z]{2}-[A-Z]{2})$|^[A-Z]{3}$",
+                        "patternErrorMessage": "Supported formats: xx-XX or XXX (for example: fr-BE or FRB)"
+                    }                    
                 }
             }
         ]

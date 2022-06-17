@@ -25,14 +25,22 @@ exports.useAlRegions = async function () {
     return false;
 }
 
-exports.removeDuplicates = function(arr) {
+exports.snippetTargetLanguage = async function () {
+    return vscode.workspace.getConfiguration('ALTB').get('snippetTargetLanguage');
+}
+
+exports.snippetTargetLanguage2 = async function () {
+    return vscode.workspace.getConfiguration('ALTB').get('snippetTargetLanguage2');
+}
+
+exports.removeDuplicates = function (arr) {
     var arrayWithoutDuplicates = [];
-    
+
     arr.forEach(element => {
-        if(arrayWithoutDuplicates.find(key => key.toUpperCase() === element.toUpperCase()) == undefined) {
+        if (arrayWithoutDuplicates.find(key => key.toUpperCase() === element.toUpperCase()) == undefined) {
             arrayWithoutDuplicates.push(element);
-        }    
-    });    
-    
+        }
+    });
+
     return arrayWithoutDuplicates;
 }

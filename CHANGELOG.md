@@ -149,3 +149,6 @@ Remove hyperlink from diagnostic code #61
 - Optimized rTestFunction snippet
 - Added rTestCodeunit (inspired by NAB AL Tools)
 - Minor snippet cleanup / format
+
+## [2.0.22]
+- Add targetLanguage / targetLanguage2 settings which replace the fixed NLB/FRB values

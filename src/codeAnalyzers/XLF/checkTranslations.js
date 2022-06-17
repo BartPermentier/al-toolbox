@@ -10,8 +10,8 @@ function getFautyTranslations(file) {
     const text = file.getText();
     let match;
     const faultyTranslationRanges = [];
-    while(match = commentRegex.exec(text)) {
-        if (!checkTranslationFormat(match.groups.comment) && !isInComment(file.positionAt(match.index), file)){
+    while (match = commentRegex.exec(text)) {
+        if (!checkTranslationFormat(match.groups.comment) && !isInComment(file.positionAt(match.index), file)) {
             faultyTranslationRanges.push(
                 new vscode.Range(file.positionAt(match.index), file.positionAt(match.index + match[0].length))
             );
@@ -30,7 +30,7 @@ function isInComment(position, file) {
 }
 
 
-const translationFormatRegex = /^\w{3}="[^"=]*"(,\w{3}="[^"=]*")*$/;
+const translationFormatRegex = /^(\w{3}|[a-z]{2}-[A-Z]{2})="[^"=]*"(,(\w{3}|[a-z]{2}-[A-Z]{2})="[^"=]*")*$/;
 /**
  * @param {string} text 
  */

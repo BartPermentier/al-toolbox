@@ -71,7 +71,7 @@ exports.snippets = {
 		"body": [
 			"field(${1:id}; \"${2:MyField}\"; ${3:Type})",
 			"{",
-			"\tCaption = '${2:MyField}', comment = '${4:NLB}=\"${5:YourLanguageText}\"';",
+			"\tCaption = '${2:MyField}', comment = '${4:$TargetLanguage}=\"${5:YourLanguageText}\"';",
 			"\tDataClassification = ${6|SystemMetadata,CustomerContent,EndUserIdentifiableInformation|};",
 			"}$0"
 		],
@@ -82,7 +82,7 @@ exports.snippets = {
 		"body": [
 			"field(${1:id}; \"${2:MyField}\"; Code[${3:Length}])",
 			"{",
-			"\tCaption = '${2:MyField}', comment = '${4:NLB}=\"${5:YourLanguageText}\"';",
+			"\tCaption = '${2:MyField}', comment = '${4:$TargetLanguage}=\"${5:YourLanguageText}\"';",
 			"\tTableRelation = ${6:Table.Field};",
 			"\tDataClassification = ${7|SystemMetadata,CustomerContent,EndUserIdentifiableInformation|};",
 			"}$0"
@@ -94,7 +94,7 @@ exports.snippets = {
 		"body": [
 			"field(${1:id}; \"${2:MyField}\"; Option)",
 			"{",
-			"\tCaption = '${2:MyField}', comment = '${3:NLB}=\"${4:YourLanguageText}\"';",
+			"\tCaption = '${2:MyField}', comment = '${3:$TargetLanguage}=\"${4:YourLanguageText}\"';",
 			"\tOptionMembers = ${5};",
 			"\tOptionCaption = '${5}';",
 			"\tDataClassification = ${6|SystemMetadata,CustomerContent,EndUserIdentifiableInformation|};",
@@ -534,7 +534,7 @@ exports.snippets = {
 	"Action Properties": {
 		"prefix": "rPropertiesAction (ALTB)",
 		"body": [
-			"Caption = '${1:Caption}', comment = '${2:NLB}=\"${3:YourLanguageCaption}\"';",
+			"Caption = '${1:Caption}', comment = '${2:$TargetLanguage}=\"${3:YourLanguageCaption}\"';",
 			"Promoted = true;",
 			"PromotedCategory = ${4|Process,New,Report|};",
 			"PromotedIsBig = true;",
@@ -548,7 +548,7 @@ exports.snippets = {
 			"action(${1:ActionName})",
 			"{",
 			"\tApplicationArea = ${2|All,Basic,Suite,Advanced|};",
-			"\tCaption = '${3:Caption}', comment = '${4:NLB}=\"${5:YourLanguageCaption}\"';",
+			"\tCaption = '${3:Caption}', comment = '${4:$TargetLanguage}=\"${5:YourLanguageCaption}\"';",
 			"\tPromoted = true;",
 			"\tPromotedCategory = ${6|Process,New,Report|};",
 			"\tPromotedIsBig = true;",
@@ -622,22 +622,22 @@ exports.snippets = {
 	"NLBComment": {
 		"prefix": "rNLBComment (ALTB)",
 		"body": [
-			", comment = 'NLB=\"${1:NlbText}\"';",
+			", comment = '$TargetLanguage=\"${1:$TargetLanguage Text}\"';",
 		],
-		"description": "Add comment (NLB)"
+		"description": "Add comment ($TargetLanguage)"
 	},
 	"FRBComment": {
 		"prefix": "rFRBComment (ALTB)",
 		"body": [
-			", comment = 'FRB=\"${1:FrbText}\"';",
+			", comment = '$TargetLanguage2=\"${1:$TargetLanguage2 Text}\"';",
 		],
-		"description": "Add comment (FRB)"
+		"description": "Add comment ($TargetLanguage2)"
 	},
 	"NLFRBComment": {
 		"prefix": "rNLFRBComment (ALTB)",
 		"body": [
-			", comment = 'NLB=\"${1:NlbText}\",FRB=\"${2:FrbText}\"';",
+			", comment = '$TargetLanguage=\"${1:$TargetLanguage Text}\",$TargetLanguage2=\"${2:$TargetLanguage2 Text}\"';",
 		],
-		"description": "Add comment (NLB / FRB)"
-	}	
+		"description": "Add comment ($TargetLanguage / $TargetLanguage2)"
+	}
 }
