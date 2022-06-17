@@ -151,4 +151,4 @@ Remove hyperlink from diagnostic code #61
 - Minor snippet cleanup / format
 
 ## [2.0.22]
-- Add targetLanguage / targetLanguage2 settings which replace the fixed NLB/FRB values
+- Add targetLanguage / targetLanguage2 settings which replaces the fixed NLB/FRB values
