@@ -631,13 +631,13 @@ exports.snippets = {
 		"body": [
 			", comment = '$TargetLanguage2=\"${1:$TargetLanguage2 Text}\"';",
 		],
-		"description": "Add comment ($TargetLanguage2)"
+		"description": "Add comment"
 	},
 	"NLFRBComment": {
 		"prefix": "rNLFRBComment (ALTB)",
 		"body": [
 			", comment = '$TargetLanguage=\"${1:$TargetLanguage Text}\",$TargetLanguage2=\"${2:$TargetLanguage2 Text}\"';",
 		],
-		"description": "Add comment ($TargetLanguage / $TargetLanguage2)"
+		"description": "Add comment"
 	}
 }

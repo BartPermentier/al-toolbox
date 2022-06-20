@@ -32,7 +32,7 @@ exports.snippetTargetLanguage = async function () {
 
 exports.snippetTargetLanguage2 = async function () {
     let uri = vscode.window.activeTextEditor.document.uri;
-    return vscode.workspace.getConfiguration('ALTB').get('snippetTargetLanguage2');
+    return vscode.workspace.getConfiguration('ALTB', uri).get('snippetTargetLanguage2');
 }
 
 exports.removeDuplicates = function (arr) {
