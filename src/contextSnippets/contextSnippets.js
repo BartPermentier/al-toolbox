@@ -33,6 +33,8 @@ exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
 
     /**
      * @param {boolean} useAlRegions 
+     * @param {string} snippetTargetLanguage 
+     * @param {string} snippetTargetLanguage2
      */
     setSnippets(useAlRegions, snippetTargetLanguage = 'NLB', snippetTargetLanguage2 = 'FRB') {
         this.snippets = Object.values(snippets.snippets).map(snippet => {
