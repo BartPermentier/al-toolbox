@@ -26,10 +26,12 @@ exports.useAlRegions = async function () {
 }
 
 exports.snippetTargetLanguage = async function () {
-    return vscode.workspace.getConfiguration('ALTB').get('snippetTargetLanguage');
+    let uri = vscode.window.activeTextEditor.document.uri;
+    return await vscode.workspace.getConfiguration('ALTB', uri).get('snippetTargetLanguage');
 }
 
 exports.snippetTargetLanguage2 = async function () {
+    let uri = vscode.window.activeTextEditor.document.uri;
     return vscode.workspace.getConfiguration('ALTB').get('snippetTargetLanguage2');
 }
 
