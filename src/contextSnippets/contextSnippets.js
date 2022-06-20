@@ -3,35 +3,50 @@ const snippets = require('./snippets');
 const generalFunctions = require('../generalFunctions');
 
 const commentRegionRegex = /\/\/(#(end)?region)/g;
+const targetLanguageRegex = /\$TargetLanguage/g;
+const targetLanguage2Regex = /\$TargetLanguage2/g;
+
 
 exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
     snippets;
     useAlRegions;
+    snippetTargetLanguage;
+    snippetTargetLanguage2;
     snippetPrefixToSnippetString = new Map();
-    
+
     constructor() {
         this.getSnippets();
     }
 
     async getSnippets() {
         const useAlRegions = await generalFunctions.useAlRegions();
-        if (this.useAlRegions !== useAlRegions) {
+        const snippetTargetLanguage = await generalFunctions.snippetTargetLanguage();
+        const snippetTargetLanguage2 = await generalFunctions.snippetTargetLanguage2();
+        if (this.useAlRegions !== useAlRegions || this.snippetTargetLanguage !== snippetTargetLanguage || this.snippetTargetLanguage2 !== snippetTargetLanguage2) {
             this.useAlRegions = useAlRegions;
-            this.setSnippets(useAlRegions);
+            this.snippetTargetLanguage = snippetTargetLanguage;
+            this.snippetTargetLanguage2 = snippetTargetLanguage2;
+            this.setSnippets(useAlRegions, snippetTargetLanguage, snippetTargetLanguage2);
         }
         return this.snippets;
     }
 
     /**
      * @param {boolean} useAlRegions 
+     * @param {string} snippetTargetLanguage 
+     * @param {string} snippetTargetLanguage2
      */
-    setSnippets(useAlRegions) {
+    setSnippets(useAlRegions, snippetTargetLanguage = 'NLB', snippetTargetLanguage2 = 'FRB') {
         this.snippets = Object.values(snippets.snippets).map(snippet => {
             const completionItem = new vscode.CompletionItem(snippet.prefix);
             completionItem.kind = vscode.CompletionItemKind.Snippet;
             let snippetString = snippet.body.join('\n');
-            if(useAlRegions)
+            if (useAlRegions)
                 snippetString = snippetString.replace(commentRegionRegex, '$1');
+            if (snippetTargetLanguage2 != '')
+                snippetString = snippetString.replace(targetLanguage2Regex, snippetTargetLanguage2);                
+            if (snippetTargetLanguage != '')
+                snippetString = snippetString.replace(targetLanguageRegex, snippetTargetLanguage);
             this.snippetPrefixToSnippetString.set(snippet.prefix, snippetString);
             completionItem.insertText = new vscode.SnippetString(snippetString);
             completionItem.detail = snippet.description;
@@ -56,10 +71,10 @@ exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
     resolveCompletionItem(item, token) {
         let snippetString = this.snippetPrefixToSnippetString.get(item.label);
         item.documentation = new vscode.MarkdownString(
-            "```\n" + 
+            "```\n" +
             replaceSnippetVarsWithDefault(snippetString) +
             "\n```", true);
-            
+
         return item;
     }
 }
@@ -72,7 +87,7 @@ const tabelstopAndVariableRegex = /\$(\d+|[A-Z_]+)/g;
  */
 function replaceSnippetVarsWithDefault(snippetString) {
     let result = snippetString;
-    while(placeholderRegex.test(result)) // placehoders can be recursive
+    while (placeholderRegex.test(result)) // placehoders can be recursive
         result = result.replace(placeholderRegex, '$1');
     result = result
         .replace(choiceRegex, '$1')
