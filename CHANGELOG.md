@@ -152,3 +152,6 @@ Remove hyperlink from diagnostic code #61
 
 ## [2.0.22]
 - Add targetLanguage / targetLanguage2 settings which replaces the fixed NLB/FRB values (https://github.com/BartPermentier/al-toolbox/issues/66)
+
+## [2.0.23]
+- Regions are back to //#region in runtime 10.0 (https://github.com/BartPermentier/al-toolbox/issues/80)
