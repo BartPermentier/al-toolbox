@@ -16,7 +16,7 @@ exports.useAlRegions = async function () {
         if (file) {
             const json = JSON.parse(file.getText());
             if (json && json.runtime) {
-                const runtime = parseInt(json.runtime.charAt(0));
+                const runtime = parseInt(json.runtime.split('.')[0]);
                 if (runtime >= 6)
                     return true;
             }
