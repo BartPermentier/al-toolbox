@@ -155,3 +155,6 @@ Remove hyperlink from diagnostic code #61
 
 ## [2.0.23]
 - Regions are back to //#region in runtime 10.0 (https://github.com/BartPermentier/al-toolbox/issues/80)
+
+## [2.0.24]
+- Fix incorrect VSIX
