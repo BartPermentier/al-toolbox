@@ -1,5 +1,5 @@
 exports.snippets = {
-	"Snippet: Table with No Series": {
+    "Snippet: Table with No Series": {
 		"prefix": "rtableNoSeries (ALTB)",
 		"description": "Snippet: Table with no series Design Pattern",
 		"body": [
@@ -11,7 +11,7 @@ exports.snippets = {
 			"\t//LookupPageId = ;",
 			"\tfields",
 			"\t{",
-			"\t\tfield(1; \"${3:MyField}\"; ${4:Code})",
+			"\t\tfield(1; \"${3:MyField}\"; Code[20])",
 			"\t\t{",
 			"\t\t\tCaption = '${3:MyField}';",
 			"\t\t\tDataClassification = SystemMetadata;",
@@ -21,13 +21,9 @@ exports.snippets = {
 			"\t\t\t\tNoSeriesManagement: Codeunit NoSeriesManagement;",
 			"\t\t\tbegin",
 			"\t\t\t\tif \"${3:MyField}\" <> xRec.\"${3:MyField}\" then begin",
-			"",
 			"\t\t\t\t\t${6:SetupName}.Get();",
-			"",
-			"\t\t\t\t\tNoSeriesManagement.TestManual(${6:SetupName}.${7:NoSeriesFieldFromSetupTable});",
-			"",
+			"\t\t\t\t\tNoSeriesManagement.TestManual(${6:SetupName}.${7:NoSeriesFieldFromSetupTable});",			
 			"\t\t\t\t\t\"No. Series\" := '';",
-			"",
 			"\t\t\t\tend;",
 			"\t\t\tend;",
 			"\t\t}",
@@ -54,13 +50,9 @@ exports.snippets = {
 			"\t\tNoSeriesManagement: Codeunit NoSeriesManagement;",
 			"\tbegin",
 			"\t\tif \"${3:MyField}\" = '' then begin ",
-			"",
 			"\t\t\t${6:SetupName}.Get(); ",
-			"",
 			"\t\t\t${6:SetupName}.Testfield(${7:NoSeriesFieldFromSetupTable});",
-			"",
 			"\t\t\tNoSeriesManagement.InitSeries(${6:SetupName}.${7:NoSeriesFieldFromSetupTable},xRec.\"No. Series\",0D,\"${3:MyField}\",\"No. Series\"); ",
-			"",
 			"\t\tend;",
 			"\tend;",
 			"}"
