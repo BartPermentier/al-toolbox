@@ -177,20 +177,22 @@ exports.snippets = {
 		]
 	},
 	"Snippet: HideValidation": {
-		"description": "Snippet Hide Validation Dialog Design Pattern on Table(ALTB)",
+		"description": "Snippet Hide Validation Dialog Design Pattern on Table (ALTB)",
 		"prefix": "rHideValidation (ALTB)",
 		"body": [
-			"//#region HideValidationDialog",
-			"procedure HideValidationDialog(HideDialog: Boolean)",
+			"//#region SetHideValidationDialog",
+			"procedure SetHideValidationDialog(HideDialog: Boolean)",
 			"begin",
 			"\tHideValidationDialog := HideDialog;",
 			"end;",
+            "//#endregion SetHideValidationDialog",
 			"",
+            "//#region GetHideValidationDialog",
 			"procedure GetHideValidationDialog():Boolean",
 			"begin",
 			"\texit(HideValidationDialog);",
 			"end;",
-			"//#endregion HideValidationDialog",
+			"//#endregion GetHideValidationDialog",
 			"var",
 			"\tHideValidationDialog: Boolean"
 		]
