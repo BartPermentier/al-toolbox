@@ -209,6 +209,18 @@ exports.snippets = {
 			"//#endregion ${1:MethodName}"
 		]
 	},
+	"Snippet: SimplestFunction": {
+        "prefix": "rSimplestFunction (ALTB)",
+        "body": [
+            "//#region ${1:MyProcedure}",
+            "${2|local,internal|} procedure ${1:MyProcedure}($3)",
+            "begin",
+            "\t$0",
+            "end;",
+            "//#endregion ${1:MyProcedure}"
+        ],
+        "description": "Snippet Procedure without parameters"
+    },
 	"Snippet: InstallCodeunit": {
 		"description": "Snippet to Create an Install Codeunit",
 		"prefix": "rInstalCodeunit (ALTB)",
@@ -216,6 +228,7 @@ exports.snippets = {
 			"codeunit ${1:ID} \"${2:Name}\"",
 			"{",
 			"\tSubtype=Install;",
+			"",
 			"\ttrigger OnInstallAppPerCompany()",
 			"\tbegin",
 			"\t\t//Code for company related operations",
