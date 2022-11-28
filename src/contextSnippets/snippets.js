@@ -625,6 +625,15 @@ exports.snippets = {
 			"}"
 		]
 	},
+	"Snippet: ActionRef": {
+        "prefix": "ractionRef (ALTB)",
+        "body": [
+            "actionref(${1/[^0-9^a-z]//gi}_Promoted; ${1:ActionName})",
+            "{",            
+            "}"
+        ],
+        "description": "Promoted ActionRef"
+    },
 	"Snippet: DelChr": {
 		"prefix": "rDelChr (ALTB)",
 		"body": [
