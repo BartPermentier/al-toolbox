@@ -1,5 +1,5 @@
 exports.snippets = {
-    "Snippet: Table with No Series": {
+	"Snippet: Table with No Series": {
 		"prefix": "rtableNoSeries (ALTB)",
 		"description": "Snippet: Table with no series Design Pattern",
 		"body": [
@@ -22,7 +22,7 @@ exports.snippets = {
 			"\t\t\tbegin",
 			"\t\t\t\tif \"${3:MyField}\" <> xRec.\"${3:MyField}\" then begin",
 			"\t\t\t\t\t${6:SetupName}.Get();",
-			"\t\t\t\t\tNoSeriesManagement.TestManual(${6:SetupName}.${7:NoSeriesFieldFromSetupTable});",			
+			"\t\t\t\t\tNoSeriesManagement.TestManual(${6:SetupName}.${7:NoSeriesFieldFromSetupTable});",
 			"\t\t\t\t\t\"No. Series\" := '';",
 			"\t\t\t\tend;",
 			"\t\t\tend;",
@@ -185,9 +185,9 @@ exports.snippets = {
 			"begin",
 			"\tHideValidationDialog := HideDialog;",
 			"end;",
-            "//#endregion SetHideValidationDialog",
+			"//#endregion SetHideValidationDialog",
 			"",
-            "//#region GetHideValidationDialog",
+			"//#region GetHideValidationDialog",
 			"procedure GetHideValidationDialog():Boolean",
 			"begin",
 			"\texit(HideValidationDialog);",
@@ -210,17 +210,81 @@ exports.snippets = {
 		]
 	},
 	"Snippet: SimplestFunction": {
-        "prefix": "rSimplestFunction (ALTB)",
-        "body": [
-            "//#region ${1:MyProcedure}",
-            "${2|local,internal|} procedure ${1:MyProcedure}($3)",
-            "begin",
-            "\t$0",
-            "end;",
-            "//#endregion ${1:MyProcedure}"
-        ],
-        "description": "Snippet Procedure without parameters"
-    },
+		"description": "Snippet Procedure without parameters",
+		"prefix": "rSimplestFunction (ALTB)",
+		"body": [
+			"//#region ${1:MyProcedure}",
+			"${2|local,internal|} procedure ${1:MyProcedure}($3)",
+			"begin",
+			"\t$0",
+			"end;",
+			"//#endregion ${1:MyProcedure}"
+		]
+	},
+	"Snippet: Upgrade Function (Company)": {
+		"description": "Upgrade Function (Company)",
+		"prefix": "rUpgradeFunctionCompany (ALTB)",
+		"body": [
+			"#region Upgrade${1:FeatureName}",
+			"internal procedure Upgrade${1:FeatureName}()",
+			"var",
+			"\tUpgradeTag: Codeunit \"Upgrade Tag\";",
+			"begin",
+			"\tif UpgradeTag.HasUpgradeTag(Return${1:FeatureName}UpgradeTag()) then",
+			"\t\texit;",
+			"",
+			"\t// Move below code to 'RegisterPerCompanyTags' (Codeunit::\"Upgrade Tag\" - OnGetPerCompanyUpgradeTags())",
+			"\t// PerCompanyUpgradeTags.Add(Return${1:FeatureName}UpgradeTag());",
+			"",
+			"\t// Move below code to 'OnUpgradePerCompany'",
+			"\t// Upgrade${1:FeatureName}();",
+			"",
+			"\t$0",
+			"",
+			"\tUpgradeTag.SetUpgradeTag(Return${1:FeatureName}UpgradeTag());",
+			"end;",
+			"",
+			"#region Return${1:FeatureName}UpgradeTag",
+			"internal procedure Return${1:FeatureName}UpgradeTag(): Text[250]",
+			"begin",
+			"\texit('${2:Prefix-ID}-${1}-$CURRENT_YEAR$CURRENT_MONTH$CURRENT_DATE');",
+			"end;",
+			"#endregion Return${1:FeatureName}UpgradeTag   ",
+			"#endregion Upgrade${1:FeatureName}"
+		]
+	},
+	"Snippet: Upgrade Function (Database)": {
+		"description": "Upgrade Function (Database)",
+		"prefix": "rUpgradeFunctionDatabase (ALTB)",
+		"body": [
+			"#region Upgrade${1:FeatureName}",
+			"internal procedure Upgrade${1:FeatureName}()",
+			"var",
+			"\tUpgradeTag: Codeunit \"Upgrade Tag\";",
+			"begin",
+			"\tif UpgradeTag.HasUpgradeTag(Return${1:FeatureName}UpgradeTag()) then",
+			"\t\texit;",
+			"",
+			"\t// Move this code to 'RegisterPerDatabaseTags' (Codeunit::\"Upgrade Tag\" - OnGetPerDatabaseUpgradeTags())",
+			"\t// PerDatabaseUpgradeTags.Add(Return${1:FeatureName}UpgradeTag());",
+			"",
+			"\t// Move this code to 'OnUpgradePerDatabase'",
+			"\t// Upgrade${1:FeatureName}();",
+			"",
+			"\t$0",
+			"",
+			"\tUpgradeTag.SetUpgradeTag(Return${1:FeatureName}UpgradeTag());",
+			"end;",
+			"",
+			"#region Return${1:FeatureName}UpgradeTag",
+			"internal procedure Return${1:FeatureName}UpgradeTag(): Text[250]",
+			"begin",
+			"\texit('${2:Prefix-ID}-${1}-$CURRENT_YEAR$CURRENT_MONTH$CURRENT_DATE');",
+			"end;",
+			"#endregion Return${1:FeatureName}UpgradeTag   ",
+			"#endregion Upgrade${1:FeatureName}"
+		]
+	},
 	"Snippet: InstallCodeunit": {
 		"description": "Snippet to Create an Install Codeunit",
 		"prefix": "rInstalCodeunit (ALTB)",
@@ -567,6 +631,15 @@ exports.snippets = {
 			"\tend;",
 			"}"
 		]
+	},
+	"Snippet: ActionRef": {
+		"prefix": "ractionRef (ALTB)",
+		"body": [
+			"actionref(${1/[^0-9^a-z]//gi}_Promoted; ${1:ActionName})",
+			"{",
+			"}"
+		],
+		"description": "Promoted ActionRef"
 	},
 	"Snippet: DelChr": {
 		"prefix": "rDelChr (ALTB)",
