@@ -37,9 +37,9 @@ exports.createFolder = createFolder;
 //#endregion
 
 async function findSingleInstanceFileInCurrentWorkspaceFolder(file) {
-    const currentWorkspaceFolderPath = workspaceManagement.getCurrentWorkspaceFolderPath();
-    let files = await vscode.workspace.findFiles(`**/${file}`);
-    files = files.filter(file => file.fsPath.startsWith(currentWorkspaceFolderPath));
+    const currentWorkspaceFolder = vscode.workspace.getWorkspaceFolder(workspaceManagement.getCurrentWorkspaceFolderUri())
+    const relativePattern = new vscode.RelativePattern(currentWorkspaceFolder, `**/${file}`);
+    const files = await vscode.workspace.findFiles(relativePattern);
 
     if (files.length === 0) throw `No ${file} found`;
     if (files.length > 1)
