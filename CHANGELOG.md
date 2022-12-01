@@ -158,3 +158,15 @@ Remove hyperlink from diagnostic code #61
 
 ## [2.0.24]
 - Fix incorrect VSIX
+
+## [2.0.25]
+- Optimize rtableNoSeries, rHideValidation snippets
+- New snippets
+  - rSimplestFunction: function without parameters
+  - rActionRef: action reference
+  - rUpgradeFunctionCompany: company upgrade function
+  - rUpgradeFunctionDatabase: database upgrade function
+- Add round brackets everywhere in document [#77](https://github.com/BartPermentier/al-toolbox/issues/77)  
+- Surround with pragma in all documents not working [#78](https://github.com/BartPermentier/al-toolbox/issues/78)
+- Create Regions doesn't work with multiple apps in Workspace [#88](https://github.com/BartPermentier/al-toolbox/issues/88)
+- Surround CopyStr (Everywhere in this document) does not work [#90](https://github.com/BartPermentier/al-toolbox/issues/90)
