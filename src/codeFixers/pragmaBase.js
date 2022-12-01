@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const codeFixer = require('./codeFixer');
+const genFunc = require('../generalFunctions');
 
 exports.PragmaBase = class PragmaBase extends codeFixer.CodeFixer {
     /**
@@ -64,9 +65,9 @@ exports.PragmaBase = class PragmaBase extends codeFixer.CodeFixer {
      * @param {boolean} addTodo 
      * @param {string} comment 
      */
-     static getPragmaTexts(diagnostic, addTodo, comment) {
-        const disableText = '#pragma warning disable ' + diagnostic.code + this.addTodo(addTodo,comment);
-        const restoreText = '#pragma warning restore ' + diagnostic.code + this.addTodo(addTodo,comment);
+    static getPragmaTexts(diagnostic, addTodo, comment) {
+        const disableText = '#pragma warning disable ' + genFunc.getDiagnosticCode(diagnostic) + this.addTodo(addTodo, comment);
+        const restoreText = '#pragma warning restore ' + genFunc.getDiagnosticCode(diagnostic) + this.addTodo(addTodo, comment);
 
         return {
             disableText: disableText,

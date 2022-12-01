@@ -7,8 +7,8 @@ class AddPragmaAllCodeFixer extends pragmaBase.PragmaBase {
      * @param {vscode.ExtensionContext} context 
      * @param {string} dignosticCode 
      */
-    constructor(context, dignosticCode){
-        super(context, dignosticCode, surroundWithPragmaAndTodo, 'ALTB: Surround {0} with Pragma', 'al-toolbox.surroundWithPragmaAllDoc');
+    constructor(context, dignosticCode) {
+        super(context, dignosticCode, surroundWithPragma, 'ALTB: Surround {0} with Pragma', 'al-toolbox.surroundWithPragmaAllDoc');
     }
 }
 exports.AddPragmaAllCodeFixer = AddPragmaAllCodeFixer;
@@ -18,7 +18,7 @@ exports.AddPragmaAllCodeFixer = AddPragmaAllCodeFixer;
  * @param {vscode.Uri} uri
  * @param {vscode.Diagnostic} diagnostic 
  */
- async function surroundWithPragmaAndTodo(edit, uri, diagnostic) {  
+async function surroundWithPragma(edit, uri, diagnostic) {
     const document = await vscode.workspace.openTextDocument(uri);
     const pragmaTexts = pragmaBase.PragmaBase.getPragmaTexts(diagnostic,false,'')
 

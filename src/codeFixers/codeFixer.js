@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const faults = require('../fault');
 const constants = require('../constants');
+const genFunc = require('../generalFunctions');
 
 const fixTypes = {
     Once: 0,
@@ -74,12 +75,18 @@ exports.CodeFixer = class CodeFixer {
         const uris = [];
         await Promise.all(uriDiagnosticPairs.map(async uriDiagnosticPair => {
             const uri = uriDiagnosticPair[0];
-            const document = await vscode.workspace.openTextDocument(uri);
             const diagnostics = uriDiagnosticPair[1];
-            await Promise.all(diagnostics.filter(diagnostic => this.isRelevant(document, diagnostic) || this.isPragmaAll(diagnostic,diagnosticToFix)).map(diagnostic => {
-                return this.func(edit, uri, diagnostic);
-            }));
-            uris.push(uri);
+            try {
+                const document = await vscode.workspace.openTextDocument(uri.fsPath);
+                await Promise.all(diagnostics.filter(diagnostic => this.isRelevant(document, diagnostic) || this.isPragmaAll(diagnostic, diagnosticToFix)).map(diagnostic => {
+                    return this.func(edit, uri, diagnostic);
+                }));
+
+                uris.push(uri);
+            }
+            catch (e) {
+                console.log(`Could not read document '${uri.fsPath}': ${e.message}`);
+            }
         }));
         return vscode.workspace.applyEdit(edit).then(async success => {
             if (success) {
@@ -106,7 +113,7 @@ exports.CodeFixer = class CodeFixer {
      * @param {vscode.Diagnostic} diagnostic
      */
     isRelevant(document, diagnostic) {
-        return diagnostic.code === this.dignosticCode
+        return (genFunc.getDiagnosticCode(diagnostic) === this.dignosticCode)
             && this.checkIfRelevant(document, diagnostic.range, diagnostic);
     }
 
@@ -115,6 +122,7 @@ exports.CodeFixer = class CodeFixer {
      * @param {vscode.Diagnostic} diagnosticToFix
      */
     isPragmaAll(diagnostic, diagnosticToFix) {
-        return (this.dignosticCode == constants.PragmaAll) && (diagnostic.code == diagnosticToFix.code)
+        return (this.dignosticCode == constants.PragmaAll)
+            && (genFunc.getDiagnosticCode(diagnostic) == genFunc.getDiagnosticCode(diagnosticToFix));
     }
 }
