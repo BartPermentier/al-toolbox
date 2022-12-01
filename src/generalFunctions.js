@@ -46,3 +46,7 @@ exports.removeDuplicates = function (arr) {
 
     return arrayWithoutDuplicates;
 }
+
+exports.getDiagnosticCode = function (diagnostic) {
+    return (diagnostic.code.value !== undefined ? diagnostic.code.value : diagnostic.code);
+}
