@@ -126,7 +126,7 @@ function getAlFileLocations(objectName, alObjectType){
     let fileLocationFormat = `${workspaceManagement.getCurrentWorkspaceFolderPath()}/src/**/`;
     if(UseOldFileNamingConventions) {
         const filePrefix = constants.AlObjectTypesToFilePrefix(alObjectType);
-        fileLocationFormat += `${filePrefix}*${compactObjectName}.al`;
+        fileLocationFormat += `${filePrefix}*.${compactObjectName}.al`;
     } else {
         const fullTypeName = constants.AlObjectTypesToFullTypeName(alObjectType);
         fileLocationFormat += `*${compactObjectName}.${fullTypeName}.al`;
