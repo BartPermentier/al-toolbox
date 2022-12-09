@@ -11,24 +11,17 @@ exports.escapeRegExp = function (string) {
 
 exports.useAlRegions = async function () {
     if (vscode.workspace.getConfiguration('ALTB').get('UseAlRegions')) {
-        const json = await fileManagement.getAppFileContents();
-        if (json && json.runtime) {
-            const runtime = parseInt(json.runtime.split('.')[0]);
-            if (runtime >= 6)
-                return true;
+        const appFileUri = await fileManagement.getAppFile();
+        const file = await vscode.workspace.openTextDocument(appFileUri);
+        if (file) {
+            const json = JSON.parse(file.getText());
+            if (json && json.runtime) {
+                const runtime = parseInt(json.runtime.split('.')[0]);
+                if (runtime >= 6)
+                    return true;
+            }
         }
     }
-    return false;
-}
-
-exports.usePromotedActionProperties = async function () {
-    const json = await fileManagement.getAppFileContents();
-    if (json && json.runtime && json.features) {
-        const noPromotedActionProperties = parseInt(json.features.indexOf("NoPromotedActionProperties")) !== -1;
-        const runtime = parseInt(json.runtime.split('.')[0]);
-        return !(noPromotedActionProperties && runtime >= 10);
-    }
-
     return false;
 }
 
