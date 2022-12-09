@@ -5,11 +5,13 @@ const generalFunctions = require('../generalFunctions');
 const commentRegionRegex = /\/\/(#(end)?region)/g;
 const targetLanguageRegex = /\$TargetLanguage/g;
 const targetLanguage2Regex = /\$TargetLanguage2/g;
+const promotedInfoRegex = /\$PromotedInfo/g;
 
 
 exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
     snippets;
     useAlRegions;
+    usePromotedActionProperties;
     snippetTargetLanguage;
     snippetTargetLanguage2;
     snippetPrefixToSnippetString = new Map();
@@ -20,13 +22,16 @@ exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
 
     async getSnippets() {
         const useAlRegions = await generalFunctions.useAlRegions();
+        const usePromotedActionProperties = await generalFunctions.usePromotedActionProperties();
         const snippetTargetLanguage = await generalFunctions.snippetTargetLanguage();
         const snippetTargetLanguage2 = await generalFunctions.snippetTargetLanguage2();
-        if (this.useAlRegions !== useAlRegions || this.snippetTargetLanguage !== snippetTargetLanguage || this.snippetTargetLanguage2 !== snippetTargetLanguage2) {
+        if (this.useAlRegions !== useAlRegions || this.usePromotedActionProperties || this.snippetTargetLanguage !== snippetTargetLanguage || this.snippetTargetLanguage2 !== snippetTargetLanguage2) {
             this.useAlRegions = useAlRegions;
+            this.usePromotedActionProperties = usePromotedActionProperties;
             this.snippetTargetLanguage = snippetTargetLanguage;
             this.snippetTargetLanguage2 = snippetTargetLanguage2;
             this.setSnippets(useAlRegions, snippetTargetLanguage, snippetTargetLanguage2);
+            this.setActionSnippets(usePromotedActionProperties);
         }
         return this.snippets;
     }
@@ -53,6 +58,22 @@ exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
             return completionItem;
         });
     }
+
+    /**
+     * @param {boolean} usePromotedActionProperties
+     */
+     setActionSnippets(usePromotedActionProperties) {
+        let snippetsToUse = (usePromotedActionProperties ? snippets.actionSnippetWithPromotedActionProperties : snippets.actionSnippetWithoutPromotedActionProperties);
+        this.snippets = Object.values(snippetsToUse).map(snippet => {
+            const completionItem = new vscode.CompletionItem(snippet.prefix);
+            completionItem.kind = vscode.CompletionItemKind.Snippet;
+            let snippetString = snippet.body.join('\n');
+            this.snippetPrefixToSnippetString.set(snippet.prefix, snippetString);
+            completionItem.insertText = new vscode.SnippetString(snippetString);
+            completionItem.detail = snippet.description;
+            return completionItem;
+        });
+    }    
 
     /**
      * @param {vscode.TextDocument} document 
