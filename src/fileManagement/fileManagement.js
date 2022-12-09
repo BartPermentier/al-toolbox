@@ -48,17 +48,8 @@ async function findSingleInstanceFileInCurrentWorkspaceFolder(file) {
     return files[0];
 }
 
-function getAppFile() {
+exports.getAppFile = function getAppFile() {
     return findSingleInstanceFileInCurrentWorkspaceFolder('app.json');
-}
-
-exports.getAppFile = getAppFile();
-
-exports.getAppFileContents = async function () {
-    const appFileUri = await getAppFile();
-    const file = await vscode.workspace.openTextDocument(appFileUri);
-    if(file)
-        return JSON.parse(file.getText());
 }
 
 exports.getSettingsFile = function getSettingsFile() {
