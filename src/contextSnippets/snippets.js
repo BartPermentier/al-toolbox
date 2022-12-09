@@ -613,25 +613,6 @@ exports.snippets = {
 
 		]
 	},
-	"Snippet: Action": {
-		"prefix": "rAction (ALTB)",
-		"body": [
-			"action(${1:ActionName})",
-			"{",
-			"\tApplicationArea = ${2|All,Basic,Suite,Advanced|};",
-			"\tCaption = '${3:Caption}', comment = '${4:$TargetLanguage}=\"${5:YourLanguageCaption}\"';",
-			"\tPromoted = true;",
-			"\tPromotedCategory = ${6|Process,New,Report|};",
-			"\tPromotedIsBig = true;",
-			"\tImage = ${7:Image};",
-			"",
-			"\ttrigger OnAction()",
-			"\tbegin",
-			"\t\t$0",
-			"\tend;",
-			"}"
-		]
-	},
 	"Snippet: ActionRef": {
 		"prefix": "ractionRef (ALTB)",
 		"body": [
@@ -720,4 +701,45 @@ exports.snippets = {
 		],
 		"description": "Add comment"
 	}
+}
+
+exports.actionSnippetWithPromotedActionProperties = {
+	"Snippet: Action": {
+		"prefix": "rAction (ALTB)",
+		"body": [
+			"action(${1:ActionName})",
+			"{",
+			"\tApplicationArea = ${2|All,Basic,Suite,Advanced|};",
+			"\tCaption = '${3:Caption}', comment = '${4:$TargetLanguage}=\"${5:YourLanguageCaption}\"';",
+			"\tPromoted = true;",
+			"\tPromotedCategory = ${6|Process,New,Report|};",
+			"\tPromotedIsBig = true;",
+			"\tImage = ${7:Image};",
+			"",
+			"\ttrigger OnAction()",
+			"\tbegin",
+			"\t\t$0",
+			"\tend;",
+			"}"
+		]
+	},
+}
+
+exports.actionSnippetWithoutPromotedActionProperties = {
+	"Snippet: Action": {
+		"prefix": "rAction (ALTB)",
+		"body": [
+			"action(${1:ActionName})",
+			"{",
+			"\tApplicationArea = ${2|All,Basic,Suite,Advanced|};",
+			"\tCaption = '${3:Caption}', comment = '${4:$TargetLanguage}=\"${5:YourLanguageCaption}\"';",
+			"\tImage = ${6:Image};",
+			"",
+			"\ttrigger OnAction()",
+			"\tbegin",
+			"\t\t$0",
+			"\tend;",
+			"}"
+		]
+	},
 }
