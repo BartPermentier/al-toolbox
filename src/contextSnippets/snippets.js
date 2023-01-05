@@ -459,7 +459,7 @@ exports.snippets = {
 		"description": "Snippet Test Function",
 		"prefix": "rTestFunction (ALTB)",
 		"body": [
-			"#//region Test${1:MethodName}",
+			"//#region Test${1:MethodName}",
 			"[Test]",
 			"procedure Test${1:MethodName}()",
 			"var",
