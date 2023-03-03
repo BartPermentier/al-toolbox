@@ -40,8 +40,9 @@ exports.renumberAll = async function renumberAll() {
         allALFiles = allALFiles.filter(file => file.fsPath.startsWith(currWorkspace));
 
         if (cancellationToken.isCancellationRequested) return [];
-        
-        const alObjects = await Promise.all(allALFiles.map(file => getAlObjectInfo(file)));
+        const alObjects = await Promise.all(allALFiles.map(file => getAlObjectInfo(file, cancellationToken)))
+        if (cancellationToken.isCancellationRequested) return [];
+
         alObjects.forEach(object => {
             if (object.id != null && objectTypeToObjects.has(object.type)){
                 objectTypeToObjects.get(object.type).push(object);
@@ -66,7 +67,8 @@ exports.renumberAll = async function renumberAll() {
 
         const progressIncrement = 100 / idMappings.length;
         const results = await Promise.all(idMappings.map(idMapping => {
-            const result = renumberFile(idMapping.newId, idMapping.id, idMapping.path, edit);
+            const result = renumberFile(idMapping.newId, idMapping.id, idMapping.path, edit, cancellationToken);
+            if (cancellationToken.isCancellationRequested) return [];
             progress.report({increment: progressIncrement});
             return result;
         }));
@@ -167,10 +169,14 @@ function getNumberRanges(textDocument) {
 
 /**
  * @param {vscode.Uri} file
+ * @param {vscode.CancellationToken} cancellationToken
  */
-async function getAlObjectInfo(file) {
-    const textDocument = await vscode.workspace.openTextDocument(file);
-    return new alFileManagement.AlObjectInfo(textDocument);
+async function getAlObjectInfo(file, cancellationToken) {
+    const textDocument = await openTextDocument(file, cancellationToken);
+    if (cancellationToken.isCancellationRequested)  
+        return null;
+    else
+        return new alFileManagement.AlObjectInfo(textDocument);
 }
 
 const objectIdRegex = /(?<=^\s*\w+\s+)\d+/m;
@@ -179,10 +185,12 @@ const objectIdRegex = /(?<=^\s*\w+\s+)\d+/m;
  * @param {number} oldNumber 
  * @param {vscode.Uri} file
  * @param {vscode.WorkspaceEdit} workspaceEdit
+ * @param {vscode.CancellationToken} cancellationToken
  */
-async function renumberFile(newNumber, oldNumber, file, workspaceEdit) {
+async function renumberFile(newNumber, oldNumber, file, workspaceEdit, cancellationToken) {
     if (newNumber === oldNumber) return false;
-    const textDocument = await vscode.workspace.openTextDocument(file);
+    const textDocument = await openTextDocument(file, cancellationToken);
+    if (cancellationToken.isCancellationRequested) return false; 
     const text = textDocument.getText();
     let match = objectIdRegex.exec(text);
     if (match === null) return false;
@@ -196,5 +204,26 @@ async function renumberFile(newNumber, oldNumber, file, workspaceEdit) {
         workspaceEdit.renameFile(file, newFileName, {ignoreIfExists: true});
     }
     return true;
+}
+
+/**
+ * @param {vscode.Uri} file
+ * @param {vscode.CancellationToken} cancellationToken
+ */
+async function openTextDocument(file, cancellationToken) {
+    var textDocument = undefined;
+    var ok = false;
+    while(!ok) {
+        await vscode.workspace.openTextDocument(file).then(textDoc => {
+            textDocument = textDoc;
+            ok = true;
+            //console.log(`File succesfully opened: ${file}`);        
+        }, error => {
+            //console.log(`File could not be opened: ${file}, retrying...`);
+        });
+        if (cancellationToken.isCancellationRequested)  return null;
+    }
+    
+    return textDocument;
 }
 //#endregion
