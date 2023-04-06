@@ -170,3 +170,9 @@ Remove hyperlink from diagnostic code #61
 - Surround with pragma in all documents not working [#78](https://github.com/BartPermentier/al-toolbox/issues/78)
 - Create Regions doesn't work with multiple apps in Workspace [#88](https://github.com/BartPermentier/al-toolbox/issues/88)
 - Surround CopyStr (Everywhere in this document) does not work [#90](https://github.com/BartPermentier/al-toolbox/issues/90)
+
+## [2.0.26]
+- Disable Promoted properties on the raction snippet in runtime 10+ [#94](https://github.com/BartPermentier/al-toolbox/issues/94)
+- Invalid region directive in rTestFunction snippet [#100](https://github.com/BartPermentier/al-toolbox/issues/100)
+- Renumber AL Objects Erro [#99](https://github.com/BartPermentier/al-toolbox/issues/99)
+- Copy fields to related tables [#60 ](https://github.com/BartPermentier/al-toolbox/issues/60)
