@@ -174,5 +174,5 @@ Remove hyperlink from diagnostic code #61
 ## [2.0.26]
 - Disable Promoted properties on the raction snippet in runtime 10+ [#94](https://github.com/BartPermentier/al-toolbox/issues/94)
 - Invalid region directive in rTestFunction snippet [#100](https://github.com/BartPermentier/al-toolbox/issues/100)
-- Renumber AL Objects Erro [#99](https://github.com/BartPermentier/al-toolbox/issues/99)
+- Renumber AL Objects Error [#99](https://github.com/BartPermentier/al-toolbox/issues/99)
 - Copy fields to related tables [#60 ](https://github.com/BartPermentier/al-toolbox/issues/60)
