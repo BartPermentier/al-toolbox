@@ -6,7 +6,7 @@ const commentRegex = /(?<=\bComment\s*=\s*)'(?<comment>([^']|'')*)'/gi;
 /**
  * @param {vscode.TextDocument} file 
  */
-function getFautyTranslations(file) {
+function getFaultyTranslations(file) {
     const text = file.getText();
     let match;
     const faultyTranslationRanges = [];
@@ -46,7 +46,7 @@ function checkTranslationFormat(text) {
  */
 function createTranslationDiagnostics(uri) {
     return vscode.workspace.openTextDocument(uri)
-        .then(textDoc => getFautyTranslations(textDoc))
+        .then(textDoc => getFaultyTranslations(textDoc))
         .then(ranges => ranges.map(range => {
             const diagnostic = new vscode.Diagnostic(range, 'Translation format is incorrect. Must match regex /\\w{3}="[^"=]*"(,\\w{3}="[^"=]*")*/.', vscode.DiagnosticSeverity.Warning)
             diagnostic.source = 'AL Toolbox';

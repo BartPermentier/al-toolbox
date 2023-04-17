@@ -18,6 +18,10 @@ const textColoring = require('./textColoring/textColoring');
 const setLoadFields = require('./codeGeneration/setLoadFields/setLoadFields');
 const checkTranslations = require('./codeAnalyzers/XLF/checkTranslations');
 
+// Telemetry
+const telemetry = require('./telemetry');
+let telemetryReporter;
+
 let fileSystemWatchers = new Map();
 let regionColorManager;
 
@@ -27,9 +31,15 @@ let regionColorManager;
 function activate(context) {
     const config = vscode.workspace.getConfiguration('ALTB');
     console.log('AL Toolbox: Started activating extension');
+
+    telemetry.initializeTelemetryReporter(context)
+    context.subscriptions.push(telemetryReporter);
+    telemetry.sendExtensionActivatedEvent();
+
     //#region Commands
     //#region Related Tables
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.createRelatedTables', async () => {
+        telemetry.sendCreateRelatedTablesEvent();
         const objectPrefix = await getObjectPrefix();
         if (objectPrefix !== undefined) {
             relatedTables.createRelatedTables(objectPrefix, getFileNameFormatter())
@@ -39,6 +49,7 @@ function activate(context) {
     }));
     const RelatedTablesManager = new relatedTables.RelatedTablesManager();
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.openRelatedTables', textEditor => {
+        telemetry.sendOpenRelatedTablesEvent();
         const extensionObjectInfo = relatedTables.getExtensionObjectInfo(textEditor.document);
         if (extensionObjectInfo) {
             if (!RelatedTablesManager.openRelateTables(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
@@ -47,6 +58,7 @@ function activate(context) {
             vscode.window.showInformationMessage('No page-/tableextension found in open file');
     }));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.openRelatedPages', textEditor => {
+        telemetry.sendOpenRelatedPagesEvent();
         const extensionObjectInfo = relatedTables.getExtensionObjectInfo(textEditor.document);
         if (extensionObjectInfo) {
             if (!RelatedTablesManager.openRelatePages(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
@@ -55,6 +67,7 @@ function activate(context) {
             vscode.window.showInformationMessage('No page-/tableextension found in open file');
     }));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.openRelatedTablesAndPages', textEditor => {
+        telemetry.sendOpenRelatedTablesAndPagesEvent();
         const extensionObjectInfo = relatedTables.getExtensionObjectInfo(textEditor.document);
         if (extensionObjectInfo) {
             if(!RelatedTablesManager.openRelatePagesAndTables(extensionObjectInfo.exendedObjectName, extensionObjectInfo.alObjectType))
@@ -64,6 +77,7 @@ function activate(context) {
     }));
 
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.copyFieldsToRelatedTables', async textEditor => {
+        telemetry.sendCopyFieldsToRelatedTablesEvent();
         const currendDoc = textEditor.document;
         const currentFileObjectInfo = new alFileManagement.AlObjectInfo(currendDoc);
         if (currentFileObjectInfo.type !== constants.AlObjectTypes.tableExtension) {
@@ -95,6 +109,7 @@ function activate(context) {
     
     //#region Wrapping
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.wrapAllFunctions', async (editor) => {
+        telemetry.sendWrapAllFunctionsEvent();
         let numberOfRegions; 
         const regionFormat = await regionWrapper.getRegionFormat();
         
@@ -103,6 +118,7 @@ function activate(context) {
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.wrapAllDataItemsAndColumns', async function (editor) {
+        telemetry.sendWrapAllDataItemsAndColumnsEvent();
         let numberOfRegions; 
         const regionFormat = await regionWrapper.getRegionFormat();
         editor.edit(editBuilder => {
@@ -110,6 +126,7 @@ function activate(context) {
         }).then(() => vscode.window.showInformationMessage(numberOfRegions +' region(s) created.'));
     }));
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.wrapAll', async function (editor) {
+        telemetry.sendWrapAllEvent();
         let numberOfRegions;
         const regionFormat = await regionWrapper.getRegionFormat();
         editor.edit(editBuilder => {
@@ -119,12 +136,13 @@ function activate(context) {
     }));
 
     context.subscriptions.push(
-        vscode.commands.registerTextEditorCommand('al-toolbox.addRegion', (editor) => contextSnippets.addRegion(editor))
+        vscode.commands.registerTextEditorCommand('al-toolbox.addRegion', (editor) => contextSnippets.addRegion(editor))    
     );
     //#endregion
 
     //#region Renumber
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAll', () => {
+        telemetry.sendRenumberAllEvent();
         renumber.renumberAll().then(results => {
                 let numberOfDocumentsChanged = 0;
                 results.forEach(changed => {
@@ -138,6 +156,7 @@ function activate(context) {
     }));
 
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.renumberFields', textEditor => {
+        telemetry.sendRenumberFieldsEvent();
         requestNumber('Start number (1, 80000, ...)').then(info => {
             if (info.ok)
                 renumberFields.renumberFields(textEditor.document, info.number)
@@ -147,6 +166,7 @@ function activate(context) {
         })
     }));
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberAllFields', () => {
+        telemetry.sendRenumberAllFieldsEvent();
         requestNumber('Start number for tables (1, 80000, ...)').then(async tablesInfo => {
             if (tablesInfo.ok) {
                 const tableExtInfo = await requestNumber('Start number for table extensions (1, 80000, ...)');
@@ -162,6 +182,7 @@ function activate(context) {
     //#endregion
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.changePrefix', async () => {
+        telemetry.sendChangePrefixEvent();
         const currPrefix = await getObjectPrefix('current prefix');
         if (currPrefix !== undefined){
             const newPrefix = await vscode.window.showInputBox({placeHolder: 'new prefix'});
@@ -194,10 +215,12 @@ function activate(context) {
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.initGitignore', () => {
+        telemetry.sendInitGitignoreEvent();
         initGitignore.initGitignore();
     }));
 
     context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.generateSetLoadFields', textEditor => {
+        telemetry.sendGenerateSetLoadFieldsEvent();
         setLoadFields.generateSetLoadFields(textEditor, textEditor.selection.start).then(result => {
             if (result)
                 if (result.fieldsAddedCount > 0) vscode.window.showInformationMessage(
@@ -213,6 +236,7 @@ function activate(context) {
     //#region Unique EntityNames & EntitySetName on API Pages
     const disableAPIEntityWarnings = config.get('DisableAPIEntityWarnings');
     if (!disableAPIEntityWarnings){
+        telemetry.sendAPIEntityWarningsEvent();
         const apiPageEntityAnalyzer = new uniqueApiEntities.ApiPageEntityAnalyzer();
         
         vscode.workspace.workspaceFolders.forEach(workspaceFolder => {
@@ -243,14 +267,15 @@ function activate(context) {
     //#endregion
 
     //#region Translation Diagnostics
-    let translationDiagnosticMangager = new checkTranslations.CommentTranslationDiagnosticMangager();
+    let translationDiagnosticManager = new checkTranslations.CommentTranslationDiagnosticMangager();
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
-        if (e.affectsConfiguration(`ALTB.${translationDiagnosticMangager.enabledSetting}`)) {
-            translationDiagnosticMangager.dispose();
-            translationDiagnosticMangager.activate();
+        if (e.affectsConfiguration(`ALTB.${translationDiagnosticManager.enabledSetting}`)) {
+            telemetry.sendTranslationFormatEvent();
+            translationDiagnosticManager.dispose();
+            translationDiagnosticManager.activate();
         }
     }));
-    context.subscriptions.push(translationDiagnosticMangager);
+    context.subscriptions.push(translationDiagnosticManager);
     //#endregion
     //#endregion
     console.log('AL Toolbox: Finished creating Diagnostics');
@@ -267,14 +292,19 @@ function activate(context) {
 
     const disableCustomFolding = config.get('DisableCustomFolding');
     if (!disableCustomFolding) {
+        telemetry.sendCustomFoldingEvent();
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new regionFolding.RegionFoldingRangeProvider()));
         context.subscriptions.push(vscode.languages.registerFoldingRangeProvider('al', new indentFolding.IndentFoldingRangeProvider()));
     }
 
     const disableSnippets = config.get('DisableSnippets');
-    if (!disableSnippets) context.subscriptions.push(
-        vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider())
-    );
+    if (!disableSnippets) {
+        telemetry.sendUseSnippetsEvent();
+        context.subscriptions.push(
+            vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider()),
+            vscode.commands.registerCommand("LogSnippetUsage", (e) => { telemetry.sendSnippetUsageEvent(e)})                    
+        );
+    }
     
     regionColorManager = new textColoring.RegionColorManager(context);
     console.log('AL Toolbox: Finished activating');
@@ -284,12 +314,14 @@ function activate(context) {
 function deactivate() {
     fileSystemWatchers.forEach(fileWatcher => fileWatcher.dispose());
     if (regionColorManager) regionColorManager.dispose();
-    console.log('Extension "AL Toolbox" is now deactivate');
+    if (telemetryReporter) telemetryReporter.dispose();
+    console.log('Extension "AL Toolbox" is now deactivated');
 }
 
 module.exports = {
 	activate,
-	deactivate
+	deactivate,
+    telemetryReporter
 }
 
 /**

@@ -417,3 +417,5 @@ exports.AlObjectTypeVariables = [
     "enum",
     "interface",
 ]
+
+exports.AppInsightsKey = "fdac9d40-1e54-4c01-93a1-0585a60d656a";

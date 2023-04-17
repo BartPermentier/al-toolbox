@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const codeFixer = require('./codeFixer');
+const telemetry = require('../telemetry');
 
 class MissingBracketsCodeFixer extends codeFixer.CodeFixer {
     /**
@@ -18,5 +19,6 @@ exports.MissingBracketsCodeFixer = MissingBracketsCodeFixer;
  * @param {vscode.Diagnostic} diagnostic 
  */
 function AddBrackets(edit, uri, diagnostic) {
+    telemetry.sendFixAA0008Event();
     edit.insert(uri, diagnostic.range.end, '()');
 }

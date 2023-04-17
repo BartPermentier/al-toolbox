@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const codeFixer = require('./codeFixer');
-
+const telemetry = require('../telemetry');
 
 class RegionFixer extends codeFixer.CodeFixer {
     /**
@@ -25,5 +25,6 @@ class RegionFixer extends codeFixer.CodeFixer {
 exports.RegionFixer = RegionFixer;
 
 async function addSlashes(edit, uri, diagnostic) {
+    telemetry.sendFixAA0666Event();
     edit.insert(uri, diagnostic.range.start, '//');
 }
