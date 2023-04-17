@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const codeFixer = require('./codeFixer');
 const pragmaBase = require('./pragmaBase');
+const telemetry = require('../telemetry');
 
 class AddPragmaWithTodoCodeFixer extends pragmaBase.PragmaBase {
     /**
@@ -19,5 +20,6 @@ exports.AddPragmaWithTodoCodeFixer = AddPragmaWithTodoCodeFixer;
  * @param {vscode.Diagnostic} diagnostic 
  */
  async function surroundWithPragmaAndTodo(edit, uri, diagnostic) {
+    telemetry.sendPragmaWithTodoEvent();
     pragmaBase.PragmaBase.insertPragma(edit,uri,diagnostic,true) 
 }

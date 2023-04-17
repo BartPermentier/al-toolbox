@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const codeFixer = require('./codeFixer');
 const faults = require('../fault');
-
+const telemetry = require('../telemetry');
 
 class PossibleOverflowCodeFixer extends codeFixer.CodeFixer {
     /**
@@ -20,6 +20,7 @@ exports.PossibleOverflowCodeFixer = PossibleOverflowCodeFixer;
  * @param {vscode.Diagnostic} diagnostic 
  */
 async function surroundWithCopyStr(edit, uri, diagnostic) {
+    telemetry.sendFixAA0139Event();
     const prefix = 'CopyStr(';
     let suffix = ', 1, ';
     

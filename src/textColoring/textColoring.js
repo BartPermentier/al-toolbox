@@ -2,6 +2,7 @@ const vscode = require('vscode');
 
 const regionRegex = /^(\s*(\/\/\s*)?#(end)?region)\b.*$/mg;
 const regionTokenRegex = /#(end)?region/;
+const telemetry = require('../telemetry');
 exports.RegionColorManager = class RegionColorManager {
 
     /**
@@ -37,17 +38,21 @@ exports.RegionColorManager = class RegionColorManager {
         const regionTextColor = altbConfig.get('RegionTextColor');
         if (regionColor === "")
             this.regionDecoration = undefined;
-        else
+        else {
+            telemetry.sendUseRegionColorEvent();
             this.regionDecoration = vscode.window.createTextEditorDecorationType({
                 color: regionColor
             });
+        }
 
         if (regionTextColor === "")
             this.regionTextDecoration = undefined;
-        else   
+        else {
+            telemetry.sendUseRegionTextColorEvent();
             this.regionTextDecoration = vscode.window.createTextEditorDecorationType({
                 color: regionTextColor
             });
+        }
         
         this.setRegionColorForEditors(vscode.window.visibleTextEditors);
     }

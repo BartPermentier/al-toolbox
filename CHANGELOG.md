@@ -176,3 +176,6 @@ Remove hyperlink from diagnostic code #61
 - Invalid region directive in rTestFunction snippet [#100](https://github.com/BartPermentier/al-toolbox/issues/100)
 - Renumber AL Objects Error [#99](https://github.com/BartPermentier/al-toolbox/issues/99)
 - Copy fields to related tables [#60 ](https://github.com/BartPermentier/al-toolbox/issues/60)
+
+## [2.0.26]
+- Add Application Insights telemetry

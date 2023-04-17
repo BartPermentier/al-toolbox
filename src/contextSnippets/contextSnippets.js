@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const snippets = require('./snippets');
 const generalFunctions = require('../generalFunctions');
+const telemetry = require('../telemetry');
 
 const commentRegionRegex = /\/\/(#(end)?region)/g;
 const targetLanguageRegex = /\$TargetLanguage/g;
@@ -55,9 +56,11 @@ exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
             "```\n" +
             replaceSnippetVarsWithDefault(snippetString) +
             "\n```", true);
-
+        console.log(item);
         return item;
     }
+
+
 
     // Private methods
     #setSnippets(useAlRegions, snippetTargetLanguage = 'NLB', snippetTargetLanguage2 = 'FRB') {
@@ -86,6 +89,11 @@ exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
         this.snippetPrefixToSnippetString.set(prefix, contents);
         completionItem.insertText = new vscode.SnippetString(contents);
         completionItem.detail = description;
+        completionItem.command = {
+            title: '',
+            command: 'LogSnippetUsage',
+            arguments: [prefix]
+        };
         return completionItem;
     }
 }
@@ -111,6 +119,7 @@ function replaceSnippetVarsWithDefault(snippetString) {
  * @param {vscode.TextEditor} textEditor 
  */
 exports.addRegion = function (textEditor) {
+    telemetry.sendAddRegionEvent();
     generalFunctions.useAlRegions()
         .then(useAlRegions => {
             let snippetText = snippets.snippets["Snippet: Region"].body.join('\n');
