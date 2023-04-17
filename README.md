@@ -133,11 +133,14 @@ Either //#Region or the default #Region can be used with this extension. The sni
 - ALTB.CheckCommentTranslations | Boolean: default `false`
     - Checks if label comments match the format required by the 'AL Language Tools' extension for generating XLIFF files
 
-- ALTB.snippetTargetLanguage | String: default `NLB`
+- ALTB.SnippetTargetLanguage | String: default `NLB`
     - Primary target language identifier used for translations in snippets. Supported formats: xx-XX or XXX (for example: nl-BE or NLB)    
 
-- ALTB.snippetTargetLanguage2 | String: default `FRB`
+- ALTB.SnippetTargetLanguage2 | String: default `FRB`
     - Secondary target language identifier used for translations in snippets. Supported formats: xx-XX or XXX (for example: fr-BE or FRB)        
+
+- ALTB.TelemetryIdentifier | String: default `External`
+    - Custom identifier for Application Insights to identify internal/external telemetry
 
 ## Known Issues
 

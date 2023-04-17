@@ -57,3 +57,8 @@ exports.removeDuplicates = function (arr) {
 exports.getDiagnosticCode = function (diagnostic) {
     return (diagnostic.code.value !== undefined ? diagnostic.code.value : diagnostic.code);
 }
+
+exports.telemetryIdentifier = async function () {
+    let uri = vscode.window.activeTextEditor.document.uri;
+    return vscode.workspace.getConfiguration('ALTB', uri).get('TelemetryIdentifier');
+}

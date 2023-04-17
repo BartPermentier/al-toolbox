@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "2.0.27",
+    "version": "2.0.28",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -178,7 +178,15 @@
                         "scope": "resource",
                         "pattern": "^([a-z]{2}-[A-Z]{2})$|^[A-Z]{3}$",
                         "patternErrorMessage": "Supported formats: xx-XX or XXX (for example: fr-BE or FRB)"
-                    }                    
+                    }   ,
+                    "ALTB.TelemetryIdentifier": {
+                        "type": "string",
+                        "default": "External",
+                        "description": "Custom identifier for Application Insights",
+                        "scope": "resource",                        
+                        "pattern": "^[A-Za-z0-9]{0,10}$",
+                        "patternErrorMessage": "Maximum 10 characters (A-Z, a-z, 0-9)"
+                    }                                     
                 }
             }
         ]

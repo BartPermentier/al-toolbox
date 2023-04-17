@@ -2,6 +2,7 @@
 const extension = require('./extension');
 const TelemetryReporter = require('vscode-extension-telemetry');
 const constants = require('./constants');
+const generalFunctions = require('./generalFunctions');
 
 function initializeTelemetryReporter(context) {
     if (!constants.AppInsightsKey)
@@ -9,9 +10,11 @@ function initializeTelemetryReporter(context) {
     extension.telemetryReporter = new TelemetryReporter.default(context.extension.id, context.extension.packageJSON.version, constants.AppInsightsKey);
 }
 
-function sendEvent(eventName, properties, measurements) {
+async function sendEvent(eventName, properties, measurements) {
     if(!extension.telemetryReporter)     
         return;    
+    const appInsightIdentifier = await generalFunctions.telemetryIdentifier();
+    properties.identifier = appInsightIdentifier;
     extension.telemetryReporter.sendTelemetryEvent(eventName, properties, measurements);    
 }
 

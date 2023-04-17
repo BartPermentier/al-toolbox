@@ -177,5 +177,8 @@ Remove hyperlink from diagnostic code #61
 - Renumber AL Objects Error [#99](https://github.com/BartPermentier/al-toolbox/issues/99)
 - Copy fields to related tables [#60 ](https://github.com/BartPermentier/al-toolbox/issues/60)
 
-## [2.0.26]
+## [2.0.27]
 - Add Application Insights telemetry
+
+## [2.0.28]
+- Add TelemetryIdentifier setting to identify internal/external telemetry
