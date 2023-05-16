@@ -683,21 +683,21 @@ exports.snippets = {
 	"NLBComment": {
 		"prefix": "rNLBComment (ALTB)",
 		"body": [
-			", comment = '$TargetLanguage=\"${1:$TargetLanguage Text}\"';",
+			", Comment = '$TargetLanguage=\"${1:$TargetLanguage Text}\"';",
 		],
 		"description": "Add comment ($TargetLanguage)"
 	},
 	"FRBComment": {
 		"prefix": "rFRBComment (ALTB)",
 		"body": [
-			", comment = '$TargetLanguage2=\"${1:$TargetLanguage2 Text}\"';",
+			", Comment = '$TargetLanguage2=\"${1:$TargetLanguage2 Text}\"';",
 		],
 		"description": "Add comment"
 	},
 	"NLFRBComment": {
 		"prefix": "rNLFRBComment (ALTB)",
 		"body": [
-			", comment = '$TargetLanguage=\"${1:$TargetLanguage Text}\",$TargetLanguage2=\"${2:$TargetLanguage2 Text}\"';",
+			", Comment = '$TargetLanguage=\"${1:$TargetLanguage Text}\",$TargetLanguage2=\"${2:$TargetLanguage2 Text}\"';",
 		],
 		"description": "Add comment"
 	}
