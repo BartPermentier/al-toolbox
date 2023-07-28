@@ -10,10 +10,10 @@ function initializeTelemetryReporter(context) {
     extension.telemetryReporter = new TelemetryReporter.default(context.extension.id, context.extension.packageJSON.version, constants.AppInsightsKey);
 }
 
-async function sendEvent(eventName, properties, measurements) {
+async function sendEvent(eventName, properties = {}, measurements = {}) {
     if(!extension.telemetryReporter)     
         return;    
-    const appInsightIdentifier = await generalFunctions.telemetryIdentifier();
+    const appInsightIdentifier = generalFunctions.telemetryIdentifier();
     properties.identifier = appInsightIdentifier;
     extension.telemetryReporter.sendTelemetryEvent(eventName, properties, measurements);    
 }
@@ -49,6 +49,7 @@ function sendUseRegionTextColorEvent() { sendEvent('028-RegionTextColor') }
 function sendSnippetUsageEvent(prefix) { 
     sendEvent(`029-SnippetUsage`, { 'snippet': prefix }) 
 } 
+function SendUseSimpleFunctionSnippetsEvent() { sendEvent('030-UseSimpleFunctionSnippets') }
 
 module.exports = {
 	initializeTelemetryReporter,
@@ -80,5 +81,6 @@ module.exports = {
     sendUseSnippetsEvent,
     sendUseRegionColorEvent,
     sendUseRegionTextColorEvent,
-    sendSnippetUsageEvent
+    sendSnippetUsageEvent,
+    SendUseSimpleFunctionSnippetsEvent
 }
