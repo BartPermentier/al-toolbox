@@ -32,12 +32,12 @@ exports.usePromotedActionProperties = async function () {
     return false;
 }
 
-exports.snippetTargetLanguage = async function () {
+exports.snippetTargetLanguage = function () {
     let uri = vscode.window.activeTextEditor.document.uri;
-    return await vscode.workspace.getConfiguration('ALTB', uri).get('snippetTargetLanguage');
+    return vscode.workspace.getConfiguration('ALTB', uri).get('snippetTargetLanguage');
 }
 
-exports.snippetTargetLanguage2 = async function () {
+exports.snippetTargetLanguage2 = function () {
     let uri = vscode.window.activeTextEditor.document.uri;
     return vscode.workspace.getConfiguration('ALTB', uri).get('snippetTargetLanguage2');
 }
@@ -61,4 +61,8 @@ exports.getDiagnosticCode = function (diagnostic) {
 exports.telemetryIdentifier = async function () {
     let uri = vscode.window.activeTextEditor.document.uri;
     return vscode.workspace.getConfiguration('ALTB', uri).get('TelemetryIdentifier');
+}
+
+exports.useSimpleFunctionSnippets = function () {
+    return vscode.workspace.getConfiguration('ALTB').get('UseSimpleFunctionSnippets');
 }
