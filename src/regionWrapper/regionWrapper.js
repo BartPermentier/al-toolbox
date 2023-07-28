@@ -111,7 +111,7 @@ function addRegionEnd(editBuilder, line, name, regionText) {
 }
 
 const EventSubscriberRegex =
-    /\[EventSubscriber\(ObjectType::(?<ObjectType>Codeunit|Page|Report|Table|XMLPort), (Codeunit|Page|Report|Database|XMLPort)::(?<Publisher>\w*|"[^"]*"), '(?<Event>([^']|'')*)', '(?<Element>([^']|'')*)', (true|false), (true|false)\)\]/i;
+    /\[EventSubscriber\(ObjectType::(?<ObjectType>Codeunit|Page|Report|Table|XMLPort), (Codeunit|Page|Report|Database|XMLPort)::(?<Publisher>\w*|"[^"]*"), '?(?<Event>([^']|'')*)'?, '(?<Element>([^']|'')*)', (true|false), (true|false)\)\]/i;
 const functionParametersRegex = /\[[^\]]+\]\s*$/;
 const functionNameRegex = /\b(trigger|procedure)\b\s+(?<name>\w+|"[^"]*")/i;
 /**
