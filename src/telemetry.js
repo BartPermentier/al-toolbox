@@ -80,6 +80,5 @@ module.exports = {
     sendUseSnippetsEvent,
     sendUseRegionColorEvent,
     sendUseRegionTextColorEvent,
-    sendSnippetUsageEvent,
-    SendUseSimpleFunctionSnippetsEvent
+    sendSnippetUsageEvent
 }
