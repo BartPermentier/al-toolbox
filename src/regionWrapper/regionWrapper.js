@@ -130,10 +130,10 @@ function getRegionNameForAlFunction(document, startLineNo, endLineNo) {
 
         if ((match = EventSubscriberRegex.exec(line)) !== null) {
          //TODO: Change ${match.groups.Publisher} to the corresponding object ID
-            return `EventSubscriber ${match.groups.ObjectType} ${match.groups.Publisher} ${match.groups.Event} ${match.groups.Element}`;
+            return `EventSubscriber ${match.groups.ObjectType} ${match.groups.Publisher} ${match.groups.Event} ${match.groups.Element}`.trimEnd();
         } else if ((match = functionNameRegex.exec(line)) !== null){
             match = functionNameRegex.exec(line);
-            return match.groups['name'];
+            return match.groups['name'].trimEnd();
         }
 
         currentLineNo++;
