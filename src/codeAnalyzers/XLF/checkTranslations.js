@@ -30,7 +30,7 @@ function isInComment(position, file) {
 }
 
 
-const translationFormatRegex = /^(\w{3}|[a-z]{2}-[A-Z]{2})="[^"=]*"(,(\w{3}|[a-z]{2}-[A-Z]{2})="[^"=]*")*$/;
+const translationFormatRegex = /^(\w{3}|[a-z]{2}-[A-Z]{2})="[^"=]*"((,|\|\|)(\w{3}|[a-z]{2}-[A-Z]{2})="[^"=]*")*$/;
 /**
  * @param {string} text 
  */
