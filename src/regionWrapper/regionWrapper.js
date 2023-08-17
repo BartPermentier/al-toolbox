@@ -4,7 +4,7 @@ const generalFunctions = require('../generalFunctions');
 
 const regionStartRegex = /\s*(\/\/\s*)?#region\b/;
 
-const alFunctionRegex = /(\[[^\]]+\]\s*)?(\b(local|internal)\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gi
+const alFunctionRegex = /(\[[^\]]+\]\s*){0,}(\b(local|internal)\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gi
 const beginRegex = /\bbegin\b|\bcase\b/gi;
 const endRegex = /\bend;?\b/gi;
 /**
