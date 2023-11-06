@@ -117,6 +117,7 @@ const functionNameRegex = /\b(trigger|procedure)\b\s+(?<name>\w+|"[^"]*")/i;
 /**
  * @param {vscode.TextDocument} document 
  * @param {number} startLineNo 
+ * @param {number} endLineNo 
  */
 function getRegionNameForAlFunction(document, startLineNo, endLineNo) {
     let line;
