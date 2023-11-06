@@ -148,7 +148,6 @@ Either //#Region or the default #Region can be used with this extension. The sni
 - ALTB.UseSimpleFunctionSnippets
     - Simplifies function snippets so a custom completion provider can be used.
  
-
 ## Known Issues
 
 - ALTB: Renumber AL Objects
