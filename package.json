@@ -154,9 +154,8 @@
                     "ALTB.UseSimpleFunctionSnippets": {
                         "type": "boolean",
                         "default": false,
-                        "description": "The AL Toolbox snippets will be simplified so a customer completion provider can be used.",
-                        "scope": "application",
-                        "when": "config.DisableSnippets"
+                        "description": "The AL Toolbox function snippets will be simplified so a custom completion provider can be used.",
+                        "scope": "application"
                     },
                     "ALTB.snippetTargetLanguage": {
                         "type": "string",
