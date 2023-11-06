@@ -4,7 +4,7 @@ const generalFunctions = require('../generalFunctions');
 
 const regionStartRegex = /\s*(\/\/\s*)?#region\b/;
 
-const alFunctionRegex = /(\[[^\]]+\]\s*)?(\blocal\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gi;
+const alFunctionRegex = /(\[[^\]]+\]\s*){0,}(\b(local|internal)\b\s*)?\b(?<kind>trigger|procedure)\b\s+(\w+|"[^"]*")\s*\(/gi
 const beginRegex = /\bbegin\b|\bcase\b/gi;
 const endRegex = /\bend;?\b/gi;
 /**
@@ -27,7 +27,7 @@ exports.WrapAllFunctions = (editBuilder, document, regionFormat) => {
     alFunctionLocations.forEach(location => {
         if ((location.start === 0) ||
                 !regionStartRegex.test(document.lineAt(location.start - 1).text)) { // check if line before function does not contain a region
-            const regionName = getRegionNameForAlFunction(document, location.start);
+            const regionName = getRegionNameForAlFunction(document, location.start, location.end);
             addRegionStart(editBuilder, document.lineAt(location.start), regionName, regionFormat.start);
             addRegionEnd(editBuilder, document.lineAt(location.end), regionName, regionFormat.end);
             ++regionCount;
@@ -111,34 +111,36 @@ function addRegionEnd(editBuilder, line, name, regionText) {
 }
 
 const EventSubscriberRegex =
-    /\[EventSubscriber\(ObjectType::(?<ObjectType>Codeunit|Page|Report|Table|XMLPort), (Codeunit|Page|Report|Database|XMLPort)::(?<Publisher>\w*|"[^"]*"), '(?<Event>([^']|'')*)', '(?<Element>([^']|'')*)', (true|false), (true|false)\)\]/i;
+    /\[EventSubscriber\(ObjectType::(?<ObjectType>Codeunit|Page|Report|Table|XMLPort), (Codeunit|Page|Report|Database|XMLPort)::(?<Publisher>\w*|"[^"]*"), '?(?<Event>([^']|'')*)'?, '(?<Element>([^']|'')*)', (true|false), (true|false)\)\]/i;
 const functionParametersRegex = /\[[^\]]+\]\s*$/;
 const functionNameRegex = /\b(trigger|procedure)\b\s+(?<name>\w+|"[^"]*")/i;
 /**
  * @param {vscode.TextDocument} document 
- * @param {number} lineNo 
+ * @param {number} startLineNo 
+ * @param {number} endLineNo 
  */
-function getRegionNameForAlFunction(document, lineNo) {
-    var line = document.lineAt(lineNo).text;
+function getRegionNameForAlFunction(document, startLineNo, endLineNo) {
+    let line;
+    let currentLineNo;
     let match;
-    if ((match = EventSubscriberRegex.exec(line)) !== null) {
-        //TODO: Change ${match.groups.Publisher} to the corresponding object ID
-        return `EventSubscriber ${match.groups.ObjectType} ${match.groups.Publisher} ${match.groups.Event} ${match.groups.Element}`;
+
+    currentLineNo = startLineNo;
+
+    while(currentLineNo !== endLineNo) {
+        line = document.lineAt(currentLineNo).text;
+
+        if ((match = EventSubscriberRegex.exec(line)) !== null) {
+         //TODO: Change ${match.groups.Publisher} to the corresponding object ID
+            return `EventSubscriber ${match.groups.ObjectType} ${match.groups.Publisher} ${match.groups.Event} ${match.groups.Element}`.trimEnd();
+        } else if ((match = functionNameRegex.exec(line)) !== null){
+            match = functionNameRegex.exec(line);
+            return match.groups['name'].trimEnd();
+        }
+
+        currentLineNo++;
     }
 
-    if (functionParametersRegex.test(line) && !functionNameRegex.test(line)) {
-        /* The line where the function starts on a line with function parameter without the 'normal' function declaration.
-         * e.g.:
-         *  [...]
-         *  procedure name(...)
-         */
-        line = document.lineAt(lineNo + 1).text;
-    }
-    match = functionNameRegex.exec(line);
-    if (match === null) {
-        console.error('Does not contain a AL function: ' + line.trimLeft());
-        vscode.window.showErrorMessage(`Failed to find function name on line ${lineNo} (line number before adding regions): Region will be named "error function name not found" instead`);
-        return '"error function name not found"';
-    }
-    return match.groups['name'];
+    console.error('Does not contain a AL function: ' + line.trimLeft());
+    vscode.window.showErrorMessage(`Failed to find function name on line ${startLineNo} (line number before adding regions): Region will be named "error function name not found" instead`);
+    return '"error function name not found"';
 }
