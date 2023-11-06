@@ -11,10 +11,13 @@ const renumberableTypes = [
     constants.AlObjectTypes.pageExtension,
     constants.AlObjectTypes.query,
     constants.AlObjectTypes.report,
+    constants.AlObjectTypes.reportextension,
     constants.AlObjectTypes.table,
     constants.AlObjectTypes.tableExtension,
     constants.AlObjectTypes.enum,
     constants.AlObjectTypes.enumextension,
+    constants.AlObjectTypes.permissionset,
+    constants.AlObjectTypes.permissionsetextension
 ]
 
 /**

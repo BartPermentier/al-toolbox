@@ -6,13 +6,16 @@ exports.AlObjectTypes = {
     pageCustomization: 'pagecustomization',
     codeUnit: 'codeunit',
     report: 'report',
+    reportextension: 'reportextension',    
     query: 'query',
     profile: 'profile',
     XMLPort: 'xmlport',
     enum: 'enum',
     enumextension: 'enumextension',
     controleAddIn: 'controladdin',
-    interface: 'interface'    
+    interface: 'interface',
+    permissionset: 'permissionset',    
+    permissionsetextension: 'permissionsetextension'    
 }
 
 exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
@@ -27,6 +30,7 @@ exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
         case this.AlObjectTypes.codeUnit:
 		    return 'Cod';
         case this.AlObjectTypes.report:
+        case this.AlObjectTypes.reportextension:
 		    return 'Rep';
         case this.AlObjectTypes.query:
 		    return 'Que';
@@ -38,6 +42,9 @@ exports.AlObjectTypesToFilePrefix = (AlObjectType) => {
             return 'ControlAddin';
         case this.AlObjectTypes.interface:
             return 'Iface';
+        case this.AlObjectTypes.permissionset:
+        case this.AlObjectTypes.permissionsetextension: 
+            return 'PermissionSet'
         default:
             return '';
     }
@@ -59,6 +66,8 @@ exports.AlObjectTypesToFullTypeName = (AlObjectType) => {
 		    return 'Codeunit';
         case this.AlObjectTypes.report:
 		    return 'Report';
+        case this.AlObjectTypes.reportextension:
+            return 'ReportExt';            
         case this.AlObjectTypes.query:
 		    return 'Query';
         case this.AlObjectTypes.profile:
@@ -69,6 +78,10 @@ exports.AlObjectTypesToFullTypeName = (AlObjectType) => {
             return 'ControlAddin';
         case this.AlObjectTypes.interface:
             return 'Interface';
+        case this.AlObjectTypes.permissionset:
+            return 'PermissionSet';
+        case this.AlObjectTypes.permissionsetextension:
+            return 'PermissionSetExt';            
         default:
             return '';
     }
