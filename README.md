@@ -142,6 +142,12 @@ Either //#Region or the default #Region can be used with this extension. The sni
 - ALTB.TelemetryIdentifier | String: default `External`
     - Custom identifier for Application Insights to identify internal/external telemetry
 
+- ALTB.DisableSnippets
+    - Disables all snippets provided by ALTB.
+
+- ALTB.UseSimpleFunctionSnippets
+    - Simplifies function snippets so a custom completion provider can be used.
+ 
 ## Known Issues
 
 - ALTB: Renumber AL Objects
