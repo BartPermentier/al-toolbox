@@ -3,6 +3,14 @@ Please visit https://www.altoolbox.com/ for more in depth information and AL Lan
 # Change Log
 All notable changes to the "al-toolbox" extension will be documented in this file.
 
+## [2.0.29]
+- Add Use Simple Function Snippets setting which simplifies function snippets so a custom completion provider can be used
+- Don't create regions when they already exists #107
+- Fix telemetry logging issue
+- Fix capitals in comment snippets
+- Adjust translation format check #110
+- Add support for permissionset, permissionsetextension, report, reportextension when renumbering objects #64
+
 ## [2.0.28]
 - Add TelemetryIdentifier setting to identify internal/external telemetry
 
