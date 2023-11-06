@@ -10,9 +10,10 @@ const targetLanguage2Regex = /\$TargetLanguage2/g;
 exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
     snippets;
     useAlRegions;
-    usePromotedActionProperties;
+    usePromotedActionProperties;    
     snippetTargetLanguage;
-    snippetTargetLanguage2;
+    snippetTargetLanguage2;    
+    useSimpleFunctionSnippets;
     snippetPrefixToSnippetString = new Map();
 
     constructor() {
@@ -22,16 +23,16 @@ exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
     async #getSnippets() {
         const useAlRegions = await generalFunctions.useAlRegions();
         const usePromotedActionProperties = await generalFunctions.usePromotedActionProperties();
-        const snippetTargetLanguage = await generalFunctions.snippetTargetLanguage();
-        const snippetTargetLanguage2 = await generalFunctions.snippetTargetLanguage2();
-        if (this.useAlRegions !== useAlRegions || this.usePromotedActionProperties || this.snippetTargetLanguage !== snippetTargetLanguage || this.snippetTargetLanguage2 !== snippetTargetLanguage2) {
+        const snippetTargetLanguage = generalFunctions.snippetTargetLanguage();
+        const snippetTargetLanguage2 = generalFunctions.snippetTargetLanguage2();
+        const useSimpleFunctionSnippets = generalFunctions.useSimpleFunctionSnippets();
+        if (this.useAlRegions !== useAlRegions || this.usePromotedActionProperties || this.snippetTargetLanguage !== snippetTargetLanguage || this.snippetTargetLanguage2 !== snippetTargetLanguage2 || this.useSimpleFunctionSnippets !== useSimpleFunctionSnippets) {
             this.useAlRegions = useAlRegions;
             this.usePromotedActionProperties = usePromotedActionProperties;
             this.snippetTargetLanguage = snippetTargetLanguage;
             this.snippetTargetLanguage2 = snippetTargetLanguage2;
             this.snippets = [];
-            this.#setSnippets(useAlRegions, snippetTargetLanguage, snippetTargetLanguage2);
-            this.#setActionSnippet(usePromotedActionProperties);
+            this.#setSnippets(useAlRegions, snippetTargetLanguage, snippetTargetLanguage2, usePromotedActionProperties, useSimpleFunctionSnippets);
         }
         return this.snippets;
     }
@@ -63,24 +64,32 @@ exports.SnippetCompletionItemProvider = class SnippetCompletionItemProvider {
 
 
     // Private methods
-    #setSnippets(useAlRegions, snippetTargetLanguage = 'NLB', snippetTargetLanguage2 = 'FRB') {
+    #setSnippets(useAlRegions, snippetTargetLanguage = 'NLB', snippetTargetLanguage2 = 'FRB', usePromotedActionProperties, useSimpleFunctionSnippets) {
+        // Action snippets
+        Array.prototype.push.apply(this.snippets, Object.values(usePromotedActionProperties ? snippets.actionSnippetWithPromotedActionProperties : snippets.actionSnippetWithoutPromotedActionProperties).map(snippet => {
+            return this.#createcompletionItem(snippet.prefix, snippet.description, this.#replaceParams(snippet.body.join('\n'), useAlRegions, snippetTargetLanguage, snippetTargetLanguage2));
+        }));
+
+        // Function snippets
+        Array.prototype.push.apply(this.snippets, Object.values(useSimpleFunctionSnippets ? snippets.simpleFunctionSnippets : snippets.functionSnippetsWithObjectType).map(snippet => {
+            return this.#createcompletionItem(snippet.prefix, snippet.description, this.#replaceParams(snippet.body.join('\n'), useAlRegions, snippetTargetLanguage, snippetTargetLanguage2));
+        }));
+
+        // Other Snippets
         Array.prototype.push.apply(this.snippets, Object.values(snippets.snippets).map(snippet => {
-            let snippetString = snippet.body.join('\n');
-            if (useAlRegions)
-                snippetString = snippetString.replace(commentRegionRegex, '$1');
-            if (snippetTargetLanguage2 != '')
-                snippetString = snippetString.replace(targetLanguage2Regex, snippetTargetLanguage2);
-            if (snippetTargetLanguage != '')
-                snippetString = snippetString.replace(targetLanguageRegex, snippetTargetLanguage);
-            return this.#createcompletionItem(snippet.prefix, snippet.description, snippetString);
+            return this.#createcompletionItem(snippet.prefix, snippet.description, this.#replaceParams(snippet.body.join('\n'), useAlRegions, snippetTargetLanguage, snippetTargetLanguage2));
         }));
     }
 
-    #setActionSnippet(usePromotedActionProperties) {
-        let snippetsToUse = (usePromotedActionProperties ? snippets.actionSnippetWithPromotedActionProperties : snippets.actionSnippetWithoutPromotedActionProperties);
-        Array.prototype.push.apply(this.snippets, Object.values(snippetsToUse).map(snippet => {
-            return this.#createcompletionItem(snippet.prefix, snippet.description, snippet.body.join('\n'));
-        }));
+    #replaceParams(textToReplace, useAlRegions, language1, language2, ) {
+        if(useAlRegions)
+        textToReplace = textToReplace.replace(commentRegionRegex, '$1');
+        if (language1 !== "")
+            textToReplace = textToReplace.replace(targetLanguageRegex, language1);         
+        if (language2 !== "")
+            textToReplace = textToReplace.replace(targetLanguage2Regex, language2);
+
+        return textToReplace;
     }
 
     #createcompletionItem(prefix, description, contents) {

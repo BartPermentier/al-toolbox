@@ -49,6 +49,7 @@ function sendUseRegionTextColorEvent() { sendEvent('028-RegionTextColor') }
 function sendSnippetUsageEvent(prefix) { 
     sendEvent(`029-SnippetUsage`, { 'snippet': prefix }) 
 }
+function SendUseSimpleFunctionSnippetsEvent() { sendEvent('030-UseSimpleFunctionSnippets') }
 
 module.exports = {
 	initializeTelemetryReporter,
@@ -80,5 +81,6 @@ module.exports = {
     sendUseSnippetsEvent,
     sendUseRegionColorEvent,
     sendUseRegionTextColorEvent,
-    sendSnippetUsageEvent
+    sendSnippetUsageEvent,
+    SendUseSimpleFunctionSnippetsEvent
 }

@@ -151,17 +151,11 @@
                         "description": "Disable all AL Toolbox snippets (requires reload). Our snippets start with 'r'.",
                         "scope": "application"
                     },
-                    "ALTB.DisableHoverProviders": {
+                    "ALTB.UseSimpleFunctionSnippets": {
                         "type": "boolean",
                         "default": false,
-                        "description": "Disable Hover Providers (requires reload). AL Toolbox shows the field description on hover.",
+                        "description": "The AL Toolbox function snippets will be simplified so a custom completion provider can be used.",
                         "scope": "application"
-                    },
-                    "ALTB.CheckCommentTranslations": {
-                        "type": "boolean",
-                        "default": false,
-                        "description": "Checks if label comments match the format required by the 'AL Language Tools' extension for generating XLIFF files",
-                        "scope": "resource"
                     },
                     "ALTB.snippetTargetLanguage": {
                         "type": "string",
@@ -178,7 +172,19 @@
                         "scope": "resource",
                         "pattern": "^([a-z]{2}-[A-Z]{2})$|^[A-Z]{3}$",
                         "patternErrorMessage": "Supported formats: xx-XX or XXX (for example: fr-BE or FRB)"
-                    }   ,
+                    }, 
+                    "ALTB.DisableHoverProviders": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disable Hover Providers (requires reload). AL Toolbox shows the field description on hover.",
+                        "scope": "application"
+                    },
+                    "ALTB.CheckCommentTranslations": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Checks if label comments match the format required by the 'AL Language Tools' extension for generating XLIFF files",
+                        "scope": "resource"
+                    },
                     "ALTB.TelemetryIdentifier": {
                         "type": "string",
                         "default": "External",
@@ -207,5 +213,8 @@
     },
     "dependencies": {
         "glob": "7.1.6"
-    }
+    },
+    "extensionDependencies": [
+        "andrzejzwierzchowski.al-code-outline"
+    ]
 }

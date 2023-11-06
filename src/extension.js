@@ -20,6 +20,7 @@ const checkTranslations = require('./codeAnalyzers/XLF/checkTranslations');
 
 // Telemetry
 const telemetry = require('./telemetry');
+const { useSimpleFunctionSnippets } = require('./generalFunctions');
 let telemetryReporter;
 
 let fileSystemWatchers = new Map();
@@ -304,6 +305,11 @@ function activate(context) {
             vscode.languages.registerCompletionItemProvider('al', new contextSnippets.SnippetCompletionItemProvider()),
             vscode.commands.registerCommand("LogSnippetUsage", (e) => { telemetry.sendSnippetUsageEvent(e)})                    
         );
+    }
+
+    const useSimpleFunctionSnippets = config.get('UseSimpleFunctionSnippets');
+    if (useSimpleFunctionSnippets) {
+        telemetry.SendUseSimpleFunctionSnippetsEvent();
     }
     
     regionColorManager = new textColoring.RegionColorManager(context);
