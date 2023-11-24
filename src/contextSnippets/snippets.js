@@ -244,7 +244,7 @@ exports.snippets = {
 		"body": [
 			"//#region EventSubscriber Page ${1:Object No.} ${2|OnAfterActionEvent,OnAfterGetCurrRecordEvent,OnAfterGetRecordEvent,OnAfterValidateEvent,OnBeforeActionEvent,OnBeforeValidateEvent,OnClosePageEvent,OnDeleteRecordEvent,OnInsertRecordEvent,OnModifyRecordEvent,OnNewRecordEvent,OnOpenPageEvent,OnQueryClosePageEvent|}",
 			"[EventSubscriber(ObjectType::Page, Page::${3:PageName}, '${2:Trigger}', '${4:CtrlSpace}', true, true)]",
-			"local procedure ${2:Trigger}_P${1:Object No.}(var Rec: Record ${5:RecName});",
+			"local procedure ${2:Trigger}_P${1:Object No.}(var Rec: Record ${5:RecName})",
 			"begin",
 			"\t$0",
 			"end;",
@@ -412,7 +412,7 @@ exports.snippets = {
 			"//#endregion EventSubscriber Page 1518 OnInitializingNotificationWithDefaultState",
 			"",
 			"//#region ${5:ReturnNotificationIdFunction}",
-			"local procedure ${5:ReturnNotificationIdFunction}(): Guid;",
+			"local procedure ${5:ReturnNotificationIdFunction}(): Guid",
 			"begin",
 			"\texit('${7:GenerateGuidHere}');",
 			"end;",
