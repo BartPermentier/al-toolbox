@@ -4,12 +4,15 @@ Please visit https://www.altoolbox.com/ for more in depth information and AL Lan
 All notable changes to the "al-toolbox" extension will be documented in this file.
 
 ## [2.0.29]
+  - Fix rUpgradeFunctionDatabase [#123](https://github.com/BartPermentier/al-toolbox/issues/123)
+
+## [2.0.29]
 - Add Use Simple Function Snippets setting which simplifies function snippets so a custom completion provider can be used
-- Don't create regions when they already exists #107
+- Don't create regions when they already exists [#107](https://github.com/BartPermentier/al-toolbox/issues/107)
 - Fix telemetry logging issue
 - Fix capitals in comment snippets
-- Adjust translation format check #110
-- Add support for permissionset, permissionsetextension, report, reportextension when renumbering objects #64
+- Adjust translation format check [#110](https://github.com/BartPermentier/al-toolbox/issues/110)
+- Add support for permissionset, permissionsetextension, report, reportextension when renumbering objects [#64](https://github.com/BartPermentier/al-toolbox/issues/64)
 
 ## [2.0.28]
 - Add TelemetryIdentifier setting to identify internal/external telemetry
@@ -21,7 +24,7 @@ All notable changes to the "al-toolbox" extension will be documented in this fil
 - Disable Promoted properties on the raction snippet in runtime 10+ [#94](https://github.com/BartPermentier/al-toolbox/issues/94)
 - Invalid region directive in rTestFunction snippet [#100](https://github.com/BartPermentier/al-toolbox/issues/100)
 - Renumber AL Objects Error [#99](https://github.com/BartPermentier/al-toolbox/issues/99)
-- Copy fields to related tables [#60 ](https://github.com/BartPermentier/al-toolbox/issues/60)
+- Copy fields to related tables [#60](https://github.com/BartPermentier/al-toolbox/issues/60)
 
 ## [2.0.25]
 - Optimize rtableNoSeries, rHideValidation snippets
@@ -39,10 +42,10 @@ All notable changes to the "al-toolbox" extension will be documented in this fil
 - Fix incorrect VSIX
 
 ## [2.0.23]
-- Regions are back to //#region in runtime 10.0 (https://github.com/BartPermentier/al-toolbox/issues/80)
+- Regions are back to //#region in runtime 10.0 [#80](https://github.com/BartPermentier/al-toolbox/issues/80)
 
 ## [2.0.22]
-- Add targetLanguage / targetLanguage2 settings which replaces the fixed NLB/FRB values (https://github.com/BartPermentier/al-toolbox/issues/66)
+- Add targetLanguage / targetLanguage2 settings which replaces the fixed NLB/FRB values [#66](https://github.com/BartPermentier/al-toolbox/issues/66)
 
 ## [2.0.21]
 - Surround names with " " for object related snippets
@@ -54,37 +57,37 @@ All notable changes to the "al-toolbox" extension will be documented in this fil
 - Minor snippet cleanup / format
 
 ## [2.0.20]
-- Fix Dev/Debug Version in Marketplace #71 (https://github.com/BartPermentier/al-toolbox/issues/71)
+- Fix Dev/Debug Version in Marketplace [#71](https://github.com/BartPermentier/al-toolbox/issues/71)
 
 ## [2.0.19]
-- Add a colon after TODO (https://github.com/BartPermentier/al-toolbox/issues/59)
-- Related Tables : provide support for 'Customer Templ.' (https://github.com/BartPermentier/al-toolbox/issues/67)
+- Add a colon after TODO [#59](https://github.com/BartPermentier/al-toolbox/issues/59)
+- Related Tables : provide support for 'Customer Templ.' [#67](https://github.com/BartPermentier/al-toolbox/issues/67)
 
 ## [2.0.18]
-Remove hyperlink from diagnostic code #61
+Remove hyperlink from diagnostic code [#61](https://github.com/BartPermentier/al-toolbox/issues/61)
 
 ## [2.0.17]
-Disable field description on hover functionality #55
+Disable field description on hover functionality [#55](https://github.com/BartPermentier/al-toolbox/issues/55)
 
 ## [2.0.16]
-'Go to Definition' opened in side window when hovering object derived variable #55
+'Go to Definition' opened in side window when hovering object derived variable [#55](https://github.com/BartPermentier/al-toolbox/issues/55)
 
 ## [2.0.15]
 - Optimized SetLoadFields functionality
-  - Improved record parameter support  #49
-  - Exclude SystemId, RecordId and several other system functions #51
-  - Only add unique fields (case-insensitive) #50
-  - Surround single if ... then or else with begin..end #45
-  - Fixed issue on local records of the same type as the current object #48
-- Added CodeAction to Add Pragma with TODO Tag #46 & #53
-- Added CodeAction to Add Pragma for all error occurences in all documents #42
+  - Improved record parameter support [#49](https://github.com/BartPermentier/al-toolbox/issues/49)
+  - Exclude SystemId, RecordId and several other system functions [#51](https://github.com/BartPermentier/al-toolbox/issues/51)
+  - Only add unique fields (case-insensitive) [#50](https://github.com/BartPermentier/al-toolbox/issues/50)
+  - Surround single if ... then or else with begin..end [#45](https://github.com/BartPermentier/al-toolbox/issues/45)
+  - Fixed issue on local records of the same type as the current object [#48](https://github.com/BartPermentier/al-toolbox/issues/48)
+- Added CodeAction to Add Pragma with TODO Tag [#46](https://github.com/BartPermentier/al-toolbox/issues/46) & [#53](https://github.com/BartPermentier/al-toolbox/issues/53)
+- Added CodeAction to Add Pragma for all error occurences in all documents [#42](https://github.com/BartPermentier/al-toolbox/issues/42)
 
 ## [2.0.14]
 - [Prefix Objects adds too many double quotes](https://github.com/BartPermentier/al-toolbox/issues/44)
 
 ## [2.0.10]
-- Duplicate fields in ALTB: Generate SetLoadFields: #39
-- EnumExtensions are not getting renumbered via "Renumber AL objects" #38
+- Duplicate fields in ALTB: Generate SetLoadFields: [#39](https://github.com/BartPermentier/al-toolbox/issues/39)
+- EnumExtensions are not getting renumbered via "Renumber AL objects" [#38](https://github.com/BartPermentier/al-toolbox/issues/38)
 - Fixed the CodeunitSubscriber Snippet
 
 ## [2.0.9]
@@ -105,7 +108,7 @@ Disable field description on hover functionality #55
 - Show field description on hover
 
 ## [2.0.3]
-- Bugfix: AL Toobox prevents folding icons in .al files with many lines #23
+- Bugfix: AL Toobox prevents folding icons in .al files with many lines [#23](https://github.com/BartPermentier/al-toolbox/issues/23)
 
 ## [2.0.2]
 - Added option to disable snippets: ALTB.DisableSnippets
