@@ -4,6 +4,7 @@ const workspaceManagement = require('./workspaceManagement');
 const path = require("path");
 const vscode = require("vscode");
 const glob = require("glob");
+const generalFunctions = require('../generalFunctions');
 
 //#region AL File Creation
 /**
@@ -123,7 +124,7 @@ function getAlFileLocations(objectName, alObjectType){
 
     const UseOldFileNamingConventions = vscode.workspace.getConfiguration('ALTB').get('UseOldFileNamingConventions');
     
-    let fileLocationFormat = `${workspaceManagement.getCurrentWorkspaceFolderPath()}/src/**/`;
+    let fileLocationFormat = `${workspaceManagement.getCurrentWorkspaceFolderPath()}/${generalFunctions.sourceCodeFolderName}/**/`;
     if(UseOldFileNamingConventions) {
         const filePrefix = constants.AlObjectTypesToFilePrefix(alObjectType);
         fileLocationFormat += `${filePrefix}*.${compactObjectName}.al`;

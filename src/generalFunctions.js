@@ -66,3 +66,7 @@ exports.telemetryIdentifier = function () {
 exports.useSimpleFunctionSnippets = function () {
     return vscode.workspace.getConfiguration('ALTB').get('UseSimpleFunctionSnippets');
 }
+
+exports.sourceCodeFolderName = function () {
+    return vscode.workspace.getConfiguration('ALTB').get('SourceCodeFolderName');
+}
