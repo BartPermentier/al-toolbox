@@ -192,7 +192,15 @@
                         "scope": "resource",                        
                         "pattern": "^[A-Za-z0-9]{0,10}$",
                         "patternErrorMessage": "Maximum 10 characters (A-Z, a-z, 0-9)"
-                    }                                     
+                    },
+                    "ALTB.SourceCodeFolderName": {
+                        "type": "string",
+                        "default": "src",
+                        "description": "Name of the root folder where the AL source code is located.",
+                        "scope": "resource",                        
+                        "pattern": "^[^<>:\"\/\\|?*]+$",
+                        "errorMessage": "Please provide a valid folder name."
+                    }
                 }
             }
         ]

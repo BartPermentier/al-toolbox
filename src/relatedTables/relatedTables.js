@@ -1,8 +1,10 @@
 const vscode = require('vscode');
 const constants = require('../constants');
-const fileMangagement = require('../fileManagement/fileManagement');
+const fileManagement = require('../fileManagement/fileManagement');
 const alFileMangagement = require('../fileManagement/alFileManagement');
 const workspaceManagement = require('../fileManagement/workspaceManagement');
+const generalFunctions = require('../generalFunctions');
+const path = require('path');
 
 /**
  * @param {string} objectNamePrefix
@@ -17,17 +19,17 @@ exports.createRelatedTables = function createRelatedTables(objectNamePrefix, fil
     }
     const PutCreatedRelatedObjectsInSeparateFolders = vscode.workspace.getConfiguration('ALTB', rootUri).get('PutCreatedRelatedObjectsInSeparateFolders');
 
-    const baseDestinationPath = rootUri.fsPath + '/src/';
-    fileMangagement.createFolder(baseDestinationPath);
+    const baseDestinationPath = path.join(rootUri.fsPath, generalFunctions.sourceCodeFolderName());
+    fileManagement.createFolder(baseDestinationPath);
 
     let destinationPath;
     const fileCreationPromises = [];
     getRelatedObjectData().forEach(element => {
-        destinationPath = baseDestinationPath + element.objectType;
-        fileMangagement.createFolder(destinationPath);
+        destinationPath = path.join(baseDestinationPath,element.objectType);
+        fileManagement.createFolder(destinationPath);
         if (PutCreatedRelatedObjectsInSeparateFolders) {
-            destinationPath += '/' + element.folder
-            fileMangagement.createFolder(destinationPath);
+            destinationPath = path.join(destinationPath, element.folder);
+            fileManagement.createFolder(destinationPath);
         }
 
         element.objects.forEach(object => {
