@@ -147,6 +147,9 @@ Either //#Region or the default #Region can be used with this extension. The sni
 
 - ALTB.UseSimpleFunctionSnippets
     - Simplifies function snippets so a custom completion provider can be used.
+
+- ALTB.SourceCodeFolderName
+    - Specifies in which folder of the current workspace the source code files are located.
  
 ## Known Issues
 
