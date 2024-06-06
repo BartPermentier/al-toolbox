@@ -124,7 +124,7 @@ function getAlFileLocations(objectName, alObjectType){
 
     const UseOldFileNamingConventions = vscode.workspace.getConfiguration('ALTB').get('UseOldFileNamingConventions');
     
-    let fileLocationFormat = `${workspaceManagement.getCurrentWorkspaceFolderPath()}/${generalFunctions.sourceCodeFolderName}/**/`;
+    let fileLocationFormat = `${workspaceManagement.getCurrentWorkspaceFolderPath()}/${generalFunctions.sourceCodeFolderName()}/**/`;
     if(UseOldFileNamingConventions) {
         const filePrefix = constants.AlObjectTypesToFilePrefix(alObjectType);
         fileLocationFormat += `${filePrefix}*.${compactObjectName}.al`;

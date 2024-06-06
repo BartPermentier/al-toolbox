@@ -3,6 +3,9 @@ Please visit https://www.altoolbox.com/ for more in depth information and AL Lan
 # Change Log
 All notable changes to the "al-toolbox" extension will be documented in this file.
 
+## [2.0.31]
+  - Source Code Folder Name Setting [#121](https://github.com/BartPermentier/al-toolbox/issues/121)
+
 ## [2.0.30]
   - Fix rUpgradeFunctionDatabase [#123](https://github.com/BartPermentier/al-toolbox/issues/123)
 
