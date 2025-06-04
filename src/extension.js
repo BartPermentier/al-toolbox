@@ -5,6 +5,7 @@ const alFileManagement = require('./fileManagement/alFileManagement');
 const regionWrapper = require('./regionWrapper/regionWrapper');
 const renumber = require('./renumberObjects/renumber');
 const renumberFields = require('./renumberObjects/renumberFields');
+const renumberConsistentFields = require('./renumberObjects/renumberConsistentFields');
 const changePrefix = require('./changePrefix/changePrefix');
 const uniqueApiEntities = require('./codeAnalyzers/apiPageEntityAnalyzer');
 const copyFieldsToRelatedTables = require('./relatedTables/copyFieldsToRelatedTables');
@@ -173,6 +174,31 @@ function activate(context) {
                 const tableExtInfo = await requestNumber('Start number for table extensions (1, 80000, ...)');
                 if (tableExtInfo.ok)
                     renumberFields.renumberAllFields(tablesInfo.number, tableExtInfo.number)
+                        .then(count => {
+                            vscode.window.showInformationMessage(`${count} object(s) renumbered`);
+                            SaveAndCloseAll();
+                        })
+            }
+        })
+    }));
+
+    context.subscriptions.push(vscode.commands.registerTextEditorCommand('al-toolbox.renumberConsistentFields', textEditor => {
+        telemetry.sendRenumberFieldsEvent();
+        requestNumber('Start number (1, 80000, ...)').then(info => {
+            if (info.ok)
+                renumberConsistentFields.renumberConsistentFields(textEditor.document, info.number)
+                    .then(ok => {
+                        if (ok) textEditor.document.save();
+                    });
+        })
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('al-toolbox.renumberConsistentAllFields', () => {
+        telemetry.sendRenumberAllFieldsEvent();
+        requestNumber('Start number for tables (1, 80000, ...)').then(async tablesInfo => {
+            if (tablesInfo.ok) {
+                const tableExtInfo = await requestNumber('Start number for table extensions (1, 80000, ...)');
+                if (tableExtInfo.ok)
+                    renumberConsistentFields.renumberConsistentAllFields(tablesInfo.number, tableExtInfo.number)
                         .then(count => {
                             vscode.window.showInformationMessage(`${count} object(s) renumbered`);
                             SaveAndCloseAll();
