@@ -172,7 +172,7 @@
                         "scope": "resource",
                         "pattern": "^([a-z]{2}-[A-Z]{2})$|^[A-Z]{3}$",
                         "patternErrorMessage": "Supported formats: xx-XX or XXX (for example: fr-BE or FRB)"
-                    }, 
+                    },
                     "ALTB.DisableHoverProviders": {
                         "type": "boolean",
                         "default": false,
@@ -189,7 +189,7 @@
                         "type": "string",
                         "default": "External",
                         "description": "Custom identifier for Application Insights",
-                        "scope": "resource",                        
+                        "scope": "resource",
                         "pattern": "^[A-Za-z0-9]{0,10}$",
                         "patternErrorMessage": "Maximum 10 characters (A-Z, a-z, 0-9)"
                     },
@@ -197,8 +197,8 @@
                         "type": "string",
                         "default": "src",
                         "description": "Name of the root folder where the AL source code is located.",
-                        "scope": "resource",                        
-                        "pattern": "^[^<>:\"\/\\|?*]+$",
+                        "scope": "resource",
+                        "pattern": "^[^<>:\"/\\|?*]+$",
                         "errorMessage": "Please provide a valid folder name."
                     }
                 }
@@ -210,19 +210,17 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/glob": "^7.1.1",
         "@types/mocha": "^7.0.1",
         "@types/vscode": "^1.42.0",
         "eslint": "^6.8.0",
-        "glob": "^7.1.6",
         "mocha": "^7.0.1",
         "typescript": "^3.7.5",
         "vscode-test": "^1.3.0"
     },
-    "dependencies": {
-        "glob": "7.1.6"
-    },
     "extensionDependencies": [
         "andrzejzwierzchowski.al-code-outline"
-    ]
+    ],
+    "dependencies": {
+        "fast-glob": "^3.3.3"
+    }
 }

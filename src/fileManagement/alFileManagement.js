@@ -3,7 +3,7 @@ const fileManagement = require('./fileManagement');
 const workspaceManagement = require('./workspaceManagement');
 const path = require("path");
 const vscode = require("vscode");
-const glob = require("glob");
+const fg = require("fast-glob");
 const generalFunctions = require('../generalFunctions');
 
 //#region AL File Creation
@@ -133,7 +133,7 @@ function getAlFileLocations(objectName, alObjectType){
         fileLocationFormat += `*${compactObjectName}.${fullTypeName}.al`;
     }
 
-    return glob.sync(fileLocationFormat);
+    return fg.sync(fileLocationFormat);
 }
 exports.getAlFileLocations = getAlFileLocations;
 //#endregion
