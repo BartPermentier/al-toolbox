@@ -2,7 +2,7 @@
     "name": "al-toolbox",
     "displayName": "AL Toolbox",
     "description": "AL Language Regions and Snippets",
-    "version": "2.0.31",
+    "version": "2.0.32",
     "publisher": "BartPermentier",
     "icon": "resources/ALTB.png",
     "engines": {
@@ -21,78 +21,87 @@
         "Other",
         "Snippets"
     ],
-    "activationEvents": [
-        "onLanguage:al",
-        "onCommand:al-toolbox.createRelatedTables",
-        "onCommand:al-toolbox.renumberAll",
-        "onCommand:al-toolbox.changePrefix",
-        "onCommand:al-toolbox.initGitignore",
-        "onCommand:al-toolbox.renumberAllFields"
-    ],
+  "activationEvents": [
+    "onLanguage:al",
+    "onCommand:al-toolbox.createRelatedTables",
+    "onCommand:al-toolbox.renumberAll",
+    "onCommand:al-toolbox.changePrefix",
+    "onCommand:al-toolbox.initGitignore",
+    "onCommand:al-toolbox.renumberAllFields",
+    "onCommand:al-toolbox.renumberConsistentAllFields"
+  ],
     "main": "./src/extension.js",
     "contributes": {
-        "commands": [
-            {
-                "command": "al-toolbox.createRelatedTables",
-                "title": "ALTB: Start Project: Create Related Tables"
-            },
-            {
-                "command": "al-toolbox.openRelatedTables",
-                "title": "ALTB: Open Related Tables"
-            },
-            {
-                "command": "al-toolbox.openRelatedPages",
-                "title": "ALTB: Open Related Pages"
-            },
-            {
-                "command": "al-toolbox.openRelatedTablesAndPages",
-                "title": "ALTB: Open Related Tables and Pages"
-            },
-            {
-                "command": "al-toolbox.wrapAllFunctions",
-                "title": "ALTB: Create regions for all AL functions and triggers"
-            },
-            {
-                "command": "al-toolbox.wrapAllDataItemsAndColumns",
-                "title": "ALTB: Create regions for all AL dataitems and columns"
-            },
-            {
-                "command": "al-toolbox.wrapAll",
-                "title": "ALTB: Create regions for all AL functions, triggers, dataitems, and columns"
-            },
-            {
-                "command": "al-toolbox.renumberAll",
-                "title": "ALTB: Renumber AL objects"
-            },
-            {
-                "command": "al-toolbox.changePrefix",
-                "title": "ALTB: Change object prefix"
-            },
-            {
-                "command": "al-toolbox.copyFieldsToRelatedTables",
-                "title": "ALTB: Copy fields to related tables"
-            },
-            {
-                "command": "al-toolbox.initGitignore",
-                "title": "ALTB: init .gitignore"
-            },
-            {
-                "command": "al-toolbox.addRegion",
-                "title": "ALTB: Add region"
-            },
-            {
-                "command": "al-toolbox.generateSetLoadFields",
-                "title": "ALTB: Generate SetLoadFields"
-            },
-            {
-                "command": "al-toolbox.renumberFields",
-                "title": "ALTB: Renumber fields"
-            },
-            {
-                "command": "al-toolbox.renumberAllFields",
-                "title": "ALTB: Renumber all fields"
-            }
-        ],
+      "commands": [
+        {
+          "command": "al-toolbox.createRelatedTables",
+          "title": "ALTB: Start Project: Create Related Tables"
+        },
+        {
+          "command": "al-toolbox.openRelatedTables",
+          "title": "ALTB: Open Related Tables"
+        },
+        {
+          "command": "al-toolbox.openRelatedPages",
+          "title": "ALTB: Open Related Pages"
+        },
+        {
+          "command": "al-toolbox.openRelatedTablesAndPages",
+          "title": "ALTB: Open Related Tables and Pages"
+        },
+        {
+          "command": "al-toolbox.wrapAllFunctions",
+          "title": "ALTB: Create regions for all AL functions and triggers"
+        },
+        {
+          "command": "al-toolbox.wrapAllDataItemsAndColumns",
+          "title": "ALTB: Create regions for all AL dataitems and columns"
+        },
+        {
+          "command": "al-toolbox.wrapAll",
+          "title": "ALTB: Create regions for all AL functions, triggers, dataitems, and columns"
+        },
+        {
+          "command": "al-toolbox.renumberAll",
+          "title": "ALTB: Renumber AL objects"
+        },
+        {
+          "command": "al-toolbox.changePrefix",
+          "title": "ALTB: Change object prefix"
+        },
+        {
+          "command": "al-toolbox.copyFieldsToRelatedTables",
+          "title": "ALTB: Copy fields to related tables"
+        },
+        {
+          "command": "al-toolbox.initGitignore",
+          "title": "ALTB: init .gitignore"
+        },
+        {
+          "command": "al-toolbox.addRegion",
+          "title": "ALTB: Add region"
+        },
+        {
+          "command": "al-toolbox.generateSetLoadFields",
+          "title": "ALTB: Generate SetLoadFields"
+        },
+        {
+          "command": "al-toolbox.renumberFields",
+          "title": "ALTB: Renumber fields"
+        },
+        {
+          "command": "al-toolbox.renumberAllFields",
+          "title": "ALTB: Renumber all fields"
+        },
+        {
+          "command": "al-toolbox.renumberConsistentFields",
+          "title": "ALTB: consistent Renumber fields"
+        },
+        {
+          "command": "al-toolbox.renumberConsistentAllFields",
+          "title": "ALTB: consistent Renumber all fields"
+        }
+      ],
         "configuration": [
             {
                 "title": "AL Toolbox Configurations",
